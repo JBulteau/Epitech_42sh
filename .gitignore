@@ -1,0 +1,8 @@
+*.vscode
+*.a
+*.o
+vgc*
+*~
+\#*\#
+42sh
+a.out

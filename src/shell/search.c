@@ -1,0 +1,93 @@
+/*
+** EPITECH PROJECT, 2017
+** search.c
+** File description:
+** Path + search for exec fnc
+*/
+
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <strings.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "my.h"
+#include "minishell.h"
+
+void disp_rights(char *name, int exists, int exec)
+{
+	if (exists == -1) {
+		my_putstr(name);
+		my_putstr(": Command not found.\n");
+	} else if (exec == -1) {
+		my_putstr(name);
+		my_putstr(": Permission denied.\n");
+	}
+}
+
+int search_local(char *name)
+{
+	int rights[2] = {0, 0};
+	int fd;
+
+	rights[0] = access(name, F_OK);
+	if (rights[0] != -1)
+		rights[1] = access(name, X_OK);
+	if (check_is_dir(name) == 1)
+		rights[1] = -1;
+	disp_rights(name, rights[0], rights[1]);
+	return ((rights[0] == 0 && rights[1] == 0) ? 0 : 1);
+}
+
+char *search_path(char **path, char *name)
+{
+	char *fn = NULL;
+	int rights[2] = {0, 0};
+
+	for (int i = 0; path[i] != NULL; i++) {
+		if ((fn = concat(path[i], concat("/", name, 0, 0), 0, 1)) \
+== NULL)
+			return (NULL);
+		rights[0] = access(fn, F_OK);
+		rights[1] = access(fn, X_OK);
+		if (rights[0] == 0 && rights[1] == 0)
+			return (fn);
+		if (rights[0] == 0 && rights[1] == -1) {
+			disp_rights(fn, rights[0], rights[1]);
+			free(fn);
+			return (NULL);
+		}
+		free(fn);
+	}
+	disp_rights(name, -1, 0);
+	return (NULL);
+}
+
+char *get_env_var(char **env, char *var)
+{
+	char *res = NULL;
+	int len = my_strlen(var);
+
+	if (env == NULL || var == NULL)
+		return (NULL);
+	for (int key = 0; env[key] != NULL; key++)
+		if (my_strcmp(env[key], var, len) == 0)
+			res = my_strndup(env[key] + len, 0);
+	if (res == NULL)
+		return (NULL);
+	return (res);
+}
+
+char **get_path(char **env)
+{
+	char **path = NULL;
+
+	if (env == NULL)
+		return (NULL);
+	for (int key = 0; env[key] != NULL; key++)
+		if (my_strcmp(env[key], "PATH=", 5) == 0)
+			path = strwordarr(env[key] + 5, ":");
+	if (path == NULL)
+		return (NULL);
+	return (path);
+}
