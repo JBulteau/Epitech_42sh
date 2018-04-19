@@ -26,7 +26,7 @@ int exec_loop(shell_t *shell)
 		return_code = exec_comm(shell->comm[i], &(shell->env), shell->pwd);
 		exec_end(shell->comm[i]);
 		if (return_code == -1)
-			return (1);
+			return (-1);
 		if (return_code == ERROR_CODE)
 			return (ERROR_CODE);
 	}

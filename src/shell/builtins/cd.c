@@ -28,7 +28,7 @@ int change_dir(char pwd[2][PATH_MAX], char *newdir)
 	return ((exists == -1) ? 1 : 0);
 }
 
-int ptr_cd(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int ptr_cd(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
 {
 	char *home = NULL;
 	int cd_res = -1;

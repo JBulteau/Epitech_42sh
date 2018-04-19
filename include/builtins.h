@@ -10,15 +10,15 @@
 
 #include "minishell.h"
 
-int ptr_cd(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_env(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_setenv(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_unsetenv(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_exit(comm_t *comm, char ***env, char [2][PATH_MAX]);
+int ptr_cd(comm_t *comm, char ***env, char [2][PATH_MAX], int *retrun_code);
+int ptr_env(comm_t *comm, char ***env, char [2][PATH_MAX], int *retrun_code);
+int ptr_setenv(comm_t *comm, char ***env, char [2][PATH_MAX], int *retrun_code);
+int ptr_unsetenv(comm_t *comm, char ***env, char [2][PATH_MAX], int *retrun_code);
+int ptr_exit(comm_t *comm, char ***env, char [2][PATH_MAX], int *retrun_code);
 
 static const struct {
 	char *name;
-	int (*fnc)(comm_t *comm, char ***env, char [2][PATH_MAX]);
+	int (*fnc)(comm_t *comm, char ***env, char [2][PATH_MAX], int *retrun_code);
 } builtins[] = {
 	{"cd", &ptr_cd},
 	{"env", &ptr_env},
