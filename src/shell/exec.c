@@ -67,8 +67,10 @@ int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
 		}
 		filepath = search_path(path, comm->argv[0]);
 		free_array((void **) path);
-		if (filepath == NULL)
+		if (filepath == NULL) {
+			//call jarvis if he is = 0 return 0 else le return 1 en dessous
 			return (1);
+		}
 		return (exec(comm, filepath, *env));
 	}
 	return (1);

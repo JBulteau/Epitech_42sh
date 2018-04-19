@@ -9,6 +9,7 @@ NAME		=	42sh
 
 SRC_DIR		=	$(realpath ./src)
 
+JARVIS_DIR	=	jarvis/
 SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
@@ -33,6 +34,8 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(RED_DIR)d_right.c\
 			$(RED_DIR)s_right.c\
 			$(RED_DIR)pipe.c\
+\
+			$(JARVIS_DIR)jarvis_corrector.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
