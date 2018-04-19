@@ -11,16 +11,26 @@
 #include <stdlib.h>
 #include <linux/limits.h>
 
-typedef struct {
+typedef struct redir_s redir_t;
+typedef struct comm_s comm_t;
+typedef struct pipe_s pipe_t;
+
+struct redir_s {
 	char *target;
 	int fd[2];
-} redir_t;
+};
 
-typedef struct comm_s {
+struct comm_s {
 	char **argv;
 	redir_t *red[4];
-	struct comm_s *pipe;
-} comm_t;
+	pipe_t *pipe[2];
+};
+
+struct pipe_s {
+	int fd[2];
+	comm_t *input;
+	comm_t *output;
+};
 
 typedef struct {
 	char **env;
@@ -79,6 +89,10 @@ int check_is_dir(char *fn);
 /*	debug.c		*/
 void debug_comm(comm_t *comm);
 
+/*	pipe.c		*/
+pipe_t *init_pipe(comm_t *in, comm_t *out);
+void destroy_pipe(pipe_t *pipe);
+
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
@@ -89,6 +103,16 @@ enum {
 	D_LEFT,
 	S_LEFT,
 	PIPE
+};
+
+enum {
+	READ,
+	WRITE
+};
+
+enum {
+	OUT,
+	IN
 };
 
 #endif

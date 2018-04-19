@@ -23,6 +23,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(SHELL_DIR)commands.c\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
+			$(SHELL_DIR)pipe.c\
 \
 			$(BI_DIR)basic_bi.c\
 			$(BI_DIR)env.c\
