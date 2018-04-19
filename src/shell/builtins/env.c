@@ -49,7 +49,7 @@ int set_env_value(char ***env, char *var, char *value)
 	return (0);
 }
 
-int ptr_env(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int ptr_env(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
 {
 	for (int i = 0; (*env)[i] != NULL; i++) {
 		my_putstr((*env)[i]);
@@ -58,7 +58,7 @@ int ptr_env(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
 	return (0);
 }
 
-int ptr_setenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int ptr_setenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
 {
 	if (comm->argv[1] == NULL) {
 		for (int i = 0; (*env)[i] != NULL; i++) {
@@ -70,7 +70,7 @@ int ptr_setenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
 	return (set_env_value(env, comm->argv[1], comm->argv[2]));
 }
 
-int ptr_unsetenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int ptr_unsetenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
 {
 	int index;
 	char *value;

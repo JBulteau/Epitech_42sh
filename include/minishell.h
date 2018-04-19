@@ -27,6 +27,7 @@ typedef struct {
 	char pwd[2][PATH_MAX];
 	char *input;
 	comm_t **comm;
+	int return_value;
 } shell_t;
 
 /*	shell.c		*/
@@ -66,7 +67,7 @@ char *get_env_var(char **env, char *var);
 
 /*	BUILT-INS	*/
 int is_builtin(char *name);
-int exec_bi(comm_t *comm, char ***env, char pwd[2][PATH_MAX]);
+int exec_bi(comm_t *comm, shell_t *shell);
 
 /*	redic.c		*/
 redir_t *init_redir(void);
