@@ -12,6 +12,6 @@
 #include "minishell.h"
 
 /* jarvis corrector.c */
-int jarvis_corrector(comm_t * comm, char ***env);
+int jarvis_corrector(comm_t * comm, char ***env, int which);
 
 #endif
