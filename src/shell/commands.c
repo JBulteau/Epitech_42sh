@@ -28,7 +28,8 @@ int exec_start(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++) {
 		if (comm->red[i]) {
-			tokens[i].fnc_exec(comm);
+			if (tokens[i].fnc_exec(comm) == -1)
+				return (-1);
 		}
 	}
 }
@@ -37,7 +38,8 @@ int exec_end(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++)
 		if (comm->red[i])
-			tokens[i].end_exec(comm);
+			if (tokens[i].end_exec(comm) == -1)
+			 	return (-1);
 }
 
 comm_t *init_comm(void)
