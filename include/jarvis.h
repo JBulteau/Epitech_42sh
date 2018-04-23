@@ -24,8 +24,18 @@ typedef struct {
 	int *which;
 } jarg_t;
 
-/* jarvis corrector.c */
+enum inc {
+	WHICH_INC,
+	INFOS_INC,
+	COMM_INC
+};
+
+/* jarvis corrector */
+int misspell_handle(jarg_t *corr, comm_t *comm);
+int refill_comm_struct(comm_t *comm, jarg_t *corr);
 int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath);
 jarg_t *init_struct_jarg(comm_t *comm);
+int wrong_spaces_handle(comm_t *comm, jarg_t *corr);
+void try_concat(comm_t *comm, jarg_t *corr, int *which_inc, int *i);
 
 #endif
