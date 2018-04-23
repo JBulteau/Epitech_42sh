@@ -53,7 +53,7 @@ void display_signal(int status);
 void disp_prompt(void);
 
 /*	exec.c		*/
-int exec(comm_t *comm, char *path, char **env);
+int exec(comm_t *comm, char *path, char **env, int jarvis);
 int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX]);
 int exec_loop(shell_t *shell);
 

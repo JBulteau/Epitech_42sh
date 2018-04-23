@@ -6,16 +6,38 @@
 */
 
 #include "jarvis.h"
+#include <sys/types.h>
+#include <dirent.h>
 
-// if which : 1 pb argument | 2 pb commande | 3 pb local
-
-int jarvis_corrector(comm_t * comm, char ***env, int which)
+int more_than_two_argv_handling(comm_t *comm, char *filepath, char **env)
 {
-	if (which == 1) {
-		//pb_arg;
-	} else if (which == 2) {
-		//pb_command
-	} else
-		//pb_local
+	char *argv_fusion = concat(comm->argv[1], comm->argv[2], 0, 0);
+
+	if (opendir(argv_fusion)) {
+		free(comm->argv[2]);
+		free(comm->argv[1]);
+		comm->argv[1] = argv_fusion;
+		comm->argv[2] = NULL;
+		return (exec(comm, filepath, env, 1));
+	}
+}
+
+// if which : 1 pb command | 2 pb local | 3 pb arg
+
+int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath)
+{
+	if (which == 1) { //pb_command
+
+	} else if (which == 2) { //pb_local
+
+	} else { //pb_arg
+		if (comm->argv[2] != NULL)
+			function1; // return 1 si encore certains sont faux, 0 si all good
+		else if (my_strlen()
+			function2;
+		else
+			function3;
+
+	}
 	return (0);
 }
