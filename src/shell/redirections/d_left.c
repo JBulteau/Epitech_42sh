@@ -41,9 +41,8 @@ int exec_d_left(comm_t *comm)
 		free(input);
 	}
 	free(input);
-	return (0);
+	return (SUCCESS_RETURN);
 }
-
 
 int end_d_left(comm_t *comm)
 {

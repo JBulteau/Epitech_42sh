@@ -6,7 +6,11 @@
 */
 
 #include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include "minishell.h"
 #include "my.h"
 
@@ -39,12 +43,12 @@ int wait_for_it(pid_t pid)
 		last_pid = wait(&status);
 		if (WIFSIGNALED(status)) {
 			if (WTERMSIG(status) == 8)
-				my_putstr("Floating exception");
+				my_puterror("Floating exception");
 			else
-				my_putstr(strsignal(WTERMSIG(status)));
+				my_puterror(strsignal(WTERMSIG(status)));
 			if (WCOREDUMP(status))
-				my_putstr(" (core dumped)");
-			my_putchar('\n');
+				my_puterror(" (core dumped)");
+			my_puterror("\n");
 		}
 	} while (last_pid != pid);
 }
@@ -52,51 +56,71 @@ int wait_for_it(pid_t pid)
 int redirect_pipe_at_exec(comm_t *curr)
 {
 	if (curr->pipe[IN]) {
-		if (dup2(curr->pipe[IN]->fd[READ], STDIN_FILENO) == -1)
-			return (ERROR_RETURN);
+		dup2(curr->pipe[IN]->fd[READ], STDIN_FILENO);
 		close(curr->pipe[IN]->fd[WRITE]);
 	}
 	if (curr->pipe[OUT]) {
-		if (dup2(curr->pipe[OUT]->fd[WRITE], STDOUT_FILENO) == -1)
-			return (ERROR_RETURN);
-		close(curr->pipe[OUT]->fd[READ]);
+		dup2(curr->pipe[OUT]->fd[WRITE], STDOUT_FILENO);
+      		close(curr->pipe[OUT]->fd[READ]);
 	}
 	return (0);
 }
 
+void debug_pid(char *s)
+{
+	fprintf(stderr, "|%i|%s\n", getpid(), s);
+}
+
 int run_pipeline(shell_t *shell, comm_t *comm)
 {
+	//TODO AJOUTER LES REDIRECTIONS FDP
 	int return_c = 0;
 	pid_t child_pid;
 
 	if ((shell == NULL) || (comm == NULL))
 		return (ERROR_RETURN);
 	for (comm_t *curr = comm; curr; curr = (curr->pipe[OUT] && curr->pipe[OUT]->output) ? curr->pipe[OUT]->output : NULL) {
-		if (redirect_pipe_at_exec(curr) == ERROR_RETURN) {
-			perror("NOPE");
-			return (ERROR_RETURN);
-		}
 		if (curr->pipe[OUT] == NULL) {
 			if (is_builtin(curr->argv[0]) != -1)
+				//TODO REDIRECT fd --> STDIN
 				return_c = exec_bi(curr, &(shell->env), shell->pwd);
+				//TODO close fd + rd STDIN to STDIN
 			else {
+				debug_pid("MAIN");
 				if ((child_pid = fork()) == -1)
 					return (ERROR_RETURN);
-				else if (child_pid == 0)
+				else if (child_pid == 0) {
+					debug_pid("CHILD WITHOUT PIPE AFTER");
+					debug_pid(curr->argv[0]);
+					redirect_pipe_at_exec(curr);
+					//RD FD --> STDIN
 					exec_bin(curr, shell->env);
+				}
+				if (curr->pipe[IN]) {
+					close(curr->pipe[IN]->fd[WRITE]);
+					close(curr->pipe[IN]->fd[READ]);
+				}
 				wait_for_it(child_pid);
 			}
 		} else {
+			debug_pid("MAIN");
 			if ((child_pid = fork()) == -1)
 				return (ERROR_RETURN);
 			if (child_pid == 0) {
+				debug_pid("CHILD BEFORE PIPE");
+				debug_pid(curr->argv[0]);
+				redirect_pipe_at_exec(curr);
 				if (is_builtin(curr->argv[0]) != -1) {
 					return_c = exec_bi(curr, &(shell->env), shell->pwd);
 					exit(return_c);
 				} else
 					exec_bin(curr, shell->env);
 			}
+			debug_pid("MAIN2");
+			//close(curr->pipe[OUT]->fd[READ]);
+			//close(curr->pipe[IN]->fd[READ]);
 		}
 	}
+	//TODO FERMER LES REDIR FDP
 	return (0);
 } /* run_pipeline */

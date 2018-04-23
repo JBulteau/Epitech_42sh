@@ -19,13 +19,3 @@ char *handle_pipe(char *input, comm_t *comm)
 		return (NULL);
 	return ("\0");
 }
-
-int exec_pipe(comm_t *comm)
-{
-	return (0);
-}
-
-int end_pipe(comm_t *comm)
-{
-	return (0);
-}

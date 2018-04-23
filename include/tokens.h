@@ -45,7 +45,7 @@ static const struct {
 	{">", &handle_s_right, &exec_s_right, &end_s_right},
 	{"<<", &handle_d_left, &exec_d_left, &end_d_left},
 	{"<", &handle_s_left, &exec_s_left, &end_s_left},
-	{"|", &handle_pipe, &exec_pipe, &end_pipe},
+	{"|", &handle_pipe, NULL, NULL},
 	{NULL, NULL, NULL, NULL}
 };
 
