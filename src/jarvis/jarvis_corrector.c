@@ -33,7 +33,7 @@ int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath)
 	} else { //pb_arg
 		if (comm->argv[2] != NULL)
 			function1; // return 1 si encore certains sont faux, 0 si all good
-		else if (my_strlen()
+		if (function1 returned 1 || !opendir(comm->argv[2]))
 			function2;
 		else
 			function3;
