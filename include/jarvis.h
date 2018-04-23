@@ -22,10 +22,10 @@ typedef struct {
 	args_t *infos;
 	int nb_good_end;
 	int *which;
-} jcorr_t;
+} jarg_t;
 
 /* jarvis corrector.c */
-int jarvis_corrector(comm_t * comm, char ***env, int which, char *filepath);
-int more_than_two_argv_handling(comm_t *comm, char *filepath, char **env);
+int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath);
+jarg_t *init_struct_jarg(comm_t *comm);
 
 #endif
