@@ -50,28 +50,28 @@ int set_env_value(char ***env, char *var, char *value)
 	return (SUCCESS_RETURN);
 }
 
-int ptr_env(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
+int ptr_env(comm_t *comm, shell_t *shell)
 {
-	for (int i = 0; (*env)[i] != NULL; i++) {
-		my_putstr((*env)[i]);
+	for (int i = 0; shell->env[i] != NULL; i++) {
+		my_putstr(shell->env[i]);
 		my_putchar('\n');
 	}
 	return (SUCCESS_RETURN);
 }
 
-int ptr_setenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
+int ptr_setenv(comm_t *comm, shell_t *shell)
 {
 	if (comm->argv[1] == NULL) {
-		for (int i = 0; (*env)[i] != NULL; i++) {
-			my_putstr((*env)[i]);
+		for (int i = 0; shell->env[i] != NULL; i++) {
+			my_putstr(shell->env[i]);
 			my_putchar('\n');
 		}
 		return (SUCCESS_RETURN);
 	}
-	return (set_env_value(env, comm->argv[1], comm->argv[2]));
+	return (set_env_value(&shell->env, comm->argv[1], comm->argv[2]));
 }
 
-int ptr_unsetenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
+int ptr_unsetenv(comm_t *comm, shell_t *shell)
 {
 	int index;
 	char *value;
@@ -81,12 +81,12 @@ int ptr_unsetenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_c
 		return (1);
 	}
 	for (int arg = 1; comm->argv[arg]; arg++) {
-		index = search_strtab(*env, comm->argv[arg]);
+		index = search_strtab(shell->env, comm->argv[arg]);
 		if (index == -1)
 			continue;
-		value = (*env)[index];
-		for (int i = index; (*env)[i]; i++)
-			(*env)[i] = (*env)[i + 1];
+		value = shell->env[index];
+		for (int i = index; (*shell->env)[i]; i++)
+			(*shell->env)[i] = (*shell->env)[i + 1];
 		free(value);
 	}
 	return (SUCCESS_RETURN);
