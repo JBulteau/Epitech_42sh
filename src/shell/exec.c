@@ -23,53 +23,43 @@ int exec_loop(shell_t *shell)
 	for (int i = 0; shell->comm[i] != NULL; i++) {
 		debug_comm(shell->comm[i]);
 		exec_start(shell->comm[i]);
-		return_code = exec_comm(shell->comm[i], &(shell->env), shell->pwd);
+		return_code = run_pipeline(shell, shell->comm[i]);
 		exec_end(shell->comm[i]);
 		if (return_code == -1)
-			return (-1);
+			return (1);
 		if (return_code == ERROR_CODE)
 			return (ERROR_CODE);
 	}
 	return (return_code);
 }
 
-int exec(comm_t *comm, char *path, char **env)
-{
-	int status = 0;
-	int child_pid = fork();
-
-	if (child_pid == 0)
-		if (execve(path, comm->argv, env) == -1) {
-			disp_wrong_arch(comm->argv[0], errno);
-			return (-1);
-		}
-	waitpid(child_pid, &status, WUNTRACED);
-	free(path);
-	display_signal(status);
-	return (status == 256 ? 1 : status);
-}
-
-int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int exec_bin(comm_t *comm, char **env)
 {
 	int is_local = (!my_strcmp(comm->argv[0], "./", 2)) || \
 (index_of(comm->argv[0], '/') != -1);
 	char **path = NULL;
 	char *filepath = NULL;
 
-	if (is_builtin(comm->argv[0]) >= 0)
-		return (exec_bi(comm, env, pwd));
 	if (is_local == 1 && !search_local(comm->argv[0])) {
-		return (exec(comm, my_strndup(comm->argv[0], 0), *env));
+		return (run_bin(comm, my_strndup(comm->argv[0], 0), env));
 	} else if (is_local == 0) {
-		if ((path = get_path(*env)) == NULL) {
+		if ((path = get_path(env)) == NULL) {
 			disp_rights(comm->argv[0], -1, 0);
-			return (1);
+			exit (1);
 		}
 		filepath = search_path(path, comm->argv[0]);
 		free_array((void **) path);
 		if (filepath == NULL)
-			return (1);
-		return (exec(comm, filepath, *env));
+			exit (1);
+		return (run_bin(comm, filepath, env));
 	}
-	return (1);
+	exit (1);
+}
+
+int run_bin(comm_t *comm, char *path, char **env)
+{
+	if (execve(path, comm->argv, env) == -1) {
+		disp_wrong_arch(comm->argv[0], errno);
+	}
+	exit (1);
 }

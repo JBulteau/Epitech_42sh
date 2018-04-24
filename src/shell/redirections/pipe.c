@@ -11,19 +11,11 @@
 char *handle_pipe(char *input, comm_t *comm)
 {
 	input = go_next_w(input + 1, separators);
-	if ((comm->pipe = init_comm()) == NULL)
+	if ((comm->pipe[OUT] = init_pipe(comm, init_comm())) == NULL)
 		return (NULL);
-	if ((parse_command(input, comm->pipe)) == -1)
+	comm->pipe[OUT]->input = comm;
+	comm->pipe[OUT]->output->pipe[IN] = comm->pipe[OUT];
+	if ((parse_command(input, comm->pipe[OUT]->output)) == -1)
 		return (NULL);
 	return ("\0");
-}
-
-int exec_pipe(comm_t *comm)
-{
-	return (0);
-}
-
-int end_pipe(comm_t *comm)
-{
-	return (0);
 }

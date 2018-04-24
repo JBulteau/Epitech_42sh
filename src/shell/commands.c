@@ -11,21 +11,25 @@
 
 void free_comm(comm_t *comm)
 {
-	if (comm->pipe)
-		free_comm(comm->pipe);
+	if (comm->pipe[OUT]) {
+		free_comm(comm->pipe[OUT]->output);
+		free(comm->pipe[OUT]);
+	}
 	free_array((void **) comm->argv);
+	free_red(comm->red[S_RIGHT]);
 	free_red(comm->red[S_LEFT]);
 	free_red(comm->red[D_LEFT]);
-	free_red(comm->red[S_RIGHT]);
 	free_red(comm->red[D_RIGHT]);
 	free(comm);
+	return;
 }
 
 int exec_start(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++) {
 		if (comm->red[i]) {
-			tokens[i].fnc_exec(comm);
+			if (tokens[i].fnc_exec(comm) == -1)
+				return (-1);
 		}
 	}
 }
@@ -34,7 +38,8 @@ int exec_end(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++)
 		if (comm->red[i])
-			tokens[i].end_exec(comm);
+			if (tokens[i].end_exec(comm) == -1)
+			 	return (-1);
 }
 
 comm_t *init_comm(void)
@@ -48,7 +53,8 @@ comm_t *init_comm(void)
 	if ((comm->argv = malloc(sizeof(char **) * 1)) == NULL)
 		return (NULL);
 	comm->argv[0] = NULL;
-	comm->pipe = NULL;
+	comm->pipe[OUT] = NULL;
+	comm->pipe[IN] = NULL;
 	return (comm);
 }
 

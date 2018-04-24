@@ -5,6 +5,7 @@
 ** main file for minishell2
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "my.h"
@@ -19,8 +20,7 @@ int main(int ac, char **av, char **env)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
-		shell->comm = full_parse(shell->input);
-		if (shell->comm == NULL)
+		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
 		return_code = exec_loop(shell);
 		free_comms(shell->comm);

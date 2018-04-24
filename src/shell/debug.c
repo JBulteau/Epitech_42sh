@@ -24,8 +24,8 @@ void debug_comm(comm_t *comm)
 		my_putchar(' ');
 	}
 	my_putchar('\n');
-	if (comm->pipe) {
+	if (comm->pipe[OUT]) {
 		my_putstr("PIPED INTO\n");
-		debug_comm(comm->pipe);
+		debug_comm(comm->pipe[OUT]->output);
 	}
 }

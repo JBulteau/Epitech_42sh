@@ -11,16 +11,26 @@
 #include <stdlib.h>
 #include <linux/limits.h>
 
-typedef struct {
+typedef struct redir_s redir_t;
+typedef struct comm_s comm_t;
+typedef struct pipe_s pipe_t;
+
+struct redir_s {
 	char *target;
 	int fd[2];
-} redir_t;
+};
 
-typedef struct comm_s {
+struct comm_s {
 	char **argv;
 	redir_t *red[4];
-	struct comm_s *pipe;
-} comm_t;
+	pipe_t *pipe[2];
+};
+
+struct pipe_s {
+	int fd[2];
+	comm_t *input;
+	comm_t *output;
+};
 
 typedef struct {
 	char **env;
@@ -77,8 +87,21 @@ void free_red(redir_t *red);
 int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 
+/*	exec.c		*/
+int exec_loop(shell_t *shell);
+int exec_bin(comm_t *comm, char **env);
+int run_bin(comm_t *comm, char *path, char **env);
+
 /*	debug.c		*/
 void debug_comm(comm_t *comm);
+
+/*	pipe.c		*/
+pipe_t *init_pipe(comm_t *in, comm_t *out);
+void destroy_pipe(pipe_t *pipe);
+int wait_for_it(pid_t pid);
+int redirect_pipe_at_exec(comm_t *curr);
+void debug_pid(char *s);
+int run_pipeline(shell_t *shell, comm_t *comm);
 
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
@@ -90,6 +113,16 @@ enum {
 	D_LEFT,
 	S_LEFT,
 	PIPE
+};
+
+enum {
+	READ,
+	WRITE
+};
+
+enum {
+	OUT,
+	IN
 };
 
 #endif

@@ -27,18 +27,21 @@ char *handle_d_right(char *input, comm_t *comm)
 
 int exec_d_right(comm_t *comm)
 {
-	comm->red[D_RIGHT]->fd[0] = open(comm->red[D_RIGHT]->target, O_RDWR | O_CREAT | O_APPEND, 0600);
+	comm->red[D_RIGHT]->fd[0] = open(comm->red[D_RIGHT]->target, O_RDWR | O\
+_CREAT | O_APPEND, 0600);
 	comm->red[D_RIGHT]->fd[1] = dup(STDOUT_FILENO);
 
-	if (comm->red[D_RIGHT]->fd[0] == -1 || comm->red[D_RIGHT]->fd[1] == -1 || dup2(comm->red[D_RIGHT]->fd[0], STDOUT_FILENO) == -1)
-		return (-1);
-	return (0);
+	if (comm->red[D_RIGHT]->fd[0] == -1 || comm->red[D_RIGHT]->fd[1] == -1 \
+|| dup2(comm->red[D_RIGHT]->fd[0], STDOUT_FILENO) == -1)
+		return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
 }
 
 int end_d_right(comm_t *comm)
 {
 	close(comm->red[D_RIGHT]->fd[0]);
-	dup2(comm->red[D_RIGHT]->fd[1], STDOUT_FILENO);
+	if (dup2(comm->red[D_RIGHT]->fd[1], STDOUT_FILENO) == -1)
+		return (ERROR_RETURN);
 	close(comm->red[D_RIGHT]->fd[1]);
-	return (0);
+	return (SUCCESS_RETURN);
 }

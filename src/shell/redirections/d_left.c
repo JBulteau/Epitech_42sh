@@ -31,19 +31,15 @@ int exec_d_left(comm_t *comm)
 
 	for (; input != NULL; input = gnl(STDIN_FILENO)) {
 		if (!my_strcmp(input, comm->red[D_LEFT]->target, 0)) {
-			puts("BREAK");
-			puts(input);
 			break;
 		}
-		puts(input);
 		if (isatty(STDIN_FILENO))
 			my_putstr("? ");
 		free(input);
 	}
 	free(input);
-	return (0);
+	return (SUCCESS_RETURN);
 }
-
 
 int end_d_left(comm_t *comm)
 {

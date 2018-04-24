@@ -62,6 +62,8 @@ int	my_getnbr_base(char const *str, char const *base);
 #define	READ_SIZE	1
 #define	SUCCESS_CODE	0
 #define	ERROR_CODE	84
+#define	ERROR_RETURN	-1
+#define SUCCESS_RETURN	0
 static const char	HEX_UP[]	=	"0123456789ABCDEF";
 static const char	HEX_LOW[]	=	"0123456789abcdef";
 static const char	NUM[]		=	"0123456789";

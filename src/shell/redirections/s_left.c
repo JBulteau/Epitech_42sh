@@ -30,20 +30,18 @@ int exec_s_left(comm_t *comm)
 	comm->red[S_LEFT]->fd[0] = open(comm->red[S_LEFT]->target, O_RDONLY);
 	comm->red[S_LEFT]->fd[1] = dup(STDIN_FILENO);
 
-	if (comm->red[S_LEFT]->fd[0] == -1)
-		return (-1);
-	if (comm->red[S_LEFT]->fd[1] == -1)
-		return (-1);
-	if (dup2(comm->red[S_LEFT]->fd[0], STDIN_FILENO) == -1)
-		return (-1);
-	return (0);
+	if ((comm->red[S_LEFT]->fd[0] == -1) || (comm->red[S_LEFT]->fd[1] == -1\
+) || (dup2(comm->red[S_LEFT]->fd[0], STDIN_FILENO) == -1))
+		return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
 }
 
 
 int end_s_left(comm_t *comm)
 {
 	close(comm->red[S_LEFT]->fd[0]);
-	dup2(comm->red[S_LEFT]->fd[1], STDIN_FILENO);
+	if (dup2(comm->red[S_LEFT]->fd[1], STDIN_FILENO) == -1)
+		return (ERROR_RETURN);
 	close(comm->red[S_LEFT]->fd[1]);
-	return (0);
+	return (SUCCESS_RETURN);
 }

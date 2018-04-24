@@ -5,6 +5,7 @@
 ** Env fnc
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "minishell.h"
 #include "my.h"
@@ -15,15 +16,15 @@ int add_env_value(char ***env, char *var, char *value, char *var_pre)
 	int len = array_len((void **) (*env));
 
 	if ((new_env = malloc(sizeof(char **) * (len + 1))) == NULL)
-		return (-1);
+		return (ERROR_RETURN);
 	for (int i = 0; (*env)[i] != NULL; i++)
 		new_env[i] = (*env)[i];
 	if ((new_env[len - 1] = concat(var_pre, value, 1, 0)) == NULL)
-		return (-1);
+		return (ERROR_RETURN);
 	new_env[len] = NULL;
 	free((*env));
 	(*env) = new_env;
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 int set_env_value(char ***env, char *var, char *value)
@@ -32,21 +33,21 @@ int set_env_value(char ***env, char *var, char *value)
 	int env_idx = search_strtab((*env), var_pre);
 
 	value = (value == NULL) ? my_strndup("", 0) : value;
-	if (index_of(ALPHA_LOW, var[0]) == -1 && index_of(ALPHA_UP, var[0]) == -1) {
-		my_putstr("setenv: Variable name must begin with a letter.\n");
+	if (index_of(ALPHA_LOW, var[0]) == -1 && index_of(ALPHA_UP, var[0]) == ERROR_RETURN) {
+		puts("setenv: Variable name must begin with a letter.");
 		return (1);
 	} else if (is_alphanum(var) == -1) {
-		my_putstr("setenv: Variable name must contain alphanumeric characters.\n");
+		puts("setenv: Variable name must contain alphanumeric characters.");
 		return (1);
 	}
 	if (env_idx != -1) {
 		free((*env)[env_idx]);
 		if (((*env)[env_idx] = concat(var_pre, value, 1, 0)) == NULL)
-			return (-1);
-	} else if (add_env_value(env, var, value, var_pre) == -1) {
-		return (-1);
+			return (ERROR_RETURN);
+	} else if (add_env_value(env, var, value, var_pre) == ERROR_RETURN) {
+		return (ERROR_RETURN);
 	}
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 int ptr_env(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
@@ -55,7 +56,7 @@ int ptr_env(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
 		my_putstr((*env)[i]);
 		my_putchar('\n');
 	}
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 int ptr_setenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
@@ -65,7 +66,7 @@ int ptr_setenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_cod
 			my_putstr((*env)[i]);
 			my_putchar('\n');
 		}
-		return (0);
+		return (SUCCESS_RETURN);
 	}
 	return (set_env_value(env, comm->argv[1], comm->argv[2]));
 }
@@ -88,5 +89,5 @@ int ptr_unsetenv(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_c
 			(*env)[i] = (*env)[i + 1];
 		free(value);
 	}
-	return (0);
+	return (SUCCESS_RETURN);
 }
