@@ -10,21 +10,23 @@
 
 #include "minishell.h"
 
-int ptr_cd(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_env(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_setenv(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_unsetenv(comm_t *comm, char ***env, char [2][PATH_MAX]);
-int ptr_exit(comm_t *comm, char ***env, char [2][PATH_MAX]);
+int ptr_cd(comm_t *comm, shell_t *shell);
+int ptr_env(comm_t *comm, shell_t *shell);
+int ptr_setenv(comm_t *comm, shell_t *shell);
+int ptr_unsetenv(comm_t *comm, shell_t *shell);
+int ptr_exit(comm_t *comm, shell_t *shell);
+int ptr_history(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
-	int (*fnc)(comm_t *comm, char ***env, char [2][PATH_MAX]);
+	int (*fnc)(comm_t *comm, shell_t *shell);
 } builtins[] = {
 	{"cd", &ptr_cd},
 	{"env", &ptr_env},
 	{"setenv", &ptr_setenv},
 	{"unsetenv", &ptr_unsetenv},
 	{"exit", &ptr_exit},
+	{"history", &ptr_history},
 	{NULL, NULL}
 };
 

@@ -21,9 +21,8 @@ int exec_loop(shell_t *shell)
 	int return_code = 0;
 
 	for (int i = 0; shell->comm[i] != NULL; i++) {
-		debug_comm(shell->comm[i]);
 		exec_start(shell->comm[i]);
-		return_code = exec_comm(shell->comm[i], &(shell->env), shell->pwd);
+		return_code = exec_comm(shell->comm[i], &(shell->env), shell->pwd, shell);
 		exec_end(shell->comm[i]);
 		if (return_code == -1)
 			return (1);
@@ -49,7 +48,7 @@ int exec(comm_t *comm, char *path, char **env)
 	return (status == 256 ? 1 : status);
 }
 
-int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX], shell_t *shell)
 {
 	int is_local = (!my_strcmp(comm->argv[0], "./", 2)) || \
 (index_of(comm->argv[0], '/') != -1);
@@ -57,7 +56,7 @@ int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
 	char *filepath = NULL;
 
 	if (is_builtin(comm->argv[0]) >= 0)
-		return (exec_bi(comm, env, pwd));
+		return (exec_bi(comm, shell));
 	if (is_local == 1 && !search_local(comm->argv[0])) {
 		return (exec(comm, my_strndup(comm->argv[0], 0), *env));
 	} else if (is_local == 0) {

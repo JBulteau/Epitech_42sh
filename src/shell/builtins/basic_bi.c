@@ -11,7 +11,7 @@
 #include "builtins.h"
 #include "minishell.h"
 
-int ptr_exit(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int ptr_exit(comm_t *comm, shell_t *shell)
 {
 	return (-1);
 }
@@ -24,9 +24,9 @@ int is_builtin(char *name)
 	return (-1);
 }
 
-int exec_bi(comm_t *comm, char ***env, char pwd[2][PATH_MAX])
+int exec_bi(comm_t *comm, shell_t *shell)
 {
-	if ((comm == NULL) || (env == NULL) || (pwd == NULL))
+	if ((comm == NULL) || (shell->env == NULL) || (shell->pwd == NULL))
 		return (-1);
-	return (builtins[is_builtin(comm->argv[0])].fnc(comm, env, pwd));
+	return (builtins[is_builtin(comm->argv[0])].fnc(comm, shell));
 }
