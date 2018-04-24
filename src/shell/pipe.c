@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 #include <stdio.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -86,14 +87,10 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 				return_c = exec_bi(curr, &(shell->env), shell->pwd);
 				//TODO close fd + rd STDIN to STDIN
 			else {
-				debug_pid("MAIN");
 				if ((child_pid = fork()) == -1)
 					return (ERROR_RETURN);
 				else if (child_pid == 0) {
-					debug_pid("CHILD WITHOUT PIPE AFTER");
-					debug_pid(curr->argv[0]);
 					redirect_pipe_at_exec(curr);
-					//RD FD --> STDIN
 					exec_bin(curr, shell->env);
 				}
 				if (curr->pipe[IN]) {
@@ -103,12 +100,9 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 				wait_for_it(child_pid);
 			}
 		} else {
-			debug_pid("MAIN");
 			if ((child_pid = fork()) == -1)
 				return (ERROR_RETURN);
 			if (child_pid == 0) {
-				debug_pid("CHILD BEFORE PIPE");
-				debug_pid(curr->argv[0]);
 				redirect_pipe_at_exec(curr);
 				if (is_builtin(curr->argv[0]) != -1) {
 					return_c = exec_bi(curr, &(shell->env), shell->pwd);
@@ -116,9 +110,10 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 				} else
 					exec_bin(curr, shell->env);
 			}
-			debug_pid("MAIN2");
-			//close(curr->pipe[OUT]->fd[READ]);
-			//close(curr->pipe[IN]->fd[READ]);
+			if (curr->pipe[OUT]) {
+				//close(curr->pipe[OUT]->fd[READ]);
+				close(curr->pipe[OUT]->fd[WRITE]);
+			}
 		}
 	}
 	//TODO FERMER LES REDIR FDP

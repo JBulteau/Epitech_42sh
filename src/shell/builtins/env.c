@@ -5,6 +5,7 @@
 ** Env fnc
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "minishell.h"
 #include "my.h"

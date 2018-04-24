@@ -86,12 +86,21 @@ void free_red(redir_t *red);
 int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 
+/*	exec.c		*/
+int exec_loop(shell_t *shell);
+int exec_bin(comm_t *comm, char **env);
+int run_bin(comm_t *comm, char *path, char **env);
+
 /*	debug.c		*/
 void debug_comm(comm_t *comm);
 
 /*	pipe.c		*/
 pipe_t *init_pipe(comm_t *in, comm_t *out);
 void destroy_pipe(pipe_t *pipe);
+int wait_for_it(pid_t pid);
+int redirect_pipe_at_exec(comm_t *curr);
+void debug_pid(char *s);
+int run_pipeline(shell_t *shell, comm_t *comm);
 
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
