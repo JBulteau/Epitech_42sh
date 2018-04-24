@@ -26,7 +26,7 @@ int main(int ac, char **av, char **env)
 		return_code = exec_loop(shell);
 		free_comms(shell->comm);
 		free(shell->input);
-		if (return_code == -1)
+		if (return_code == -1 || return_code == -ERROR_CODE)
 			break;
 		disp_prompt();
 	}

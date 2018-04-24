@@ -39,6 +39,8 @@ shell_t *init_shell(char **env)
 		return (NULL);
 	shell->return_value = 0;
 	shell->history = NULL;
+	if (load42(shell) == ERROR_RETURN)
+		return (NULL);
 	getcwd(shell->pwd[0], PATH_MAX);
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';

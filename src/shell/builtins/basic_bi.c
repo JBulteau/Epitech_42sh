@@ -19,8 +19,13 @@ int ptr_exit(comm_t *comm, shell_t *shell)
 		shell->return_value = 1;
 		return (0);
 	}
+	if (comm->argv[1] == NULL) {
+		shell->return_value = 0;
+		return (-ERROR_CODE);
+	}
 	if (is_num(comm->argv[1]) == 0) {
 		shell->return_value = my_getnbr(comm->argv[1]);
+		return (-ERROR_CODE);
 	} else if (is_alphanum(comm->argv[1]) == 0 && (comm->argv[1][0] >= '0'\
 ) && (comm->argv[1][0] <= '9')) {
 		shell->return_value = 1;
@@ -31,7 +36,7 @@ int ptr_exit(comm_t *comm, shell_t *shell)
 		puts("exit: Expression Syntax.");
 		return (0);
 	}
-	return (-1);
+	return (-ERROR_CODE);
 }
 
 int is_builtin(char *name)

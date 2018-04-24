@@ -26,8 +26,8 @@ int exec_loop(shell_t *shell)
 		exec_end(shell->comm[i]);
 		if (return_code == -1)
 			return (1);
-		if (return_code == ERROR_CODE)
-			return (ERROR_CODE);
+		if (return_code == -ERROR_CODE)
+			return (-ERROR_CODE);
 	}
 	return (return_code);
 }
