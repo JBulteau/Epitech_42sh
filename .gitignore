@@ -1,6 +1,8 @@
 *.vscode
 *.a
 *.o
+*.gcda
+*.gcno
 vgc*
 *~
 \#*\#
