@@ -21,7 +21,6 @@ int exec_loop(shell_t *shell)
 	int return_code = 0;
 
 	for (int i = 0; shell->comm[i] != NULL; i++) {
-		debug_comm(shell->comm[i]);
 		exec_start(shell->comm[i]);
 		return_code = run_pipeline(shell, shell->comm[i]);
 		exec_end(shell->comm[i]);
