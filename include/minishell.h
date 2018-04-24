@@ -15,6 +15,11 @@ typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 
+typedef struct history_s {
+	char *data;
+	struct history_s *next;
+} history_t;
+
 struct redir_s {
 	char *target;
 	int fd[2];
@@ -37,6 +42,7 @@ typedef struct {
 	char pwd[2][PATH_MAX];
 	char *input;
 	comm_t **comm;
+	history_t *history;
 	int return_value;
 } shell_t;
 
@@ -65,7 +71,7 @@ void disp_prompt(void);
 
 /*	exec.c		*/
 int exec(comm_t *comm, char *path, char **env);
-int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX]);
+int exec_comm(comm_t *comm, char ***env, char pwd[2][PATH_MAX], shell_t *shell);
 int exec_loop(shell_t *shell);
 
 /*	search.c	*/
@@ -78,6 +84,9 @@ char *get_env_var(char **env, char *var);
 /*	BUILT-INS	*/
 int is_builtin(char *name);
 int exec_bi(comm_t *comm, shell_t *shell);
+
+/*	history.c	*/
+int save_history(shell_t *shell, char *input);
 
 /*	redic.c		*/
 redir_t *init_redir(void);

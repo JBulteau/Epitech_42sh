@@ -20,6 +20,7 @@ int main(int ac, char **av, char **env)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
+		save_history(shell, shell->input);
 		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
 		return_code = exec_loop(shell);

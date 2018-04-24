@@ -12,22 +12,22 @@
 #include "builtins.h"
 #include "minishell.h"
 
-int ptr_exit(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
+int ptr_exit(comm_t *comm, shell_t *shell)
 {
 	if (array_len((void **) comm->argv) > 3) {
 		puts("exit: Expression Syntax.");
-		*retrun_code = 1;
+		shell->return_value = 1;
 		return (0);
 	}
 	if (is_num(comm->argv[1]) == 0) {
-		*retrun_code = my_getnbr(comm->argv[1]);
+		shell->return_value = my_getnbr(comm->argv[1]);
 	} else if (is_alphanum(comm->argv[1]) == 0 && (comm->argv[1][0] >= '0'\
 ) && (comm->argv[1][0] <= '9')) {
-		*retrun_code = 1;
+		shell->return_value = 1;
 		puts("exit: Badly formed number.");
 		return (0);
 	} else {
-		*retrun_code = 1;
+		shell->return_value = 1;
 		puts("exit: Expression Syntax.");
 		return (0);
 	}
@@ -44,10 +44,7 @@ int is_builtin(char *name)
 
 int exec_bi(comm_t *comm, shell_t *shell)
 {
-	int bi_no = 0;
-
 	if ((comm == NULL) || (shell == NULL) || (shell->env == NULL) || (shell->pwd == NULL))
 		return (-1);
-	bi_no = is_builtin(comm->argv[0]);
-	return (builtins[bi_no].fnc(comm, &(shell->env), shell->pwd, &(shell->return_value)));
+	return (builtins[is_builtin(comm->argv[0])].fnc(comm, shell));
 }
