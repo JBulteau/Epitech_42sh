@@ -42,35 +42,39 @@ int wait_for_it(pid_t pid)
 
 	do {
 		last_pid = wait(&status);
-		if (WIFSIGNALED(status)) {
-			if (WTERMSIG(status) == 8)
-				my_puterror("Floating exception");
-			else
-				my_puterror(strsignal(WTERMSIG(status)));
-			if (WCOREDUMP(status))
-				my_puterror(" (core dumped)");
-			my_puterror("\n");
-		}
+		if (!WIFSIGNALED(status))
+			continue;
+		if (WTERMSIG(status) == 8)
+			my_puterror("Floating exception");
+		else
+			my_puterror(strsignal(WTERMSIG(status)));
+		if (WCOREDUMP(status))
+			my_puterror(" (core dumped)");
+		my_puterror("\n");
 	} while (last_pid != pid);
+	return (status);
 }
 
 int redirect_pipe_at_exec(comm_t *curr)
 {
 	if (curr->pipe[IN]) {
-		dup2(curr->pipe[IN]->fd[READ], STDIN_FILENO);
+		if (dup2(curr->pipe[IN]->fd[READ], STDIN_FILENO) == -1)
+			return (ERROR_RETURN);
 		close(curr->pipe[IN]->fd[WRITE]);
 	}
 	if (curr->pipe[OUT]) {
-		dup2(curr->pipe[OUT]->fd[WRITE], STDOUT_FILENO);
-      		close(curr->pipe[OUT]->fd[READ]);
+		if (dup2(curr->pipe[OUT]->fd[WRITE], STDOUT_FILENO) == -1)
+			return (ERROR_RETURN);
+		close(curr->pipe[OUT]->fd[READ]);
 	}
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 void debug_pid(char *s)
 {
 	fprintf(stderr, "|%i|%s\n", getpid(), s);
 }
+
 
 int run_pipeline(shell_t *shell, comm_t *comm)
 {
@@ -118,4 +122,4 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 	}
 	//TODO FERMER LES REDIR FDP
 	return (0);
-} /* run_pipeline */
+}
