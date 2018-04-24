@@ -36,18 +36,21 @@ static int first_part_init(jarg_t *corr, comm_t *comm, int *nb_argv)
 	return (0);
 }
 
-static void fill_infos(comm_t *comm, jarg_t *corr, int i, int *nb_argv)
+void fill_infos(comm_t *comm, jarg_t *corr, int i, int *nb_argv)
 {
+	DIR *dirp;
+
 	if (comm->argv[i][0] == '-') {
 		corr->infos[i - 1].pos = -2;
 		corr->infos[i - 1].correct = 1;
 		corr->infos[i - 1].name = my_strndup("options", 7);
-	} else if (opendir(comm->argv[i])) {
+	} else if (dirp = opendir(comm->argv[i])) {
 		corr->nb_good_start += 1;
 		corr->infos[i - 1].name = my_strndup(comm->argv[i], \
 my_strlen(comm->argv[i]));
 		corr->infos[i - 1].correct = 1;
 		corr->infos[i - 1].pos = i;
+		closedir(dirp);
 	} else {
 		corr->infos[i - 1].name = my_strndup(comm->argv[i], \
 my_strlen(comm->argv[i]));
@@ -103,8 +106,9 @@ int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath)
 		if (returned_value == -1)
 			return (-1);
 		printf("Jarvis OP\n");
-		if (corr->nb_good_start < corr->nb_good_end)
+		if (corr->nb_good_start <= corr->nb_good_end)
 			exec(comm, filepath, *env, 1);
-	}
+		}
+	free_jarvis_corrector(&corr, 0);
 	return (0);
 }

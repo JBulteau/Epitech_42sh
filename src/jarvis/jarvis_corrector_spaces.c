@@ -22,11 +22,13 @@ corr->infos[*i + 1].name, 0, 0);
 		(*i)++;
 		closedir(dirp);
 	}
+	free(both);
 }
 
 int wrong_spaces_handle(comm_t *comm, jarg_t *corr)
 {
 	int which_inc = 0;
+	int check = 1;
 
 	for (int i = 0; corr->infos[i + 1].pos != -1; i++) {
 		if (corr->infos[i].correct == 0 && \
@@ -39,20 +41,16 @@ corr->infos[i + 1].correct == 0) {
 		}
 	}
 	if (corr->nb_good_start < corr->nb_good_end)
-		if ((which_inc = refill_comm_struct(comm, corr)) == -1)
+		if ((check = refill_comm_struct(comm, corr)) == -1)
 			return (-1);
-	if (which_inc == 0)
-		return (0);
-	else
-		return (1);
+	return (check);
 }
 
 int fill_comm(comm_t *comm, jarg_t *corr, int *inc)
 {
 	if (inc[INFOS_INC] + 1 == corr->which[inc[WHICH_INC]]) {
-		comm->argv[inc[COMM_INC]] = \
-my_strndup(concat(corr->infos[inc[INFOS_INC]].name, corr->infos[inc[INFOS_INC] \
-+ 1].name, 0, 0), 0);
+		comm->argv[inc[COMM_INC]] = concat(corr->infos[inc[INFOS_INC]].\
+name, corr->infos[inc[INFOS_INC] + 1].name, 0, 0);
 		(inc[INFOS_INC])++;
 		(inc[COMM_INC])++;
 		(inc[WHICH_INC])++;
@@ -63,6 +61,20 @@ my_strndup(corr->infos[inc[INFOS_INC]].name, 0);
 		(inc[COMM_INC])++;
 	}
 	return (0);
+}
+
+int refill_infos(comm_t *comm, jarg_t *corr)
+{
+	int nb_argv = 0;
+
+	corr->nb_good_start = 0;
+	for (int i = 1; comm->argv[i] != NULL; i++ && nb_argv++);
+	corr->infos = malloc(sizeof(args_t) * (nb_argv + 1));
+	if (corr->infos == NULL)
+		return (-1);
+	corr->infos[nb_argv].pos = -1;
+	for (int i = 1; comm->argv[i] != NULL; i++)
+		fill_infos(comm, corr, i, &nb_argv);
 }
 
 int refill_comm_struct(comm_t *comm, jarg_t *corr)
@@ -83,5 +95,11 @@ int refill_comm_struct(comm_t *comm, jarg_t *corr)
 	for (; corr->infos[inc[INFOS_INC]].pos != -1; (inc[INFOS_INC])++)
 		if (fill_comm(comm, corr, inc) == 1)
 			continue;
+	free_jarvis_corrector(&corr, 1);
+	if (refill_infos(comm, corr) == -1)
+		return (-1);
+	for (int i = 0; corr->infos[i].pos != -1; i++)
+		if (corr->infos[i].correct == 0)
+			return (1);
 	return (0);
 }

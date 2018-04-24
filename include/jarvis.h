@@ -31,6 +31,8 @@ enum inc {
 };
 
 /* jarvis corrector */
+void fill_infos(comm_t *comm, jarg_t *corr, int i, int *nb_argv);
+void free_jarvis_corrector(jarg_t **corr, int i);
 int misspell_handle(jarg_t *corr, comm_t *comm);
 int refill_comm_struct(comm_t *comm, jarg_t *corr);
 int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath);
