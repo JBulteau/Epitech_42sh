@@ -25,6 +25,7 @@ corr->infos[*i + 1].correct == 0) {
 
 static int first_part_init(jarg_t *corr, comm_t *comm, int *nb_argv)
 {
+	corr->change = 0;
 	if (corr == NULL)
 		return (-1);
 	corr->nb_good_start = 0;
@@ -106,9 +107,9 @@ int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath)
 		if (returned_value == -1)
 			return (-1);
 		printf("Jarvis OP\n");
-		if (corr->nb_good_start <= corr->nb_good_end)
+		if (corr->change == 1)
 			exec(comm, filepath, *env, 1);
-		}
+	}
 	free_jarvis_corrector(&corr, 0);
 	return (0);
 }

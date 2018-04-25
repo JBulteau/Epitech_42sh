@@ -22,16 +22,5 @@ void free_jarvis_corrector(jarg_t **corr, int i)
 
 int misspell_handle(jarg_t *corr, comm_t *comm)
 {
-	char path[2];
-	DIR *dirp;
-	struct dirent *curr;
-	int nb_total_indir = 0;
-
-	path[0] = '.';
-	path[1] = '\0';
-	dirp = opendir(path);
-	while (curr = readdir(dirp))
-		nb_total_indir++;
-	printf("nb : %i", nb_total_indir);
 	return (0);
 }

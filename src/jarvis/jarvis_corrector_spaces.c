@@ -84,6 +84,7 @@ int refill_comm_struct(comm_t *comm, jarg_t *corr)
 	int nb_total = 0;
 	char *save = my_strndup(comm->argv[0], my_strlen(comm->argv[0]));
 
+	corr->change = 1;
 	for (; corr->which[nb_change] != -1; nb_change++);
 	for (; comm->argv[nb_total] != NULL; nb_total++);
 	free_array((void *) comm->argv);

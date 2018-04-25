@@ -22,6 +22,7 @@ typedef struct {
 	args_t *infos;
 	int nb_good_end;
 	int *which;
+	int change;
 } jarg_t;
 
 enum inc {
