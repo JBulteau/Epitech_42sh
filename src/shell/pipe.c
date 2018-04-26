@@ -78,19 +78,20 @@ void debug_pid(char *s)
 
 int run_pipeline(shell_t *shell, comm_t *comm)
 {
-	//TODO AJOUTER LES REDIRECTIONS FDP
 	int return_c = 0;
 	pid_t child_pid;
 
 	if ((shell == NULL) || (comm == NULL))
-		return (ERROR_RETURN);
+		return (-ERROR_CODE);
 	for (comm_t *curr = comm; curr; curr = (curr->pipe[OUT] && curr->pipe[OUT]->output) ? curr->pipe[OUT]->output : NULL) {
 		if (curr->pipe[OUT] == NULL) {
-			if (is_builtin(curr->argv[0]) != -1)
+			if (is_builtin(curr->argv[0]) != -1) {
 				//TODO REDIRECT fd --> STDIN
 				return_c = exec_bi(curr, shell);
+				if (return_c == -ERROR_CODE)
+					return (-ERROR_CODE);
 				//TODO close fd + rd STDIN to STDIN
-			else {
+			} else {
 				if ((child_pid = fork()) == -1)
 					return (ERROR_RETURN);
 				else if (child_pid == 0) {

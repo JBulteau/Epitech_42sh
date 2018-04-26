@@ -20,12 +20,13 @@ int main(int ac, char **av, char **env)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
+		save_history(shell, shell->input);
 		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
 		return_code = exec_loop(shell);
 		free_comms(shell->comm);
 		free(shell->input);
-		if (return_code == -1)
+		if (return_code == -1 || return_code == -ERROR_CODE)
 			break;
 		disp_prompt();
 	}
