@@ -15,7 +15,7 @@ void try_concat(comm_t *comm, jarg_t *corr, int *which_inc, int *i)
 corr->infos[*i + 1].name, 0, 0);
 	DIR *dirp;
 
-	if (dirp = opendir(both)) {
+	if (dirp = opendir(both)) { //NE PAS OPENDIR MAIS ACCESS
 		corr->nb_good_end += 1;
 		corr->which[*which_inc] = corr->infos[*i].pos;
 		(*which_inc)++;
