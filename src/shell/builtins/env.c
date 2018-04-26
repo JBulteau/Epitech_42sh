@@ -53,8 +53,7 @@ int set_env_value(char ***env, char *var, char *value)
 int ptr_env(comm_t *comm, shell_t *shell)
 {
 	for (int i = 0; shell->env[i] != NULL; i++) {
-		my_putstr(shell->env[i]);
-		my_putchar('\n');
+		puts(shell->env[i]);
 	}
 	return (SUCCESS_RETURN);
 }
@@ -63,8 +62,7 @@ int ptr_setenv(comm_t *comm, shell_t *shell)
 {
 	if (comm->argv[1] == NULL) {
 		for (int i = 0; shell->env[i] != NULL; i++) {
-			my_putstr(shell->env[i]);
-			my_putchar('\n');
+			puts(shell->env[i]);
 		}
 		return (SUCCESS_RETURN);
 	}
@@ -85,8 +83,8 @@ int ptr_unsetenv(comm_t *comm, shell_t *shell)
 		if (index == -1)
 			continue;
 		value = shell->env[index];
-		for (int i = index; (*shell->env)[i]; i++)
-			(*shell->env)[i] = (*shell->env)[i + 1];
+		for (int i = index; shell->env[i]; i++)
+			shell->env[i] = shell->env[i + 1];
 		free(value);
 	}
 	return (SUCCESS_RETURN);
