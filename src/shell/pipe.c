@@ -52,7 +52,7 @@ int wait_for_it(pid_t pid)
 			my_puterror(" (core dumped)");
 		my_puterror("\n");
 	} while (last_pid != pid);
-	return (status);
+	return (WEXITSTATUS(status));
 }
 
 int redirect_pipe_at_exec(comm_t *curr)
@@ -102,7 +102,7 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 					close(curr->pipe[IN]->fd[WRITE]);
 					close(curr->pipe[IN]->fd[READ]);
 				}
-				wait_for_it(child_pid);
+				return_c = wait_for_it(child_pid);
 			}
 		} else {
 			if ((child_pid = fork()) == -1)
@@ -116,11 +116,12 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 					exec_bin(curr, shell->env);
 			}
 			if (curr->pipe[OUT]) {
-				//close(curr->pipe[OUT]->fd[READ]);
 				close(curr->pipe[OUT]->fd[WRITE]);
+				close(curr->pipe[OUT]->fd[READ]);
+				printf("READ %i\n", curr->pipe[OUT]->fd[READ]);
 			}
 		}
 	}
 	//TODO FERMER LES REDIR FDP
-	return (0);
+	return (return_c);
 }
