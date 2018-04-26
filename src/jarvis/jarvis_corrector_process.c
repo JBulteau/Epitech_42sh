@@ -68,6 +68,8 @@ char *check_path_argv(int *nb_to_path, char **arg)
 		for (int i = 0; i <= pos; i++)
 			current_path[i] = (*arg)[i];
 	}
+	if (//changement)
+		corr->change = 1;
 }
 
 int misspell_handle(jarg_t *corr, comm_t *comm)
