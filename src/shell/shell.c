@@ -54,4 +54,7 @@ void delete_shell(shell_t *shell)
 	free_array((void **) shell->env);
 	free_history(shell->history);
 	free(shell);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 }
