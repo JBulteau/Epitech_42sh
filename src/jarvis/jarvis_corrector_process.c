@@ -28,14 +28,14 @@ int more_than_four_char(char *error, char *try)
 
 char *check_path_argv(int *nb_to_path, char **arg)
 {
-	char *current_path = NULL;
+	char *current_path = strdup("./");
 	int pos_after_slash = 0;
 	int to_know = 0;
 	int letter_nbr = 0;
 
 	for (int i = 0; (*arg)[i] != '\0'; i++)
 		if ((*arg)[i] == '/' && (*arg)[i + 1] == '\0') {
-			(*arg)[i] = '/0';
+			(*arg)[i] = '\0';
 			to_know = 1;
 		}
 	for (int pos = 0; (*arg)[pos] != '\0'; pos++) {
@@ -44,24 +44,30 @@ char *check_path_argv(int *nb_to_path, char **arg)
 && (*arg)[pos] <= 'z'))
 			letter_nbr = 1;
 		if (!(pos != 0 && (*arg)[pos] == '/')) {
-			//set le path a '/';
+			current_path += 1;
 			continue;
 		}
 		(*arg)[pos] = '\0';
 		if (letter_nbr != 1) { //fonction endessous;
+			printf("Without letter\n");
 			if (!(opendir(*arg))) {
 				(*arg)[pos] = '/';
 				return (NULL);
+			}
 		} else {
 			if (!(opendir(*arg))) {
-				waiting;
+				printf("with letter\n");
 			}
 		}
 		letter_nbr = 0;
 		(*arg)[pos] = '/';
-		ici : set current_âth + pos_after_slash;
+		pos_after_slash = pos + 1;
+		free(current_path);
+		current_path = malloc(sizeof(char) * (pos + 2));
+		current_path[pos + 1] = '\0';
+		for (int i = 0; i <= pos; i++)
+			current_path[i] = (*arg)[i];
 	}
-
 }
 
 int misspell_handle(jarg_t *corr, comm_t *comm)
