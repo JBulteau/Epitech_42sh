@@ -39,6 +39,15 @@ int save_history(shell_t *shell, char *input)
 	return (0);
 }
 
+void free_history(history_t *hist)
+{
+	if (hist == NULL)
+		return;
+	free(hist->data);
+	free_history(hist->next);
+	free(hist);
+}
+
 int ptr_history(comm_t *comm, shell_t *shell)
 {
 	for (history_t *curr = shell->history; curr != NULL; \
