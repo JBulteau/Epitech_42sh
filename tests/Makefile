@@ -9,10 +9,10 @@ NAME		=	test
 
 SRC_FOLDER	=	../src
 
-SRC		=	$(SRC_FOLDER)/shell/parsing/quote.c\
+SRC		=	$(SRC_FOLDER)/shell/parsing/is_quote.c\
 			$(SRC_FOLDER)/shell/parsing/struct.c
 
-SRC_UT		=	quote_functions_test.c\
+SRC_UT		=	is_quote_functions_test.c\
 			struct_functions_test.c
 
 OBJ		=	$(SRC:.c=.o) $(SRC_UT:.c=.o)

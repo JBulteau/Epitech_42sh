@@ -16,7 +16,8 @@ node_t **realloc_node(node_t **node, int n)
 		return (NULL);
 	for (int i = 0; i < n; i++) {
 		if (node != NULL && node[i] != NULL) {
-			new_node[i] = init_node(node[i]->buffer, node[i]->quote);
+			new_node[i] = \
+			init_node(node[i]->buffer, node[i]->quote);
 			free(node[i]->buffer);
 			free(node[i]);
 		} else {
@@ -25,6 +26,7 @@ node_t **realloc_node(node_t **node, int n)
 		if (new_node[i] == NULL)
 			return (NULL);
 	}
+	new_node[n] = NULL;
 	if (node != NULL)
 		free(node);
 	return (new_node);

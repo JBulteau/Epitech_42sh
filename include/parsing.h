@@ -39,6 +39,10 @@ node_t **realloc_node(node_t **node, int n);
 /*quote*/
 
 node_t *parse_quote(node_t *node, char *buffer);
+node_t *fill_buffer(node_t *node, char *buffer, int i);
+
+/*is_quote.c*/
+
 int is_a_quote(char c);
 int is_simple(char c);
 int is_double(char c);
