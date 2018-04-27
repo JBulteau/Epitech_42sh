@@ -13,6 +13,7 @@ SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
 42RC_DIR	=	$(SHELL_DIR)42rc/
+PARSING_DIR	=	$(SHELL_DIR)parsing/
 
 SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(SHELL_DIR)shell.c\
@@ -38,10 +39,16 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(RED_DIR)pipe.c\
 \
 			$(42RC_DIR)load42.c\
+\
+			$(PARSING_DIR)parsing.c\
+			$(PARSING_DIR)struct.c\
+			$(PARSING_DIR)quote.c
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include
+TEST_FOLDER	=	tests
+
+CFLAGS		=	-W -Wextra -Wall -Wshadow -I include
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -69,3 +76,10 @@ re:		fclean all
 
 debug:		CFLAGS += -g
 debug:		re
+
+tests_run:
+		$(MAKE) -C $(TEST_FOLDER)
+		./$(TEST_FOLDER)/test > /dev/null
+
+tests_fclean:
+		$(MAKE) fclean -C $(TEST_FOLDER)
