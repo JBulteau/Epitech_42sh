@@ -70,6 +70,10 @@ void free_aliases(alias_t *alias, int free_next)
                 free_aliases(alias->nav[NEXT], 1);
         else {
                 puts("HERE\nNOT REMOVING");
+                if (alias->nav[PREV] != NULL)
+                        alias->nav[PREV]->nav[NEXT] = alias->nav[NEXT];
+                if (alias->nav[NEXT] != NULL)
+                        alias->nav[NEXT]->nav[PREV] = alias->nav[PREV];
         }
         free(alias);
 }
@@ -86,10 +90,14 @@ int rm_alias(shell_t *shell, char **av)
        for (alias_t *current = shell->aliases; current != NULL; current = current->nav[NEXT]) {
                for (int i = 2; av[i] != NULL; i++) {
                         if (!strcmp(av[i], current->name)) {
+                                if (current->nav[PREV] == NULL)
+                                        shell->aliases = current->nav[NEXT];
                                 puts("FOUND");
                                 free_aliases(current, 0);
+                                puts("END RM");
                         }
                 }
+                puts("A");
        }
         return (0);
 }
