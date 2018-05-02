@@ -17,8 +17,8 @@ alias_t *create_alias(char *name, char*alias, alias_t *prev)
 
         if (new == NULL)
                 return (NULL);
-        new->alias = alias;
-        new->name = name;
+        new->alias = strdup(alias);
+        new->name = strdup(name);
         new->nav[PREV] = prev;
         new->nav[NEXT] = NULL;
         return (new);
@@ -44,20 +44,43 @@ int disp_help(void)
 int add_alias(char **args, shell_t *shell)
 {
         alias_t *last = NULL;
+        int i = 1;
 
         if (shell->aliases == NULL) {
-                puts("INIT");
-                shell->aliases = create_alias("name", "alias", NULL);
-                return (0);
+                puts("Init");
+                shell->aliases = create_alias(args[i++], "alias", NULL);
         }
-        puts("ADDING");
+        last = shell->aliases;
         for (; last->nav[NEXT] != NULL; last = last->nav[NEXT]);
-        last->nav[NEXT] = create_alias("name", "alias", last);
+        for (; args[i] != NULL; last = last->nav[NEXT]) {
+                puts("Adding");
+                last->nav[NEXT] = create_alias(args[i++], "alias", last);
+        }
         return (0);
 }
 
-int rm_alias(shell_t *shell)
+void free_aliases(alias_t *alias)
 {
+        if (alias == NULL)
+                return;
+        free(alias->name);
+        free(alias->alias);
+        free_aliases(alias->nav[NEXT]);
+        free(alias);
+}
+
+int rm_alias(shell_t *shell, char **av)
+{
+        if (av[2] == NULL) {
+                puts("Please specify an alias to remove");
+                return (1);
+        }
+        if (shell->aliases == NULL) {
+                return (0);
+        }
+        if (strcmp(shell->aliases->name, av[1]) == 0) {
+                puts("TODO REMOVE");
+        }
         return (0);
 }
 
@@ -68,6 +91,6 @@ int ptr_alias(comm_t *comm, shell_t *shell)
         if (!strcmp(comm->argv[1], "--help") || !strcmp(comm->argv[1], "-h"))
                 return (disp_help());
         if (!strcmp(comm->argv[1], "rm") || !strcmp(comm->argv[1], "delete"))
-                return (rm_alias(shell));
-        return (add_alias(comm->argv + 1, &(shell->aliases)));
+                return (rm_alias(shell, comm->argv));
+        return (add_alias(comm->argv, shell));
 }
