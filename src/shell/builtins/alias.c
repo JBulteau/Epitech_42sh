@@ -47,25 +47,30 @@ int add_alias(char **args, shell_t *shell)
         int i = 1;
 
         if (shell->aliases == NULL) {
-                puts("Init");
                 shell->aliases = create_alias(args[i++], "alias", NULL);
         }
         last = shell->aliases;
         for (; last->nav[NEXT] != NULL; last = last->nav[NEXT]);
         for (; args[i] != NULL; last = last->nav[NEXT]) {
-                puts("Adding");
                 last->nav[NEXT] = create_alias(args[i++], "alias", last);
         }
         return (0);
 }
 
-void free_aliases(alias_t *alias)
+void free_aliases(alias_t *alias, int free_next)
 {
+        alias_t prev;
+        alias_t next;
+
         if (alias == NULL)
                 return;
         free(alias->name);
         free(alias->alias);
-        free_aliases(alias->nav[NEXT]);
+        if (free_next)
+                free_aliases(alias->nav[NEXT], 1);
+        else {
+                puts("HERE\nNOT REMOVING");
+        }
         free(alias);
 }
 
@@ -78,9 +83,14 @@ int rm_alias(shell_t *shell, char **av)
         if (shell->aliases == NULL) {
                 return (0);
         }
-        if (strcmp(shell->aliases->name, av[1]) == 0) {
-                puts("TODO REMOVE");
-        }
+       for (alias_t *current = shell->aliases; current != NULL; current = current->nav[NEXT]) {
+               for (int i = 2; av[i] != NULL; i++) {
+                        if (!strcmp(av[i], current->name)) {
+                                puts("FOUND");
+                                free_aliases(current, 0);
+                        }
+                }
+       }
         return (0);
 }
 
