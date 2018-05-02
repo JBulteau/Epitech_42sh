@@ -30,6 +30,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(BI_DIR)env.c\
 			$(BI_DIR)cd.c\
 			$(BI_DIR)history.c\
+			$(BI_DIR)alias.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\

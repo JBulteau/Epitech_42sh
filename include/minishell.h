@@ -14,6 +14,13 @@
 typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
+typedef struct alias_s alias_t;
+
+struct alias_s {
+	char *name;
+        char *alias;
+        struct alias_s *nav[2];
+};
 
 typedef struct history_s {
 	char *data;
@@ -42,6 +49,7 @@ typedef struct {
 	char pwd[2][PATH_MAX];
 	char *input;
 	comm_t **comm;
+	alias_t *aliases;
 	history_t *history;
 	int return_value;
 } shell_t;
@@ -132,6 +140,11 @@ enum {
 enum {
 	OUT,
 	IN
+};
+
+enum {
+        PREV,
+        NEXT
 };
 
 #endif
