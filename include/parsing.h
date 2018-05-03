@@ -17,7 +17,8 @@ enum quote_type {
 	NONE = -1,
 	SIMPLE,
 	DOUBLE,
-	MAGIC
+	MAGIC,
+	PARENTHESES
 };
 
 typedef struct node node_t;
@@ -58,5 +59,11 @@ int is_magic(char c);
 node_t *parse_split(node_t *node);
 node_t *search_semicolon(node_t *node);
 node_t *parse_semicolon(node_t *node, char *buffer, int i);
+
+/*parentheses.c*/
+
+node_t *parse_parentheses(node_t *node);
+node_t *search_parentheses(node_t *node);
+node_t *checkl_parentheses(node_t *node);
 
 #endif

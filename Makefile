@@ -45,6 +45,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(PARSING_DIR)quote.c\
 			$(PARSING_DIR)is_quote.c\
 			$(PARSING_DIR)split.c\
+			$(PARSING_DIR)parentheses.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

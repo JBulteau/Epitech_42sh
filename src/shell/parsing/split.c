@@ -17,13 +17,14 @@ node_t *parse_semicolon(node_t *node, char *buffer, int i)
 		j = 0;
 		n = 2;
 	}
-	if (buffer[i] == ';' && node->quote == NONE) {
+	if (buffer[i] == ';' && node->quote == NONE \
+	&& (i < 1 || buffer[i - 1] != ';')) {
 		if (node->next[n - 2]->buffer != NULL)
 			node->next = realloc_node(node->next, n++);
 		if (node->next == NULL)
 			return (NULL);
 		j = 0;
-	} else {
+	} else if ((i < 1 || buffer[i - 1] != ';') || buffer[i] != ';') {
 		if ((node->next[n - 2]->buffer = \
 		realloc(node->next[n - 2]->buffer, j + 2)) == NULL)
 			return (NULL);
@@ -53,5 +54,5 @@ node_t *parse_split(node_t *node)
 		if (node->next[i] == NULL)
 			return (NULL);
 	}
-	return (node);
+	return (parse_parentheses(node));
 }

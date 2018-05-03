@@ -121,7 +121,8 @@ enum {
 	S_RIGHT,
 	D_LEFT,
 	S_LEFT,
-	PIPE
+	PIPE,
+	SEMICOLON
 };
 
 enum {
