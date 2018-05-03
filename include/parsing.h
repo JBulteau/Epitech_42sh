@@ -63,7 +63,10 @@ node_t *parse_semicolon(node_t *node, char *buffer, int i);
 /*parentheses.c*/
 
 node_t *parse_parentheses(node_t *node);
-node_t *search_parentheses(node_t *node);
-node_t *checkl_parentheses(node_t *node);
+node_t *check_parentheses(node_t *node, char *buffer);
+
+/*free_node.c*/
+
+void free_node(node_t *node);
 
 #endif
