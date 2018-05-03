@@ -35,7 +35,7 @@ CC		=	cc
 all:		$(NAME)
 
 $(NAME):	$(OBJ)
-		$(CC) -o $(NAME) $(SRC) $(SRC_UT) $(CFLAGS) $(LDFLAGS)
+		$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS)
 
 clean:
 		rm -f *.gcno *.gcda

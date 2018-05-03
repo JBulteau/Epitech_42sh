@@ -9,6 +9,7 @@
 #define __PARSING_H_
 
 #include "minishell.h"
+#include <stdbool.h>
 
 typedef enum quote_type quote_type_t;
 
@@ -24,6 +25,7 @@ typedef struct node node_t;
 struct node {
 	char *buffer;
 	quote_type_t quote;
+	bool backslash;
 	node_t **next;
 };
 
@@ -39,8 +41,8 @@ node_t **realloc_node(node_t **node, int n);
 /*quote*/
 
 node_t *parse_quote(node_t *node, char *buffer);
-node_t *fill_buffer(node_t *node, char *buffer, int i);
-
+node_t *fill_buffer(node_t *node, char *buffer, int *i);
+node_t *delete_quote(node_t *node, char *buffer, int i);
 /*is_quote.c*/
 
 int is_a_quote(char c);
