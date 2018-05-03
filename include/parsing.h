@@ -25,6 +25,7 @@ typedef struct node node_t;
 struct node {
 	char *buffer;
 	quote_type_t quote;
+	int separator;
 	bool backslash;
 	node_t **next;
 };
@@ -43,11 +44,19 @@ node_t **realloc_node(node_t **node, int n);
 node_t *parse_quote(node_t *node, char *buffer);
 node_t *fill_buffer(node_t *node, char *buffer, int *i);
 node_t *delete_quote(node_t *node, char *buffer, int i);
+int missing_quote(node_t *node, char *buffer);
+
 /*is_quote.c*/
 
 int is_a_quote(char c);
 int is_simple(char c);
 int is_double(char c);
 int is_magic(char c);
+
+/*split.c*/
+
+node_t *parse_split(node_t *node);
+node_t *search_semicolon(node_t *node);
+node_t *parse_semicolon(node_t *node, char *buffer, int i);
 
 #endif

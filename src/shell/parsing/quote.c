@@ -71,11 +71,14 @@ node_t *fill_buffer(node_t *node, char *buffer, int *i)
 node_t *parse_quote(node_t *node, char *buffer)
 {
 	node->next = realloc_node(node->next, 1);
+	if (node->next == NULL)
+		return (NULL);
 	for (int i = 0; buffer[i] != '\0'; i++) {
-		if ((node = fill_buffer(node, buffer, &i)) == NULL)
+		node = fill_buffer(node, buffer, &i);
+		if (node == NULL)
 			return (NULL);
 	}
 	if (missing_quote(node, buffer))
 		return (NULL);
-	return (node);
+	return (parse_split(node));
 }

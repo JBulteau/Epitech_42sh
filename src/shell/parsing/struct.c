@@ -48,6 +48,7 @@ node_t *init_node(char *buffer, int quote)
 		node->buffer = NULL;
 	}
 	node->quote = quote;
+	node->separator = NONE;
 	node->backslash = false;
 	node->next = NULL;
 	return (node);
