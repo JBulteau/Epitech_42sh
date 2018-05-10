@@ -1,0 +1,1 @@
+gcc main.c is_quote.c quote.c struct.c split.c parentheses.c -I ../../../include -L ../../../lib/my -lmy && ./a.out > result && diff result ref ; rm a.out
