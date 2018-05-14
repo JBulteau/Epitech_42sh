@@ -7,6 +7,8 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <signal.h>
 #include "minishell.h"
 #include "my.h"
 
@@ -54,6 +56,10 @@ void delete_shell(shell_t *shell)
 	free_array((void **) shell->env);
 	free_history(shell->history);
 	free(shell);
+	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
+		if (kill(pid_job[i], SIGKILL) == -1)
+			perror("kill");
+	}
 	free(pid_job);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);

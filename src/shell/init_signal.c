@@ -45,7 +45,7 @@ void catch_ctrl_z(int sig)
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
 (pid_job[i + 1] && pid_job[i + 1] == -2))
 		return;
-	if (kill(pid_job[i], SIGSTOP)) {
+	if (kill(pid_job[i], SIGSTOP) == -1) {
 		perror("kill");
 		return;
 	}
