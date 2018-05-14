@@ -16,7 +16,7 @@ int main(int ac, char **av, char **env)
 	shell_t *shell = init_shell(env);
 	int return_code = SUCCESS_CODE;
 
-	if (shell == NULL)
+	if (shell == NULL || init_signal() == -1)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {

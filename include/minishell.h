@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <linux/limits.h>
 
+extern pid_t *pid_job;
+
 typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
@@ -111,6 +113,14 @@ int wait_for_it(pid_t pid);
 int redirect_pipe_at_exec(comm_t *curr);
 void debug_pid(char *s);
 int run_pipeline(shell_t *shell, comm_t *comm);
+
+/*	init_signal.c	*/
+int init_signal(void);
+
+/*	jobs.c		*/
+int find_last_pid(void);
+int add_to_pid(pid_t);
+int remove_last_pid(void);
 
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";

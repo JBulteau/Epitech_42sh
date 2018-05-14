@@ -8,6 +8,7 @@
 #include "my.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 
 static void save_fnc(char *save, char *src)
 {
@@ -21,7 +22,6 @@ static void save_fnc(char *save, char *src)
 		save[i] = src[index + i];
 		src[index + i] = 0;
 	}
-
 }
 
 static char *last_step(char *res, char *save, int index)
@@ -41,7 +41,7 @@ char *gnl(int fd)
 	char *res = malloc(1);
 	int index = 1;
 
-	if (res == NULL)
+	if (res == NULL || memset(buff, 0, sizeof(READ_SIZE)) == NULL)
 		return (NULL);
 	res[0] = 0;
 	if ((res = concat(save, res, 0, 1)) == NULL)
