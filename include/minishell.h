@@ -116,6 +116,7 @@ int run_pipeline(shell_t *shell, comm_t *comm);
 
 /*	init_signal.c	*/
 int init_signal(void);
+char *get_proc_name(pid_t);
 
 /*	jobs.c		*/
 int find_last_pid(void);

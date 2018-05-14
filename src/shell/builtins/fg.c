@@ -15,6 +15,7 @@
 int ptr_fg(comm_t *comm, shell_t *shell)
 {
 	int i = find_last_pid();
+	char *name;
 
 	if (pid_job[i] == -1 || pid_job[i] == -2) {
 		puts("fg: no current job");
@@ -24,7 +25,9 @@ int ptr_fg(comm_t *comm, shell_t *shell)
 		perror("kill");
 		return (2);
 	}
-	printf("pid : %d -> continued\n", pid_job[i]);
+	name = get_proc_name(pid_job[i]);
+	printf("[%d] %d - %s -> continued\n", i + 1, pid_job[i], name);
 	pid_job[i + 1] = -1;
+	free(name);
 	return (wait_for_it(pid_job[i]));
 }

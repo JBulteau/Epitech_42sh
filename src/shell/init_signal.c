@@ -6,6 +6,8 @@
 */
 
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <string.h>
 #include <stdio.h>
@@ -16,9 +18,28 @@
 
 pid_t *pid_job;
 
+char* get_proc_name(pid_t pid)
+{
+	char* name = malloc(sizeof(char) * 1024);
+	size_t size;
+	int fd;
+
+	if(name == NULL)
+		return (NULL);
+	sprintf(name, "/proc/%d/cmdline", pid);
+	fd = open(name, O_RDONLY);
+	if(fd == -1)
+		return (NULL);
+	size = read(fd, name, 1024);
+	name[size - 1] = '\0';
+	close(fd);
+	return (name);
+}
+
 void catch_ctrl_z(int sig)
 {
 	int i = find_last_pid();
+	char *name;
 
 	my_putstr("\033[2D  \033[2D");
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
@@ -32,8 +53,10 @@ void catch_ctrl_z(int sig)
 		perror("raise");
 		return;
 	}
-	printf("\npid : %d -> suspend\n", pid_job[i]);
+	name = get_proc_name(pid_job[i]);
+	printf("\n[%d] : %d - %s -> suspended\n", i + 1, pid_job[i], name);
 	pid_job[i + 1] = -2;
+	free(name);
 }
 
 void catch_ctrl_c(int sig)
