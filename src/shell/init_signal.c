@@ -24,11 +24,11 @@ char* get_proc_name(pid_t pid)
 	size_t size;
 	int fd;
 
-	if(name == NULL)
+	if (name == NULL)
 		return (NULL);
 	sprintf(name, "/proc/%d/cmdline", pid);
 	fd = open(name, O_RDONLY);
-	if(fd == -1)
+	if (fd == -1)
 		return (NULL);
 	size = read(fd, name, 1024);
 	name[size - 1] = '\0';
@@ -76,8 +76,8 @@ int init_signal(void)
 	struct sigaction act_c;
 
 	pid_job = malloc(sizeof(int) * 2);
-	if (pid_job == NULL || memset(&act_z, '\0', sizeof(act_z) + 1) == NULL || \
-memset(&act_c, '\0', sizeof(act_z) + 1) == NULL)
+	if (memset(&act_z, '\0', sizeof(act_z) + 1) == NULL || \
+memset(&act_c, '\0', sizeof(act_z) + 1) == NULL || pid_job == NULL)
 		return (-1);
 	pid_job[0] = -1;
 	act_z.sa_sigaction = (void *)catch_ctrl_z;
