@@ -19,6 +19,11 @@ int ptr_exit(comm_t *comm, shell_t *shell)
 		shell->return_value = 1;
 		return (0);
 	}
+	if (pid_job[find_last_pid()] != -1 && pid_job[find_last_pid()] != -2) {
+		shell->return_value = 0;
+		puts("Jobs still running (fg to continued).");
+		return (0);
+	}
 	if (comm->argv[1] == NULL) {
 		shell->return_value = 0;
 		return (-ERROR_CODE);
