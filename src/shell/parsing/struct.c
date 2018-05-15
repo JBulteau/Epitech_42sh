@@ -32,7 +32,7 @@ node_t **realloc_node(node_t **node, int n)
 	return (new_node);
 }
 
-node_t *init_node(char *buffer, int quote)
+node_t *init_node(char *buffer, quote_type_t quote)
 {
 	node_t *node = malloc(sizeof(node_t));
 
@@ -48,7 +48,7 @@ node_t *init_node(char *buffer, int quote)
 		node->buffer = NULL;
 	}
 	node->quote = quote;
-	node->separator = NONE;
+	node->separator = 0;
 	node->backslash = false;
 	node->next = NULL;
 	return (node);

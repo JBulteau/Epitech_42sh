@@ -21,12 +21,21 @@ enum quote_type {
 	PARENTHESES
 };
 
+
+typedef enum separator_type separator_type_t;
+
+enum separator_type {
+	SEMICOLON = 1,
+	D_PIPE,
+	D_AMPERSAND
+};
+
 typedef struct node node_t;
 
 struct node {
 	char *buffer;
 	quote_type_t quote;
-	int separator;
+	separator_type_t separator;
 	bool backslash;
 	node_t **next;
 };
@@ -37,7 +46,7 @@ comm_t **parsing(char *buffer);
 
 /*struct.c*/
 
-node_t *init_node(char *buffer, int quote);
+node_t *init_node(char *buffer, quote_type_t quote);
 node_t **realloc_node(node_t **node, int n);
 
 /*quote*/
@@ -58,7 +67,8 @@ int is_magic(char c);
 
 node_t *parse_split(node_t *node);
 node_t *search_separators(node_t *node);
-node_t *parse_semicolon(node_t *node, char *buffer, int i);
+node_t *parse_separators(node_t *node, char *buffer, int *i);
+separator_type_t is_separator(char *buffer, int *i, node_t *node);
 
 /*parentheses.c*/
 
