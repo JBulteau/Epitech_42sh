@@ -13,13 +13,16 @@
 
 int main(int ac, char **av, char **env)
 {
+	int size = 0;
 	shell_t *shell = init_shell(env);
 	int return_code = SUCCESS_CODE;
 
 	if (shell == NULL || init_signal() == -1)
 		return (ERROR_CODE);
 	disp_prompt();
-	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
+	while (getline(&(shell->input), &size, stdin) != -1) {
+		if (shell->input[strlen(shell->input) - 1] == '\n')
+			shell->input[strlen(shell->input) - 1] = 0;
 		save_history(shell, shell->input);
 		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
