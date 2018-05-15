@@ -13,10 +13,8 @@ node_t *parse_semicolon(node_t *node, char *buffer, int i)
 	static int j = 0;
 	static int n = 2;
 
-	if (i == 0) {
-		j = 0;
-		n = 2;
-	}
+	j = (i == 0) ? 0 : j;
+	n = (i == 0) ? 2 : n;
 	if (buffer[i] == ';' && node->quote == NONE \
 	&& (i < 1 || buffer[i - 1] != ';')) {
 		if (node->next[n - 2]->buffer != NULL)
@@ -34,7 +32,7 @@ node_t *parse_semicolon(node_t *node, char *buffer, int i)
 	return (node);
 }
 
-node_t *search_semicolon(node_t *node)
+node_t *search_separators(node_t *node)
 {
 	node->next = realloc_node(node->next, 1);
 	if (node->next == NULL)
@@ -50,7 +48,7 @@ node_t *search_semicolon(node_t *node)
 node_t *parse_split(node_t *node)
 {
 	for (int i = 0; node->next[i] != NULL; i++) {
-		node->next[i] = search_semicolon(node->next[i]);
+		node->next[i] = search_separators(node->next[i]);
 		if (node->next[i] == NULL)
 			return (NULL);
 	}

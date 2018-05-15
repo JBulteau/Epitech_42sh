@@ -25,5 +25,5 @@ int is_simple(char c)
 
 int is_a_quote(char c)
 {
-	return (is_simple(c) ||  is_double(c) || is_magic(c));
+	return (is_simple(c) || is_double(c) || is_magic(c));
 }

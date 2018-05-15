@@ -57,7 +57,7 @@ int is_magic(char c);
 /*split.c*/
 
 node_t *parse_split(node_t *node);
-node_t *search_semicolon(node_t *node);
+node_t *search_separators(node_t *node);
 node_t *parse_semicolon(node_t *node, char *buffer, int i);
 
 /*parentheses.c*/
