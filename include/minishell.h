@@ -11,9 +11,18 @@
 #include <stdlib.h>
 #include <linux/limits.h>
 
+extern pid_t *pid_job;
+
 typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
+typedef struct alias_s alias_t;
+
+struct alias_s {
+	char *name;
+        char *alias;
+        struct alias_s *nav[2];
+};
 
 typedef struct history_s {
 	char *data;
@@ -42,6 +51,7 @@ typedef struct {
 	char pwd[2][PATH_MAX];
 	char *input;
 	comm_t **comm;
+	alias_t *aliases;
 	history_t *history;
 	int return_value;
 } shell_t;
@@ -112,6 +122,15 @@ int redirect_pipe_at_exec(comm_t *curr);
 void debug_pid(char *s);
 int run_pipeline(shell_t *shell, comm_t *comm);
 
+/*	init_signal.c	*/
+int init_signal(void);
+char *get_proc_name(pid_t);
+
+/*	jobs.c		*/
+int find_last_pid(void);
+int add_to_pid(pid_t);
+int remove_last_pid(void);
+
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
@@ -132,6 +151,11 @@ enum {
 enum {
 	OUT,
 	IN
+};
+
+enum {
+        PREV,
+        NEXT
 };
 
 #endif

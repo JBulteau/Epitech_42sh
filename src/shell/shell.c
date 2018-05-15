@@ -7,6 +7,8 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <signal.h>
 #include "minishell.h"
 #include "my.h"
 
@@ -39,6 +41,7 @@ shell_t *init_shell(char **env)
 		return (NULL);
 	shell->return_value = 0;
 	shell->history = NULL;
+	shell->aliases = NULL;
 	//if (load42(shell) == ERROR_RETURN)
 	//	return (NULL);
 	getcwd(shell->pwd[0], PATH_MAX);
@@ -53,7 +56,13 @@ void delete_shell(shell_t *shell)
 		return;
 	free_array((void **) shell->env);
 	free_history(shell->history);
+	free_aliases(shell->aliases, 1);
 	free(shell);
+	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
+		if (kill(pid_job[i], SIGKILL) == -1)
+			perror("kill");
+	}
+	free(pid_job);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);

@@ -37,8 +37,9 @@ void destroy_pipe(pipe_t *pipe)
 
 int wait_for_it(pid_t pid)
 {
+	pid_t father = getpid();
 	pid_t last_pid;
-	int status;
+	int status = 0;
 
 	do {
 		last_pid = wait(&status);
@@ -51,7 +52,9 @@ int wait_for_it(pid_t pid)
 		if (WCOREDUMP(status))
 			my_puterror(" (core dumped)");
 		my_puterror("\n");
-	} while (last_pid != pid);
+	} while (last_pid != pid && last_pid != father && last_pid != -1);
+	if (last_pid != father && last_pid != -1)
+		remove_last_pid();
 	return (WEXITSTATUS(status));
 }
 
@@ -75,7 +78,6 @@ void debug_pid(char *s)
 	fprintf(stderr, "|%i|%s\n", getpid(), s);
 }
 
-
 int run_pipeline(shell_t *shell, comm_t *comm)
 {
 	int return_c = 0;
@@ -98,6 +100,7 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 					redirect_pipe_at_exec(curr);
 					exec_bin(curr, shell->env);
 				}
+				add_to_pid(child_pid);
 				if (curr->pipe[IN]) {
 					close(curr->pipe[IN]->fd[WRITE]);
 					close(curr->pipe[IN]->fd[READ]);
@@ -115,6 +118,7 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 				} else
 					exec_bin(curr, shell->env);
 			}
+			add_to_pid(child_pid);
 			if (curr->pipe[OUT]) {
 				close(curr->pipe[OUT]->fd[WRITE]);
 				close(curr->pipe[OUT]->fd[READ]);

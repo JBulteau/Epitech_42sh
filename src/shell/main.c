@@ -16,13 +16,16 @@ int main(int ac, char **av, char **env)
 	shell_t *shell = init_shell(env);
 	int return_code = SUCCESS_CODE;
 
-	if (shell == NULL)
+	if (shell == NULL || init_signal() == -1)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
 		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
+		for (int i = 0; shell->comm[i] != NULL; i++)
+			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
+				return (ERROR_CODE);
 		return_code = exec_loop(shell);
 		free_comms(shell->comm);
 		free(shell->input);

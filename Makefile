@@ -25,11 +25,15 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
 			$(SHELL_DIR)pipe.c\
+			$(SHELL_DIR)init_signal.c\
+			$(SHELL_DIR)jobs.c\
 \
 			$(BI_DIR)basic_bi.c\
 			$(BI_DIR)env.c\
 			$(BI_DIR)cd.c\
 			$(BI_DIR)history.c\
+			$(BI_DIR)fg.c\
+			$(BI_DIR)alias.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\
