@@ -23,6 +23,9 @@ int main(int ac, char **av, char **env)
 		save_history(shell, shell->input);
 		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
+		for (int i = 0; shell->comm[i] != NULL; i++)
+			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
+				return (ERROR_CODE);
 		return_code = exec_loop(shell);
 		free_comms(shell->comm);
 		free(shell->input);

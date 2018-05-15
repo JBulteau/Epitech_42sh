@@ -17,6 +17,7 @@ int ptr_unsetenv(comm_t *comm, shell_t *shell);
 int ptr_exit(comm_t *comm, shell_t *shell);
 int ptr_history(comm_t *comm, shell_t *shell);
 int ptr_fg(comm_t *comm, shell_t *shell);
+int ptr_alias(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
@@ -29,6 +30,7 @@ static const struct {
 	{"exit", &ptr_exit},
 	{"history", &ptr_history},
 	{"fg", &ptr_fg},
+	{"alias", &ptr_alias},
 	{NULL, NULL}
 };
 
