@@ -10,6 +10,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <my.h>
+#include <string.h>
 
 int check_same(char **both, int distance_allowed, int i, int b)
 {

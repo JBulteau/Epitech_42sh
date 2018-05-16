@@ -40,6 +40,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(JARVIS_DIR)jarvis_corrector_misspell.c\
 			$(JARVIS_DIR)jarvis_corrector_tools.c\
 			$(JARVIS_DIR)jarvis_corrector_algo.c\
+			$(JARVIS_DIR)jarvis_corrector_refill.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

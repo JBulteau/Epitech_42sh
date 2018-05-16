@@ -33,10 +33,11 @@ enum inc {
 };
 
 /* jarvis corrector */
+int refill_arg(char **arg, char *cpy, char *current_path, int size_after);
 int check_same(char **distance_allowed, int letter_in_a_row, int i, int b);
 int count_correct_letter(int distance_allowed, char **both);
-int correct_short(char **result, glob_t *pglob);
-int correct_long(char **result, glob_t *pglob);
+int correct_short(char **result, glob_t *pglob, char *curr_path);
+int correct_long(char **result, glob_t *pglob, char *curr_path);
 char *prepare_copy(char **arg, char *current_path);
 int is_slash_ending(char **arg);
 int is_number_or_letter(char **arg, int pos);
