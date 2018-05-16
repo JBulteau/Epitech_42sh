@@ -5,15 +5,14 @@
 ** init the signals and init for jobs
 */
 
+#include <stdio.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <signal.h>
 #include <string.h>
-#include <stdio.h>
-#include <errno.h>
 #include <unistd.h>
-#include "my.h"
+#include <stdlib.h>
 #include "minishell.h"
 
 pid_t *pid_job;
@@ -41,7 +40,7 @@ void catch_ctrl_z(int sig)
 	int i = find_last_pid();
 	char *name;
 
-	my_putstr("\033[2D  \033[2D");
+	printf("\033[2D  \033[2D");
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
 (pid_job[i + 1] && pid_job[i + 1] == -2))
 		return;
@@ -65,7 +64,7 @@ void catch_ctrl_c(int sig)
 
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
 (pid_job[i + 1] && pid_job[i + 1] == -2)) {
-		my_putstr("\033[2D  \n");
+		printf("\033[2D  \n");
 		disp_prompt();
 	}
 }
@@ -85,4 +84,27 @@ memset(&act_c, '\0', sizeof(act_z) + 1) == NULL || pid_job == NULL)
 	sigaction(SIGTSTP, &act_z, NULL);
 	sigaction(SIGINT, &act_c, NULL);
 	return (0);
+}
+
+int wait_for_it(pid_t pid)
+{
+	pid_t father = getpid();
+	pid_t last_pid;
+	int status = 0;
+
+	do {
+		last_pid = wait(&status);
+		if (!WIFSIGNALED(status))
+			continue;
+		if (WTERMSIG(status) == 8)
+			fprintf(stderr, "Floating exception");
+		else
+			fprintf(stderr, strsignal(WTERMSIG(status)));
+		if (WCOREDUMP(status))
+			fprintf(stderr, " (core dumped)");
+		fprintf(stderr, "\n");
+	} while (last_pid != pid && last_pid != father && last_pid != -1);
+	if (last_pid != father && last_pid != -1)
+		remove_last_pid();
+	return (WEXITSTATUS(status));
 }

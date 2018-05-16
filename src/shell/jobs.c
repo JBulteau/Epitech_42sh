@@ -5,11 +5,8 @@
 ** jobs functions
 */
 
-#include <sys/types.h>
-#include <signal.h>
-#include <string.h>
-#include <stdio.h>
-#include <errno.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include "minishell.h"
 
 int find_last_pid(void)

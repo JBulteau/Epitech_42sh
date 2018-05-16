@@ -5,15 +5,15 @@
 ** main file for minishell2
 */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <my.h>
+#include <string.h>
 #include <unistd.h>
-#include "my.h"
+#include <stdio.h>
 #include "minishell.h"
 
 int main(int ac, char **av, char **env)
 {
-	int size = 0;
+	size_t size;
 	shell_t *shell = init_shell(env);
 	int return_code = SUCCESS_CODE;
 
@@ -37,7 +37,7 @@ int main(int ac, char **av, char **env)
 		disp_prompt();
 	}
 	if ((shell->input == NULL) && isatty(0))
-		my_putstr("exit\n");
+		puts("exit");
 	delete_shell(shell);
 	return (return_code);
 }

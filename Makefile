@@ -25,6 +25,8 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
 			$(SHELL_DIR)pipe.c\
+			$(SHELL_DIR)exec_pipe.c\
+			$(SHELL_DIR)redir_pipe.c\
 			$(SHELL_DIR)init_signal.c\
 			$(SHELL_DIR)jobs.c\
 \
@@ -34,6 +36,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(BI_DIR)history.c\
 			$(BI_DIR)fg.c\
 			$(BI_DIR)alias.c\
+			$(BI_DIR)alias_struc.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\

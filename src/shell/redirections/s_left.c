@@ -5,21 +5,22 @@
 ** Functions for simple redirection left
 */
 
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include "my.h"
 #include "minishell.h"
 #include "tokens.h"
-#include "my.h"
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
 char *handle_s_left(char *input, comm_t *comm)
 {
 	int len;
 
-	input += my_strlen(tokens[S_LEFT].tk);
+	input += strlen(tokens[S_LEFT].tk);
 	input = go_next_w(input, separators);
 	len = get_wlen(input, separators);
-	if ((comm->red[S_LEFT]->target = my_strndup(input, len)) == NULL)
+	if ((comm->red[S_LEFT]->target = strndup(input, len)) == NULL)
 		return (NULL);
 	input += len;
 	return (input);
@@ -35,7 +36,6 @@ int exec_s_left(comm_t *comm)
 		return (ERROR_RETURN);
 	return (SUCCESS_RETURN);
 }
-
 
 int end_s_left(comm_t *comm)
 {
