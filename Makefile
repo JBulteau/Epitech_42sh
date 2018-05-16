@@ -36,6 +36,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(BI_DIR)history.c\
 			$(BI_DIR)fg.c\
 			$(BI_DIR)alias.c\
+			$(BI_DIR)echo.c\
 			$(BI_DIR)alias_struc.c\
 \
 			$(RED_DIR)d_left.c\
