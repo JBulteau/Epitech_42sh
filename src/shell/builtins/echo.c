@@ -5,6 +5,7 @@
 ** Builtin echo
 */
 
+#include <stdio.h>
 #include <unistd.h>
 #include "minishell.h"
 #include "my.h"
