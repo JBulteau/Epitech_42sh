@@ -71,7 +71,6 @@ jarg_t *init_struct_jarg(comm_t *comm)
 		return (NULL);
 	for (int i = 1; comm->argv[i] != NULL; i++)
 		fill_infos(comm, corr, i, &nb_argv);
-	for (int i = 0; corr->infos[i].pos != -1; i++);
 	corr->which = NULL;
 	for (int i = 0; corr->infos[i + 1].pos != -1; i++)
 		if ((check = last_part_init(corr, comm, &nb_argv, &i)) == 1)

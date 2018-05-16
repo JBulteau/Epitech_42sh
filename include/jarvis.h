@@ -10,6 +10,7 @@
 
 #include "my.h"
 #include "minishell.h"
+#include <glob.h>
 
 typedef struct {
 	char *name;
@@ -32,6 +33,12 @@ enum inc {
 };
 
 /* jarvis corrector */
+int count_correct_letter(int distance_allowed, char *wrong, char *try);
+int correct_short(char **result, glob_t *pglob);
+int correct_long(char **result, glob_t *pglob);
+char *prepare_copy(char **arg, char *current_path);
+int is_slash_ending(char **arg);
+int is_number_or_letter(char **arg, int pos);
 void fill_infos(comm_t *comm, jarg_t *corr, int i, int *nb_argv);
 void free_jarvis_corrector(jarg_t **corr, int i);
 int misspell_handle(jarg_t *corr, comm_t *comm);
