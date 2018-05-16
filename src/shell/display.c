@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/wait.h>
 #include "minishell.h"
 
@@ -34,4 +34,5 @@ void disp_prompt(void)
 {
 	if (isatty(STDIN_FILENO))
 		printf(prompt);
+	fflush(stdout);
 }
