@@ -42,6 +42,7 @@ shell_t *init_shell(char **env)
 	shell->return_value = 0;
 	shell->history = NULL;
 	shell->aliases = NULL;
+	shell->input = NULL;
 	//if (load42(shell) == ERROR_RETURN)
 	//	return (NULL);
 	getcwd(shell->pwd[0], PATH_MAX);

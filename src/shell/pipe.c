@@ -25,6 +25,7 @@ pipe_t *init_pipe(comm_t *in, comm_t *out)
 	pipe_->output = out;
 	if (pipe(pipe_->fd) == -1)
 		return (NULL);
+	//fprintf(stderr, "PIPE initialized: READ: %i WRITE: %i\n", pipe_->fd[READ], pipe_->fd[WRITE]);
 	return (pipe_);
 }
 
@@ -58,74 +59,90 @@ int wait_for_it(pid_t pid)
 	return (WEXITSTATUS(status));
 }
 
-int redirect_pipe_at_exec(comm_t *curr)
-{
-	if (curr->pipe[IN]) {
-		if (dup2(curr->pipe[IN]->fd[READ], STDIN_FILENO) == -1)
-			return (ERROR_RETURN);
-		close(curr->pipe[IN]->fd[WRITE]);
-	}
-	if (curr->pipe[OUT]) {
-		if (dup2(curr->pipe[OUT]->fd[WRITE], STDOUT_FILENO) == -1)
-			return (ERROR_RETURN);
-		close(curr->pipe[OUT]->fd[READ]);
-	}
-	return (SUCCESS_RETURN);
-}
-
 void debug_pid(char *s)
 {
 	fprintf(stderr, "|%i|%s\n", getpid(), s);
 }
 
+int init_redir_pipe(comm_t *comm)
+{
+	if (comm->pipe[IN]) {
+	//	fprintf(stderr, "|%i| |%s %s|REDIRECT STDIN FROM pipe[READ]: %i\n", getpid(), comm->argv[0], comm->argv[1], comm->pipe[IN]->fd[READ]);
+		if (dup2(comm->pipe[IN]->fd[READ], STDIN_FILENO) == -1) {
+			perror("dup2");
+			return (-1);
+		}
+	}
+	if (comm->pipe[OUT]) {
+	//	fprintf(stderr, "|%i| |%s %s| REDIRECT STDOUT to pipe[WRITE]: %i\n", getpid(), comm->argv[0], comm->argv[1], comm->pipe[OUT]->fd[WRITE]);
+		if (dup2(comm->pipe[OUT]->fd[WRITE], STDOUT_FILENO) == -1) {
+			perror("dup2");
+			return (-1);
+		}
+		close(comm->pipe[OUT]->fd[READ]);
+	}
+}
+
+int run_not_last(shell_t *shell, comm_t *curr)
+{
+	pid_t child_pid;
+
+	if ((child_pid = fork()) == -1)
+		return (ERROR_RETURN);
+	if (child_pid == 0) {
+		init_redir_pipe(curr);
+		if (is_builtin(curr->argv[0]) != -1)
+			exit(exec_bi(curr, shell));
+		else
+			exec_bin(curr, shell->env);
+	}
+	if (curr->pipe[OUT])
+		close(curr->pipe[OUT]->fd[WRITE]);
+	close_in(curr);
+	return (0);
+}
+
+void close_in(comm_t *curr)
+{
+	if (curr->pipe[IN]) {
+		close(curr->pipe[IN]->fd[READ]);
+		close(curr->pipe[IN]->fd[WRITE]);
+	}
+}
+
+int run_last_pipeline(shell_t *shell, comm_t *curr)
+{
+	pid_t child_pid;
+	int return_c = 0;
+
+	if (is_builtin(curr->argv[0]) != -1) {
+		init_redir_pipe(curr);		
+		return_c = exec_bi(curr, shell);
+	} else {
+		if ((child_pid = fork()) == -1)
+			return (ERROR_RETURN);
+		else if (child_pid == 0) {
+			init_redir_pipe(curr);
+			exec_bin(curr, shell->env);
+		}
+		return_c = wait_for_it(child_pid);
+	}
+	close_in(curr);
+	return (return_c);
+}
+
 int run_pipeline(shell_t *shell, comm_t *comm)
 {
 	int return_c = 0;
-	pid_t child_pid;
 
 	if ((shell == NULL) || (comm == NULL))
 		return (-ERROR_CODE);
 	for (comm_t *curr = comm; curr; curr = (curr->pipe[OUT] && curr->pipe[OUT]->output) ? curr->pipe[OUT]->output : NULL) {
 		if (curr->pipe[OUT] == NULL) {
-			if (is_builtin(curr->argv[0]) != -1) {
-				//TODO REDIRECT fd --> STDIN
-				return_c = exec_bi(curr, shell);
-				if (return_c == -ERROR_CODE)
-					return (-ERROR_CODE);
-				//TODO close fd + rd STDIN to STDIN
-			} else {
-				if ((child_pid = fork()) == -1)
-					return (ERROR_RETURN);
-				else if (child_pid == 0) {
-					redirect_pipe_at_exec(curr);
-					exec_bin(curr, shell->env);
-				}
-				add_to_pid(child_pid);
-				if (curr->pipe[IN]) {
-					close(curr->pipe[IN]->fd[WRITE]);
-					close(curr->pipe[IN]->fd[READ]);
-				}
-				return_c = wait_for_it(child_pid);
-			}
+			return_c = run_last_pipeline(shell, curr);
 		} else {
-			if ((child_pid = fork()) == -1)
-				return (ERROR_RETURN);
-			if (child_pid == 0) {
-				redirect_pipe_at_exec(curr);
-				if (is_builtin(curr->argv[0]) != -1) {
-					return_c = exec_bi(curr, shell);
-					exit(return_c);
-				} else
-					exec_bin(curr, shell->env);
-			}
-			add_to_pid(child_pid);
-			if (curr->pipe[OUT]) {
-				close(curr->pipe[OUT]->fd[WRITE]);
-				close(curr->pipe[OUT]->fd[READ]);
-				printf("READ %i\n", curr->pipe[OUT]->fd[READ]);
-			}
+			return_c = run_not_last(shell, curr);
 		}
 	}
-	//TODO FERMER LES REDIR FDP
 	return (return_c);
 }
