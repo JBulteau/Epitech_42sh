@@ -5,8 +5,8 @@
 ** Functions that manages commands
 */
 
-#include "tokens.h"
 #include "minishell.h"
+#include "tokens.h"
 #include "my.h"
 
 void free_comm(comm_t *comm)
@@ -27,19 +27,19 @@ void free_comm(comm_t *comm)
 int exec_start(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++) {
-		if (comm->red[i]) {
-			if (tokens[i].fnc_exec(comm) == -1)
-				return (-1);
+		if (comm->red[i] && tokens[i].fnc_exec(comm) == -1) {
+			return (ERROR_RETURN);
 		}
 	}
+	return (0);
 }
 
 int exec_end(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++)
-		if (comm->red[i])
-			if (tokens[i].end_exec(comm) == -1)
-			 	return (-1);
+		if (comm->red[i] && (tokens[i].end_exec(comm) == -1))
+			return (-1);
+	return (0);
 }
 
 comm_t *init_comm(void)

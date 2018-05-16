@@ -5,12 +5,12 @@
 ** Main shell functions
 */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
+#include <sys/types.h>
 #include <signal.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include "minishell.h"
-#include "my.h"
 
 char **clone_arr(char **arr)
 {
@@ -27,12 +27,17 @@ char **clone_arr(char **arr)
 		if (new_arr == NULL)
 			return (NULL);
 		for (int i = 0; arr[i]; i++)
-			new_arr[i] = my_strndup(arr[i], 0);
+			new_arr[i] = strdup(arr[i]);
 		new_arr[len - 1] = NULL;
 	}
 	return (new_arr);
 }
 
+/*
+** TODO: Add this to bonus folder
+** if (load42(shell) == ERROR_RETURN)
+** return (NULL);
+*/
 shell_t *init_shell(char **env)
 {
 	shell_t *shell = malloc(sizeof(shell_t));
@@ -43,8 +48,6 @@ shell_t *init_shell(char **env)
 	shell->history = NULL;
 	shell->aliases = NULL;
 	shell->input = NULL;
-	//if (load42(shell) == ERROR_RETURN)
-	//	return (NULL);
 	getcwd(shell->pwd[0], PATH_MAX);
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';

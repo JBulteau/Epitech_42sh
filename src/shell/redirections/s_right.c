@@ -5,21 +5,22 @@
 ** Functions for simple redirection right
 */
 
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 #include "minishell.h"
 #include "my.h"
 #include "tokens.h"
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
 char *handle_s_right(char *input, comm_t *comm)
 {
 	int len;
 
-	input += my_strlen(tokens[S_RIGHT].tk);
+	input += strlen(tokens[S_RIGHT].tk);
 	input = go_next_w(input, separators);
 	len = get_wlen(input, separators);
-	if ((comm->red[S_RIGHT]->target = my_strndup(input, len)) == NULL)
+	if ((comm->red[S_RIGHT]->target = strndup(input, len)) == NULL)
 		return (NULL);
 	input += len;
 	return (input);
@@ -36,7 +37,6 @@ _CREAT | O_TRUNC, 0600);
 		return (ERROR_RETURN);
 	return (SUCCESS_RETURN);
 }
-
 
 int end_s_right(comm_t *comm)
 {

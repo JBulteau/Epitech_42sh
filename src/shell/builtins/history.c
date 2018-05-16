@@ -5,7 +5,8 @@
 ** Funtion that list all the command use since the begin of the shell
 */
 
-#include "builtins.h"
+#include <stdio.h>
+#include <string.h>
 #include "minishell.h"
 
 history_t *create_new_case(char *s)
