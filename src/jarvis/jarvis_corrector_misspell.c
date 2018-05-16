@@ -45,6 +45,7 @@ int misspell_process(char **arg, int pos, char *current_path, int *nb_to_path)
 	char *cpy = prepare_copy(arg, current_path);
 	glob_t pglob;
 	char *concat_path_star = concat(current_path, "*", 0, 0);
+	int size = 0;
 
 	if (!cpy)
 		return (1);
@@ -54,15 +55,22 @@ int misspell_process(char **arg, int pos, char *current_path, int *nb_to_path)
 	if (glob(concat_path_star, GLOB_NOSORT, NULL, &pglob) != 0)
 		return (2);
 	if (my_strlen(cpy) >= 4) {
+		size = strlen(cpy);
 		if (correct_long(&cpy, &pglob))
 			return (2);
-		else
+		else {
+			pos += strlen(cpy) - size;
 			printf("test : %s\n", cpy); //refill_arg();
-	} else
+		}
+	} else {
 		if (correct_short(&cpy, &pglob))
 			return (2);
-		else
-			//refill_arg();
+		else {
+			pos += strlen(cpy) - size;
+			4;//refill_arg();
+		}
+	}
+	globfree(&pglob);
 	return (0);
 }
 
@@ -71,13 +79,19 @@ char *check_path_argv(int *nb_to_path, char **arg, jarg_t *corr, int *check)
 	char *current_path = strdup("./");
 	int to_know = is_slash_ending(arg);
 	int let = 0;
+	int test = 0;
 
 	for (int pos = 0; (*arg)[pos] != '\0'; pos++) {
-		if (pre_process_check(&let, arg, pos, &current_path))
+		test = 0;
+		printf("pos : %i\n", pos);
+		for (int a = pos; (*arg)[a] != '\0'; a++)
+			if ((*arg)[a] == '/')
+				test = 1;
+		if (test == 1 && pre_process_check(&let, arg, pos, &current_path))
 			continue;
-		if (let == 0 && access(*arg, F_OK) == -1 && ((*arg)[pos] = '/'))
+		if (test == 1 && let == 0 && access(*arg, F_OK) == -1 && ((*arg)[pos] = '/'))
 			return (NULL);
-		else if (let != 0 && (let = misspell_process(arg, pos, current_path, nb_to_path)))
+		else if ((test != 1 || let != 0) && (let = misspell_process(arg, pos, current_path, nb_to_path)))
 			return (NULL);
 		if (let == 2) {
 			*check = 1;

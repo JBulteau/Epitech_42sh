@@ -47,7 +47,7 @@ int correct_long(char **result, glob_t *pglob)
 	int distance_allowed = 0;
 	char *both[2] = {*result, NULL};
 
-	for (int i = 0; *result[i] != '\0'; i++)
+	for (int i = 0; (*result)[i] != '\0'; i++)
 		if (i % 3 == 0)
 			distance_allowed++;
 	for (int i = 0; pglob->gl_pathv[i] != NULL; i++) {
