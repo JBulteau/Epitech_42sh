@@ -11,6 +11,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "minishell.h"
+#include "my.h"
 
 char **clone_arr(char **arr)
 {

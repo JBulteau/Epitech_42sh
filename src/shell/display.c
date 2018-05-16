@@ -12,9 +12,9 @@
 #include <sys/wait.h>
 #include "minishell.h"
 
-void disp_wrong_arch(char *str, int errno)
+void disp_wrong_arch(char *str, int num)
 {
-	printf("%s: %s. Wrong Architecture\n", str, strerror(errno));
+	printf("%s: %s. Wrong Architecture\n", str, strerror(num));
 }
 
 void display_signal(int status)

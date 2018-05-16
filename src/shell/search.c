@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "my.h"
+#include "minishell.h"
 
 void disp_rights(char *name, int exists, int exec)
 {
