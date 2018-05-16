@@ -5,14 +5,17 @@
 ** Functions that loads the .42rc file
 */
 
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include "my.h"
 #include "minishell.h"
+#include "my.h"
 
+/*
+** TODO: Replace gnl
+*/
 int ask_y_n(char *s, char *yes, char *no)
 {
 	int res;
@@ -32,7 +35,8 @@ int ask_y_n(char *s, char *yes, char *no)
 int load42(shell_t *shell)
 {
 	int create = 0;
-	char *path42rc = concat(get_env_var(shell->env, "HOME="), concat("/", ".42rc", 0, 0), 1, 1);
+	char *path42rc = concat(get_env_var(shell->env, "HOME="), \
+concat("/", ".42rc", 0, 0), 1, 1);
 
 	if (path42rc == NULL)
 		return (ERROR_RETURN);

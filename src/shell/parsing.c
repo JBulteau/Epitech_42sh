@@ -5,18 +5,18 @@
 ** Parsing fnc
 */
 
-#include <stdlib.h>
-#include <unistd.h>
+#include <stddef.h>
+#include <string.h>
+#include "tokens.h"
 #include "minishell.h"
 #include "my.h"
-#include "tokens.h"
 
 int is_tk(char *input)
 {
 	if (input[0] == '\0')
 		return (-1);
 	for (int i = 0; tokens[i].tk; i++)
-		if (!my_strcmp(tokens[i].tk, input, my_strlen(tokens[i].tk)))
+		if (!strncmp(tokens[i].tk, input, strlen(tokens[i].tk)))
 			return (i);
 	return (-1);
 }

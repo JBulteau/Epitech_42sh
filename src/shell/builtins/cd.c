@@ -7,9 +7,8 @@
 
 #include <errno.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include "my.h"
 #include "minishell.h"
 
 int change_dir(char pwd[2][PATH_MAX], char *newdir)
@@ -17,12 +16,9 @@ int change_dir(char pwd[2][PATH_MAX], char *newdir)
 	int exists = chdir((newdir == NULL) ? "" : newdir);
 
 	if (exists == -1) {
-		my_putstr(newdir);
-		my_putstr(": ");
-		my_putstr(strerror(errno));
-		my_putstr(".\n");
+		printf("%s: %s.\n", newdir, strerror(errno));
 	} else {
-		my_strcpy(pwd[1], pwd[0], PATH_MAX);
+		strncpy(pwd[1], pwd[0], PATH_MAX);
 		getcwd(pwd[0], PATH_MAX);
 	}
 	return ((exists == -1) ? 1 : 0);
@@ -36,17 +32,17 @@ int ptr_cd(comm_t *comm, shell_t *shell)
 	if (comm->argv[1] == NULL) {
 		home = get_env_var(shell->env, "HOME=");
 		if (home == NULL) {
-			my_putstr("cd: No home directory.\n");
+			puts("cd: No home directory.");
 			return (1);
 		}
 		cd_res = change_dir(shell->pwd, home);
 		free(home);
 		return (cd_res);
-	} else if (!my_strcmp(comm->argv[1], "-", 0))
+	} else if (!strcmp(comm->argv[1], "-"))
 		return (change_dir(shell->pwd, shell->pwd[1]));
 	else {
 		if (comm->argv[2] != NULL) {
-			my_putstr("cd: Too many arguments.\n");
+			puts("cd: Too many arguments.");
 			return (1);
 		}
 		return (change_dir(shell->pwd, comm->argv[1]));

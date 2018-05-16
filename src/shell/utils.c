@@ -4,22 +4,20 @@
 ** File description:
 ** Utils fnc
 */
-
-#include <errno.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include <unistd.h>
+#include <string.h>
 #include <stdlib.h>
 #include "my.h"
 
 int search_strtab(char **arr, char *to_find)
 {
-	int len = my_strlen(to_find);
+	int len = strlen(to_find);
 
 	if ((arr == NULL) || (to_find == NULL))
 		return (-1);
 	for (int i = 0; arr[i]; i++)
-		if (!my_strcmp(to_find, arr[i], len))
+		if (!strncmp(to_find, arr[i], len))
 			return (i);
 	return (-1);
 }

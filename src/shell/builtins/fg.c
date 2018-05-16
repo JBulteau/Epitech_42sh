@@ -5,12 +5,9 @@
 ** fg = function to continue the jobs stoped
 */
 
-#include "builtins.h"
-#include "minishell.h"
-#include <sys/types.h>
 #include <signal.h>
-#include <stdio.h>
-#include <errno.h>
+#include "minishell.h"
+#include "stdio.h"
 
 int ptr_fg(comm_t *comm, shell_t *shell)
 {
