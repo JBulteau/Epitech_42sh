@@ -14,7 +14,7 @@
 
 int pre_process_check(int *letter_nbr, char **arg, int pos, char **current_path)
 {
-	letter_nbr += (is_number_or_letter(arg, pos)) ? 1 : 0;
+	(*letter_nbr) += (is_number_or_letter(arg, pos)) ? 1 : 0;
 	if ((pos == 0 && (*arg)[pos] == '/')) {
 		*current_path += 1;
 		return (1);
@@ -43,7 +43,7 @@ int post_misspell_process(int *let, char **arg, char **current_path, int pos)
 int misspell_process(char **arg, int pos, char *current_path, int *nb_to_path)
 {
 	char *cpy = prepare_copy(arg, current_path);
-	glob_t *pglob;
+	glob_t pglob;
 	char *concat_path_star = concat(current_path, "*", 0, 0);
 
 	if (!cpy)
@@ -51,18 +51,18 @@ int misspell_process(char **arg, int pos, char *current_path, int *nb_to_path)
 	*nb_to_path = pos + 1;
 	if (access(*arg, F_OK) != -1)
 		return (0);
-	if (glob(concat_path_star, GLOB_NOSORT, NULL, pglob) != 0)
+	if (glob(concat_path_star, GLOB_NOSORT, NULL, &pglob) != 0)
 		return (2);
-	if (my_strlen(cpy) >= 4)
-		if (correct_long(&cpy, pglob))
+	if (my_strlen(cpy) >= 4) {
+		if (correct_long(&cpy, &pglob))
 			return (2);
 		else
-			refill_arg();
-	else
-		if (correct_short(&cpy, pglob))
+			printf("test : %s\n", cpy); //refill_arg();
+	} else
+		if (correct_short(&cpy, &pglob))
 			return (2);
 		else
-			refill_arg();
+			//refill_arg();
 	return (0);
 }
 
@@ -106,7 +106,7 @@ int misspell_handle(jarg_t *corr, comm_t *comm)
 		if (path == NULL)
 			return (-1);
 		if (check == 0)
-			last_check_path();
+			4;//last_check_path();
 	}
 	return (0);
 }

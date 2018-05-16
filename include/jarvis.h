@@ -33,7 +33,8 @@ enum inc {
 };
 
 /* jarvis corrector */
-int count_correct_letter(int distance_allowed, char *wrong, char *try);
+int check_same(char **distance_allowed, int letter_in_a_row, int i, int b);
+int count_correct_letter(int distance_allowed, char **both);
 int correct_short(char **result, glob_t *pglob);
 int correct_long(char **result, glob_t *pglob);
 char *prepare_copy(char **arg, char *current_path);

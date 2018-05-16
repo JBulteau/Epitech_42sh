@@ -11,8 +11,18 @@
 #include <unistd.h>
 #include <my.h>
 
-int count_correct_letter(int distance_allowed, char *wrong, char *try)
+int check_same(char **both, int distance_allowed, int i, int b)
 {
+	int calcul_res = 0;
+
+	if (both[0][b] == both[1][i]) {
+		calcul_res = b - i;
+		calcul_res *= (calcul_res < 0) ? -1 : 1;
+		if (calcul_res <= distance_allowed)
+			return (1);
+		else
+			return (0);
+	}
 	return (0);
 }
 
