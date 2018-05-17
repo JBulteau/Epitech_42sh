@@ -24,7 +24,7 @@ INC = -I ../../include
 
 CC = gcc
 
-CFLAGS = $(INC) -Wall -Wextra
+CFLAGS = $(INC) -Wall -Wextra -Wshadow
 
 all: $(NAME)
 

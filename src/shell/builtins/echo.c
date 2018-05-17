@@ -5,12 +5,14 @@
 ** Builtin echo
 */
 
+#include <stdio.h>
 #include <unistd.h>
 #include "minishell.h"
 #include "my.h"
 
 int ptr_echo(comm_t *comm, shell_t *shell)
 {
+        UNUSED(shell);
         if (comm->argv[1] == NULL) {
                 putchar('\n');
                 return (SUCCESS_RETURN);

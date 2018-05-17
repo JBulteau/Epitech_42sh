@@ -10,7 +10,7 @@
 #include "minishell.h"
 #include "my.h"
 
-int add_env_value(char ***env, char *var, char *value, char *var_pre)
+int add_env_value(char ***env, char *value, char *var_pre)
 {
 	char **new_env = NULL;
 	int len = array_len((void **) (*env));
@@ -46,7 +46,7 @@ rs.");
 		free((*env)[env_idx]);
 		if (((*env)[env_idx] = concat(var_pre, value, 1, 0)) == NULL)
 			return (ERROR_RETURN);
-	} else if (add_env_value(env, var, value, var_pre) == ERROR_RETURN) {
+	} else if (add_env_value(env, value, var_pre) == ERROR_RETURN) {
 		return (ERROR_RETURN);
 	}
 	return (SUCCESS_RETURN);
@@ -54,6 +54,7 @@ rs.");
 
 int ptr_env(comm_t *comm, shell_t *shell)
 {
+	UNUSED(comm);
 	for (int i = 0; shell->env[i] != NULL; i++) {
 		puts(shell->env[i]);
 	}

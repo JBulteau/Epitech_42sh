@@ -61,9 +61,6 @@ int add_alias(char **args, shell_t *shell)
 
 void free_aliases(alias_t *alias, int free_next)
 {
-	alias_t prev;
-	alias_t next;
-
 	if (alias == NULL)
 		return;
 	free(alias->name);

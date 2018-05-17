@@ -18,11 +18,11 @@ int disp_help(void)
 int replace_alias(alias_t *node, comm_t *comm)
 {
 	for (alias_t *curr = node; node != NULL; node = node->nav[NEXT]) {
-		if (!strcmp(comm->argv[0], node->name)) {
+		if (!strcmp(comm->argv[0], curr->name)) {
 			free(comm->argv[0]);
-			comm->argv[0] = strdup(node->alias);
+			comm->argv[0] = strdup(curr->alias);
 		}
-		if ((!strcmp(comm->argv[0], node->name)) && (comm->argv[0] == \
+		if ((!strcmp(comm->argv[0], curr->name)) && (comm->argv[0] == \
 NULL))
 			return (-1);
 	}

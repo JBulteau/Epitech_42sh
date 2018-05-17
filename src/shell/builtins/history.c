@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "minishell.h"
+#include "my.h"
 
 history_t *create_new_case(char *s)
 {
@@ -51,8 +52,10 @@ void free_history(history_t *hist)
 
 int ptr_history(comm_t *comm, shell_t *shell)
 {
+	UNUSED(comm);
 	for (history_t *curr = shell->history; curr != NULL; \
 curr = curr->next) {
 		puts((char *) curr->data);
 	}
+	return (0);
 }
