@@ -12,21 +12,21 @@
 #include <unistd.h>
 #include <string.h>
 
-int count_correct_letter(int distance_allowed, char **both)
+int count_correct_letter(int dist_allow, char **both)
 {
 	int res = 0;
 	int check = 0;
-	int letter_in_a_row = 0;
+	int letter_in_row = 0;
 
 	for (int i = 0; both[1][i] != '\0'; i++) {
-		for (int b = 0; b < i + distance_allowed && both[0][b] != '\0'; b++) {
-			check = check_same(both, distance_allowed, i, b);
-			letter_in_a_row = (check == 1) ? letter_in_a_row + 1 : 0;
+		check = 0;
+		for (int b = 0; (b < i + dist_allow && both[0][b] != '\0') && \
+check != 1; b++) {
+			check = check_same(both, dist_allow, i, b);
+			letter_in_row = (check == 1) ? letter_in_row + 1 : 0;
 			res += (check == 1) ? 1 : 0;
-			if (letter_in_a_row == 3 && (res += 1) && \
-(!(letter_in_a_row = 0))) {}
-			if (check == 1)
-				break;
+			if (letter_in_row == 3 && (res += 1) && \
+(!(letter_in_row = 0))) {}
 		}
 	}
 	return (res);
@@ -41,29 +41,27 @@ int fill_result_correct(char **result, glob_t *pglob, int i, char *current_path)
 	return (0);
 }
 
-int correct_long(char **result, glob_t *pglob, char *curr_path)
+int correct_short(char **result, glob_t *pglob, char *curr_path)
+{
+	return (1);
+}
+
+int correct_long(char **result, glob_t *glob, char *curr_path)
 {
 	int count_correct = 0;
 	int distance_allowed = 0;
 	char *both[2] = {*result, NULL};
 
 	for (int i = 0; (*result)[i] != '\0'; i++)
-		if (i % 3 == 0)
-			distance_allowed++;
-	for (int i = 0; pglob->gl_pathv[i] != NULL; i++) {
-		if ((100 - ((int)strlen(pglob->gl_pathv[i] + strlen(curr_path)) * 100) / (int)strlen(*result)) < -30 || \
-(100 - ((int)strlen(pglob->gl_pathv[i] + strlen(curr_path)) * 100) / (int)strlen(*result)) > 30)
+		distance_allowed += (i % 3 == 0) ? 1 : 0;
+	for (int i = 0; glob->gl_pathv[i] != NULL; i++) {
+		if (check_lenght(glob, curr_path, result, i))
 			continue;
-		both[1] = pglob->gl_pathv[i] + strlen(curr_path);
+		both[1] = glob->gl_pathv[i] + strlen(curr_path);
 		count_correct = \
 count_correct_letter(distance_allowed, both);
 		if (((count_correct * 100) / strlen(*result)) > 70)
-			return (fill_result_correct(result, pglob, i, curr_path));
+			return (fill_result_correct(result, glob, i, curr_path));
 	}
-	return (1);
-}
-
-int correct_short(char **result, glob_t *pglob, char *curr_path)
-{
 	return (1);
 }

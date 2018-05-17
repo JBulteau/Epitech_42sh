@@ -8,21 +8,21 @@
 #include "jarvis.h"
 #include <sys/types.h>
 #include <dirent.h>
+#include <unistd.h>
 
-void try_concat(comm_t *comm, jarg_t *corr, int *which_inc, int *i)
+int try_concat(comm_t *comm, jarg_t *corr, int *which_inc, int *i)
 {
 	char *both = concat(corr->infos[*i].name, \
 corr->infos[*i + 1].name, 0, 0);
-	DIR *dirp;
 
-	if (dirp = opendir(both)) { //NE PAS OPENDIR MAIS ACCESS
+	if (access(both, F_OK) == 0) {
 		corr->nb_good_end += 1;
 		corr->which[*which_inc] = corr->infos[*i].pos;
 		(*which_inc)++;
 		(*i)++;
-		closedir(dirp);
 	}
 	free(both);
+	return (1);
 }
 
 int wrong_spaces_handle(comm_t *comm, jarg_t *corr)
@@ -32,14 +32,13 @@ int wrong_spaces_handle(comm_t *comm, jarg_t *corr)
 
 	for (int i = 0; corr->infos[i + 1].pos != -1; i++) {
 		if (corr->infos[i].correct == 0 && \
-corr->infos[i + 1].correct == 0) {
-			try_concat(comm, corr, &which_inc, &i);
-			if (corr->infos[i + 1].pos != -1)
-				continue;
-			else
-				break;
+corr->infos[i + 1].correct == 0 && (try_concat(comm, corr, &which_inc, &i)) && \
+corr->infos[i + 1].pos != -1)
+			continue;
+		else if (corr->infos[i].correct == 0 && \
+corr->infos[i + 1].correct == 0)
+			break;
 		}
-	}
 	if (corr->nb_good_start < corr->nb_good_end)
 		if ((check = refill_comm_struct(comm, corr)) == -1)
 			return (-1);
@@ -75,6 +74,7 @@ int refill_infos(comm_t *comm, jarg_t *corr)
 	corr->infos[nb_argv].pos = -1;
 	for (int i = 1; comm->argv[i] != NULL; i++)
 		fill_infos(comm, corr, i, &nb_argv);
+	return (0);
 }
 
 int refill_comm_struct(comm_t *comm, jarg_t *corr)
@@ -84,10 +84,7 @@ int refill_comm_struct(comm_t *comm, jarg_t *corr)
 	int nb_total = 0;
 	char *save = my_strndup(comm->argv[0], my_strlen(comm->argv[0]));
 
-	corr->change = 1;
-	for (; corr->which[nb_change] != -1; nb_change++);
-	for (; comm->argv[nb_total] != NULL; nb_total++);
-	free_array((void *) comm->argv);
+	prepare_refill(corr, comm, &nb_change, &nb_total);
 	comm->argv = malloc(sizeof(char*) * (nb_total - nb_change + 1));
 	if (comm->argv == NULL)
 		return (-1);
