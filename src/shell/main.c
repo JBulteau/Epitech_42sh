@@ -38,8 +38,8 @@ int main(int ac, char **av, char **env)
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		return_code = run_that(shell);
-		if (return_code == -1 || return_code == -ERROR_CODE)
+		exec = run_that(shell);
+		if (exec == -1 || exec == -ERROR_CODE)
 			break;
 		free(shell->input);
 		disp_prompt();

@@ -45,7 +45,6 @@ void free_history(history_t *hist)
 {
 	if (hist == NULL)
 		return;
-	puts(hist->data);
 	free(hist->data);
 	free_history(hist->next);
 	free(hist);
