@@ -61,6 +61,7 @@ void delete_shell(shell_t *shell)
 		return;
 	free_array((void **) shell->env);
 	free_history(shell->history);
+	free(shell->input);
 	free_aliases(shell->aliases, 1);
 	free(shell);
 	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
