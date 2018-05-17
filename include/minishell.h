@@ -76,7 +76,7 @@ redir_t *init_redir(void);
 shell_t *init_shell(char **env);
 char *search_path(char **path, char *name);
 int add_alias(char **args, shell_t *shell);
-int add_env_value(char ***env, char *var, char *value, char *var_pre);
+int add_env_value(char ***env, char *value, char *var_pre);
 int add_to_pid(pid_t child);
 int ask_y_n(char *s, char *yes, char *no);
 void catch_ctrl_c(int sig);

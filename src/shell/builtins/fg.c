@@ -7,6 +7,7 @@
 
 #include <signal.h>
 #include "minishell.h"
+#include "my.h"
 #include <stdio.h>
 #include <unistd.h>
 
@@ -15,6 +16,8 @@ int ptr_fg(comm_t *comm, shell_t *shell)
 	int i = find_last_pid();
 	char *name;
 
+	UNUSED(shell);
+	UNUSED(comm);
 	if (pid_job[i] == -1 || pid_job[i] == -2) {
 		puts("fg: no current job");
 		fflush(stdout);

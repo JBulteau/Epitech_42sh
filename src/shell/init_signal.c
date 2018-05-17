@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "minishell.h"
+#include "my.h"
 
 pid_t *pid_job;
 
@@ -40,6 +41,7 @@ void catch_ctrl_z(int sig)
 	int i = find_last_pid();
 	char *name;
 
+	UNUSED(sig);
 	printf("\033[2D  \033[2D");
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
 (pid_job[i + 1] && pid_job[i + 1] == -2))
@@ -62,6 +64,7 @@ void catch_ctrl_c(int sig)
 {
 	int i = find_last_pid();
 
+	UNUSED(sig);
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
 (pid_job[i + 1] && pid_job[i + 1] == -2)) {
 		printf("\033[2D  \n");
