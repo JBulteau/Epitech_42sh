@@ -22,9 +22,10 @@ separator_type_t is_separator(char *buffer, int *i, node_t *node)
 		break;
 	case '|' :
 		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
-		&& buffer[*i - 1] != '&')) && buffer[(*i) + 1] == '|')
+		&& buffer[*i - 1] != '&')) && buffer[(*i) + 1] == '|') {
 			(*i)++;
 			return (D_PIPE);
+		}
 		break;
 	case '&' :
 		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
