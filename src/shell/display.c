@@ -5,36 +5,34 @@
 ** Display functions
 */
 
-#include <string.h>
-#include <sys/wait.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "minishell.h"
-#include "my.h"
 
-
-void disp_wrong_arch(char *str, int errno)
+void disp_wrong_arch(char *str, int num)
 {
-	my_putstr(str);
-	my_putstr(": ");
-	my_putstr(strerror(errno));
-	my_putstr(". Wrong Architecture\n");
+	printf("%s: %s. Wrong Architecture\n", str, strerror(num));
 }
 
 void display_signal(int status)
 {
 	if (WIFSIGNALED(status)) {
 		if (WTERMSIG(status) == 8)
-			my_putstr("Floating exception");
+			printf("Floating exception");
 		else
-			my_putstr(strsignal(WTERMSIG(status)));
+			printf(strsignal(WTERMSIG(status)));
 		if (WCOREDUMP(status))
-			my_putstr(" (core dumped)");
-		my_putchar('\n');
+			printf(" (core dumped)");
+		putchar('\n');
 	}
 }
 
 void disp_prompt(void)
 {
 	if (isatty(STDIN_FILENO))
-		my_putstr(prompt);
+		printf(prompt);
+	fflush(stdout);
 }

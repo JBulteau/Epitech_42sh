@@ -1,0 +1,16 @@
+.TH man 1 "27 May 2018" "23.42" "42sh man page"
+
+.SH NAME
+42sh \- A basic shell 
+.SH SYNOPSIS
+../42sh
+.SH DESCRIPTION
+Ouais bon nique j'ai la flemme
+.SH OPTIONS
+On a la flemme pour l'instant
+.SH SEE ALSO
+tchs(1), csh(5)
+.SH BUGS
+No known bugs (pour l'instant).
+.SH AUTHOR
+Vivek Gite (vivek@nixcraft.net.in)

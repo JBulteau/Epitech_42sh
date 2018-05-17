@@ -26,11 +26,20 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
 			$(SHELL_DIR)pipe.c\
+			$(SHELL_DIR)exec_pipe.c\
+			$(SHELL_DIR)redir_pipe.c\
+			$(SHELL_DIR)init_signal.c\
+			$(SHELL_DIR)jobs.c\
 \
 			$(BI_DIR)basic_bi.c\
 			$(BI_DIR)env.c\
 			$(BI_DIR)cd.c\
 			$(BI_DIR)history.c\
+			$(BI_DIR)history_exec.c\
+			$(BI_DIR)fg.c\
+			$(BI_DIR)alias.c\
+			$(BI_DIR)echo.c\
+			$(BI_DIR)alias_struc.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\
@@ -53,6 +62,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
+CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
 TEST_FOLDER	=	tests
 
 CFLAGS		=	-W -Wextra -Wall -Wshadow -I include
@@ -82,7 +92,9 @@ fclean:		clean
 re:		fclean all
 
 debug:		CFLAGS += -g
-debug:		re
+debug:		$(OBJ)
+		$(MAKE) -C $(LIB_DIR)/my debug
+		$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(CFLAGS)
 
 tests_run:
 		$(MAKE) -C $(TEST_FOLDER)

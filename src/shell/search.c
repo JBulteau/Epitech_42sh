@@ -5,30 +5,25 @@
 ** Path + search for exec fnc
 */
 
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <strings.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "my.h"
 #include "minishell.h"
 
 void disp_rights(char *name, int exists, int exec)
 {
 	if (exists == -1) {
-		my_putstr(name);
-		my_putstr(": Command not found.\n");
+		printf("%s: Command not found.\n", name);
 	} else if (exec == -1) {
-		my_putstr(name);
-		my_putstr(": Permission denied.\n");
+		printf("%s: Permission denied.\n", name);
 	}
 }
 
 int search_local(char *name)
 {
 	int rights[2] = {0, 0};
-	int fd;
 
 	rights[0] = access(name, F_OK);
 	if (rights[0] != -1)
@@ -66,13 +61,13 @@ char *search_path(char **path, char *name)
 char *get_env_var(char **env, char *var)
 {
 	char *res = NULL;
-	int len = my_strlen(var);
+	int len = strlen(var);
 
 	if (env == NULL || var == NULL)
 		return (NULL);
 	for (int key = 0; env[key] != NULL; key++)
-		if (my_strcmp(env[key], var, len) == 0)
-			res = my_strndup(env[key] + len, 0);
+		if (strncmp(env[key], var, len) == 0)
+			res = strdup(env[key] + len);
 	if (res == NULL)
 		return (NULL);
 	return (res);
@@ -85,7 +80,7 @@ char **get_path(char **env)
 	if (env == NULL)
 		return (NULL);
 	for (int key = 0; env[key] != NULL; key++)
-		if (my_strcmp(env[key], "PATH=", 5) == 0)
+		if (strncmp(env[key], "PATH=", 5) == 0)
 			path = strwordarr(env[key] + 5, ":");
 	if (path == NULL)
 		return (NULL);

@@ -5,10 +5,10 @@
 ** main file for minishell2
 */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <my.h>
+#include <string.h>
 #include <unistd.h>
-#include "my.h"
+#include <stdio.h>
 #include "minishell.h"
 
 int main(int ac, char **av, char **env)
@@ -16,23 +16,28 @@ int main(int ac, char **av, char **env)
 	shell_t *shell = init_shell(env);
 	int return_code = SUCCESS_CODE;
 
-	if (shell == NULL)
+	UNUSED(av);
+	UNUSED(ac);
+	if (shell == NULL || init_signal() == -1)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
 		if ((shell->comm = full_parse(shell->input)) == NULL)
 			return (ERROR_CODE);
+		for (int i = 0; shell->comm[i] != NULL; i++)
+			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
+				return (ERROR_CODE);
 		return_code = exec_loop(shell);
 		free_comms(shell->comm);
-		free(shell->input);
 		if (return_code == -1 || return_code == -ERROR_CODE)
 			break;
+		free(shell->input);
 		disp_prompt();
 	}
+	free(shell->input);
 	if ((shell->input == NULL) && isatty(0))
-		my_putstr("exit\n");
-	return_code = shell->return_value;
+		puts("exit");
 	delete_shell(shell);
 	return (return_code);
 }

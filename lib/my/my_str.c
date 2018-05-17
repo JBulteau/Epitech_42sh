@@ -30,7 +30,7 @@ char *my_strcpy(char *dest, char const *src, int n)
 int my_strcmp(const char *str1, const char *str2, int n)
 {
 	if (str1 == NULL || str2 == NULL)
-		return (0);
+		return (1);
 	if (n == 0 && my_strlen(str1) != my_strlen(str2))
 		return (1);
 	for (int i = 0; n == 0 && str1[i] && str2[i]; i++)

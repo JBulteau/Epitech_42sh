@@ -1,48 +1,83 @@
 ##
-## EPITECH PROJECT, 2018
-## Unit Tests
+## EPITECH PROJECT, 2017
+## Makefile for UT
 ## File description:
-## Unit Tests
+## UT for 42sh
 ##
+
+SRC_DIR		=	$(realpath ../src)
+
+SHELL_DIR	=	shell/
+BI_DIR		=	$(SHELL_DIR)builtins/
+RED_DIR		=	$(SHELL_DIR)redirections/
+
+SRC_FILES	=	$(SHELL_DIR)shell.c\
+			$(SHELL_DIR)utils.c\
+			$(SHELL_DIR)search.c\
+			$(SHELL_DIR)exec.c\
+			$(SHELL_DIR)debug.c\
+			$(SHELL_DIR)parsing.c\
+			$(SHELL_DIR)commands.c\
+			$(SHELL_DIR)display.c\
+			$(SHELL_DIR)redir.c\
+			$(SHELL_DIR)pipe.c\
+\
+			$(BI_DIR)basic_bi.c\
+			$(BI_DIR)env.c\
+			$(BI_DIR)cd.c\
+\
+			$(RED_DIR)d_left.c\
+			$(RED_DIR)s_left.c\
+			$(RED_DIR)d_right.c\
+			$(RED_DIR)s_right.c\
+			$(RED_DIR)pipe.c\
+
+SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
+
+TESTS_DIR	=	$(realpath ./UT)
+
+TESTS_FILES	=	shell.c
+
+SRC_TESTS	=	$(addprefix $(TESTS_DIR)/, $(TESTS_FILES))
+
+OBJ		=	$(SRC:%.c=%.o) $(SRC_TESTS:%.c=%.o)
+
+CCTMP		=	$(SRC:%.c=%.gcno) $(SRC:%.c=%.gcda) $(SRC_TESTS:%.c=%.gcno) $(SRC_TESTS:%.c=%.gcda)
 
 NAME		=	test
 
-SRC_FOLDER	=	../src
-
-SRC		=	$(SRC_FOLDER)/shell/parsing/is_quote.c\
-			$(SRC_FOLDER)/shell/parsing/struct.c
-
-SRC_UT		=	is_quote_functions_test.c\
-			struct_functions_test.c
-
-OBJ		=	$(SRC:.c=.o) $(SRC_UT:.c=.o)
-
-CCTMP		=	$(SRC:.c=.gcno) $(SRC:.c=.gcda) $(SRC_UT:.c=.gcno) $(SRC_UT:.c=.gcda)
-
 INCLUDE		=	-I ../include
 
-CFLAGS		=	$(INCLUDE) -Wall -Wextra --coverage -fprofile-arcs -ftest-coverage -Werror
+CFLAGS		=	-Wall -Wextra -coverage
+CFLAGS		+=	$(INCLUDE)
 
+LIB_DIR		=	../lib/
 
-LIB_FOLDER	=	../lib/
+LIB_FLAGS	=	-L $(LIB_DIR) -lmy -lcriterion -lgcov
 
-LIB		=	-L $(LIB_FOLDER) -lmy
+LIB		=	$(LIB_DIR)my/libmy.a
 
-LDFLAGS		=	$(LIB) -lcriterion -lgcov
-
-CC		=	cc
+CC		=	gcc
 
 all:		$(NAME)
 
-$(NAME):	$(OBJ)
-		$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS)
+$(NAME):	$(LIB)
+		$(CC) -o $(NAME) $(SRC) $(SRC_TESTS) $(LIB_FLAGS) $(CFLAGS)
 
-clean:
-		rm -f *.gcno *.gcda
-		rm -f $(OBJ)
-		rm -f $(CCTMP)
+$(LIB):
+		$(MAKE) -C $(LIB_DIR)my
+		$(MAKE) clean -C $(LIB_DIR)my
+
+cclean:
+		$(RM) $(CCTMP)
+		$(RM) *.gcno
+		$(RM) *.gcda
+		$(RM) *.gcov
+
+clean:		cclean
+		$(RM) $(OBJ)
 
 fclean:		clean
-		rm -f $(NAME)
+		$(RM) -f $(NAME)
 
 re:		fclean all
