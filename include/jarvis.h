@@ -33,6 +33,10 @@ enum inc {
 };
 
 /* jarvis corrector */
+int check_slash(char **arg, int i);
+void refill_last(char **arg, char *cpy, char *current_path);
+int misspell_process(char **arg, int *pos, char *current_path, int check);
+char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr);
 int refill_arg(char **arg, char *cpy, char *current_path, int size_after);
 int check_same(char **distance_allowed, int letter_in_a_row, int i, int b);
 int count_correct_letter(int distance_allowed, char **both);

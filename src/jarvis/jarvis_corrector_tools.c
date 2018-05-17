@@ -32,11 +32,12 @@ char *prepare_copy(char **arg, char *current_path)
 	char *res = NULL;
 
 	if (index_of(*arg, '/') >= 0)
-		res = strdup((*arg) + my_strlen(current_path));
+		res = strdup((*arg) + strlen(current_path));
 	else
 		res = strdup(*arg);
 	if (!res)
 		return (NULL);
+	return (res);
 }
 
 void free_jarvis_corrector(jarg_t **corr, int i)
