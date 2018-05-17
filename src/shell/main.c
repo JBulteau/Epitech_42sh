@@ -11,6 +11,21 @@
 #include <stdio.h>
 #include "minishell.h"
 
+int run_that(shell_t *shell)
+{
+	int return_code = 0;
+
+	if ((shell->comm = full_parse(shell->input)) == NULL)
+		return (ERROR_CODE);
+	for (int i = 0; shell->comm[i] != NULL; i++)
+		if (replace_alias(shell->aliases, shell->comm[i]) == -1)
+			return (ERROR_CODE);
+	return_code = exec_loop(shell);
+	if (shell->comm != NULL)
+		free_comms(shell->comm);
+	return (return_code);
+}
+
 int main(int ac, char **av, char **env)
 {
 	shell_t *shell = init_shell(env);
@@ -23,14 +38,8 @@ int main(int ac, char **av, char **env)
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		if ((shell->comm = full_parse(shell->input)) == NULL)
-			return (ERROR_CODE);
-		for (int i = 0; shell->comm[i] != NULL; i++)
-			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
-				return (ERROR_CODE);
-		exec = exec_loop(shell);
-		free_comms(shell->comm);
-		if (exec == ERROR_RETURN)
+		exec = run_that(shell);
+		if (exec == -1 || exec == -ERROR_CODE)
 			break;
 		free(shell->input);
 		disp_prompt();
