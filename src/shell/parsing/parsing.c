@@ -10,7 +10,7 @@
 
 comm_t **parsing(char *buffer)
 {
-	node_t *node = init_node(buffer, NONE);
+	node_t *node = init_node(buffer, NONE, 0);
 
 	if (node == NULL)
 		return (NULL);

@@ -37,14 +37,14 @@ node_t *delete_quote(node_t *node, char *buffer, int i)
 	if (is_a_quote(buffer[i]) && (node->next[n - 2]->quote) == NONE \
 	&& !node->backslash) {
 		if (node->next[n - 2]->buffer != NULL)
-			node->next = realloc_node(node->next, n++);
+			node->next = realloc_node(node->next, n++, node->quote, node->separator);
 		if (node->next == NULL)
 			return (NULL);
 		j = 0;
 		node->next[n - 2]->quote = index_of("'\"`", buffer[i]);
 	} else if (node->next[n - 2]->quote == index_of("'\"`", buffer[i]) \
 	&& node->next[n - 2]->quote != NONE && !node->backslash) {
-		if ((node->next = realloc_node(node->next, n++)) == NULL)
+		if ((node->next = realloc_node(node->next, n++, node->quote, node->separator)) == NULL)
 			return (NULL);
 		j = 0;
 	} else {
@@ -70,7 +70,7 @@ node_t *fill_buffer(node_t *node, char *buffer, int *i)
 
 node_t *parse_quote(node_t *node, char *buffer)
 {
-	node->next = realloc_node(node->next, 1);
+	node->next = realloc_node(node->next, 1, node->quote, node->separator);
 	if (node->next == NULL)
 		return (NULL);
 	for (int i = 0; buffer[i] != '\0'; i++) {

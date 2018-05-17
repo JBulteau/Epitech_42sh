@@ -12,21 +12,22 @@
 node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
 {
 	int total_len = 0;
-	int buf_len = strlen(node->buffer);
+	size_t buf_len = strlen(node->buffer);
 	int tmp = j;
 	int k = 0;
-	int n = 0;
+	size_t n = 0;
 
 	for (size_t i = 0; i < pglob.gl_pathc; i++) {
 		total_len += strlen(pglob.gl_pathv[i]) + 1;
 	}
-	node->buffer = realloc(node->buffer, sizeof(char) * (buf_len + total_len - len));
+	node->buffer = realloc(node->buffer, sizeof(char) * (buf_len + total_len - len + 3));
 	if (node->buffer == NULL)
 		return (NULL);
 	for (size_t i = 0; j + i + len <= buf_len && i <= len + 1; i++)
 		node->buffer[j + i - 1] = node->buffer[j + len + i];
-	for (; node->buffer[j - 1] != '\0'; j++)
-		node->buffer[j + total_len] = node->buffer[j];
+	for (; node->buffer[j] != '\0'; j++)
+		node->buffer[j + total_len - 4] = node->buffer[j];
+	node->buffer[j + total_len - 4] = '\0';
 	for (j = tmp; j < tmp + total_len && n < pglob.gl_pathc; j++) {
 		if (pglob.gl_pathv[n][k] != '\0') {
 			node->buffer[j] = pglob.gl_pathv[n][k];
@@ -96,5 +97,5 @@ node_t *parse_globbing(node_t *node)
 		if (node->next[i] == NULL)
 			return (NULL);
 	}
-	return (node);
+	return (parse_cmd_separators(node));
 }

@@ -8,7 +8,26 @@
 #include "my.h"
 #include "parsing.h"
 
-node_t **realloc_node(node_t **node, int n)
+node_t *copy_node(node_t *dest, node_t *src)
+{
+	if (dest == NULL) {
+		dest = malloc(sizeof(node_t));
+		if (dest == NULL)
+			return (NULL);
+	}
+	dest->buffer = my_strndup(src->buffer, 0);
+	if (dest->buffer == NULL) {
+		free(dest);
+		return (NULL);
+	}
+	dest->quote = src->quote;
+	dest->separator = src->separator;
+	dest->backslash = false;
+	dest->next = NULL;
+	return (dest);
+}
+
+node_t **realloc_node(node_t **node, int n, quote_type_t quote, separator_type_t separator)
 {
 	node_t **new_node = malloc(sizeof(node_t*) * (n + 1));
 
@@ -17,11 +36,11 @@ node_t **realloc_node(node_t **node, int n)
 	for (int i = 0; i < n; i++) {
 		if (node != NULL && node[i] != NULL) {
 			new_node[i] = \
-			init_node(node[i]->buffer, node[i]->quote);
+			init_node(node[i]->buffer, node[i]->quote, node[i]->separator);
 			free(node[i]->buffer);
 			free(node[i]);
 		} else {
-			new_node[i] = init_node(NULL, NONE);
+			new_node[i] = init_node(NULL, quote, separator);
 		}
 		if (new_node[i] == NULL)
 			return (NULL);
@@ -32,7 +51,7 @@ node_t **realloc_node(node_t **node, int n)
 	return (new_node);
 }
 
-node_t *init_node(char *buffer, quote_type_t quote)
+node_t *init_node(char *buffer, quote_type_t quote, separator_type_t separator)
 {
 	node_t *node = malloc(sizeof(node_t));
 
@@ -48,7 +67,7 @@ node_t *init_node(char *buffer, quote_type_t quote)
 		node->buffer = NULL;
 	}
 	node->quote = quote;
-	node->separator = 0;
+	node->separator = separator;
 	node->backslash = false;
 	node->next = NULL;
 	return (node);
