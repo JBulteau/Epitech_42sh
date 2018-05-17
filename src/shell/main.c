@@ -14,11 +14,11 @@
 int main(int ac, char **av, char **env)
 {
 	shell_t *shell = init_shell(env);
-	int return_code = SUCCESS_CODE;
+	int exec = SUCCESS_CODE;
 
 	UNUSED(av);
 	UNUSED(ac);
-	if (shell == NULL || init_signal() == -1)
+	if (shell == NULL || init_signal() == ERROR_RETURN)
 		return (ERROR_CODE);
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
@@ -28,16 +28,16 @@ int main(int ac, char **av, char **env)
 		for (int i = 0; shell->comm[i] != NULL; i++)
 			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
 				return (ERROR_CODE);
-		return_code = exec_loop(shell);
+		exec = exec_loop(shell);
 		free_comms(shell->comm);
-		if (return_code == -1 || return_code == -ERROR_CODE)
+		if (exec == ERROR_RETURN)
 			break;
 		free(shell->input);
 		disp_prompt();
 	}
-	free(shell->input);
-	if ((shell->input == NULL) && isatty(0))
+	if (shell->input == NULL && isatty(0))
 		puts("exit");
+	exec = shell->return_value;
 	delete_shell(shell);
-	return (return_code);
+	return (exec);
 }
