@@ -76,4 +76,6 @@ fclean:		clean
 re:		fclean all
 
 debug:		CFLAGS += -g
-debug:		re
+debug:		$(OBJ)
+		$(MAKE) -C $(LIB_DIR)/my debug
+		$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(CFLAGS)
