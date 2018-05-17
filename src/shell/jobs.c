@@ -5,41 +5,74 @@
 ** jobs functions
 */
 
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
 #include "minishell.h"
 
-int find_last_pid(void)
+jobs_t *find_node_job(void)
+{
+	jobs_t *new = list_jobs;
+
+	while (new->next != NULL)
+		new = new->next;
+	return (new);
+}
+
+int get_nb_job(void)
 {
 	int i = 0;
+	jobs_t *new = list_jobs;
 
-	for (; pid_job[i] != -1 && pid_job[i] != -2; i++);
-	if (i > 0)
-		i--;
+	for (; new->next != NULL; i++, new = new->next);
 	return (i);
 }
 
-int remove_last_pid(void)
+jobs_t *new_node(void)
 {
-	int i = find_last_pid();
+	jobs_t *new;
+	jobs_t *node = find_node_job();
 
-	pid_job = realloc(pid_job, sizeof(pid_t) * (i + 2));
-	if (pid_job == NULL)
-		return (-1);
-	pid_job[i] = -2;
-	return (0);
+	new = malloc(sizeof(jobs_t));
+	if (new == NULL)
+		return (perror("Malloc"), NULL);
+	new->pid_job = malloc(sizeof(int) * 2);
+	if (new->pid_job == NULL)
+		return (perror("Malloc"), NULL);
+	new->pid_job[0] = 0;
+	new->running = true;
+	new->next = NULL;
+	node->next = new;
+	return (new);
 }
 
-int add_to_pid(pid_t child)
+void remove_node(void)
 {
-	int i = find_last_pid();
+	jobs_t *new = list_jobs;
+	jobs_t *save = new;
 
-	pid_job = realloc(pid_job, sizeof(pid_t) * (i + 3));
-	if (pid_job == NULL)
+	new = new->next;
+	while (new->next != NULL) {
+		save = new;
+		new = new->next;
+	}
+	save->next = NULL;
+	free(new);
+}
+
+int add_pid_jobs(pid_t child)
+{
+	int i = 0;
+	jobs_t *node = find_node_job();
+
+	for(; node->pid_job[i] != 0; i++);
+	node->pid_job = realloc(node->pid_job, sizeof(int) * (i + 2));
+	if (node->pid_job == NULL) {
+		perror("Realloc");
 		return (-1);
-	if (pid_job[i] != -1 && pid_job[i] != -2)
-		i++;
-	pid_job[i] = child;
-	pid_job[i + 1] = -1;
+	}
+	node->pid_job[i] = child;
+	node->pid_job[i + 1] = 0;
 	return (0);
 }

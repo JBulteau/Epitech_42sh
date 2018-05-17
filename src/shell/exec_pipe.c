@@ -22,6 +22,8 @@ int run_not_last(shell_t *shell, comm_t *curr)
 		else
 			exec_bin(curr, shell->env);
 	}
+	if (add_pid_jobs(child_pid) == -1)
+		return (ERROR_RETURN);
 	if (curr->pipe[OUT])
 		close(curr->pipe[OUT]->fd[WRITE]);
 	close_in(curr);
@@ -43,6 +45,8 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 			init_redir_pipe(curr);
 			exec_bin(curr, shell->env);
 		}
+		if (add_pid_jobs(child_pid) == -1)
+			return (ERROR_RETURN);
 		return_c = wait_for_it(child_pid);
 	}
 	close_in(curr);
@@ -53,7 +57,7 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 {
 	int return_c = 0;
 
-	if ((shell == NULL) || (comm == NULL))
+	if ((shell == NULL) || (comm == NULL) || new_node() == NULL)
 		return (-ERROR_CODE);
 	for (comm_t *curr = comm; curr; curr = (curr->pipe[OUT] && curr->pipe\
 [OUT]->output) ? curr->pipe[OUT]->output : NULL) {

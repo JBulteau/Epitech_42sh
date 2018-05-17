@@ -10,13 +10,19 @@
 
 #include <stdlib.h>
 #include <linux/limits.h>
-
-extern pid_t *pid_job;
+#include <stdbool.h>
 
 typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 typedef struct alias_s alias_t;
+typedef struct jobs_s jobs_t;
+
+struct jobs_s {
+	bool running;
+	pid_t *pid_job;
+	jobs_t *next;
+};
 
 struct alias_s {
 	char *name;
@@ -55,6 +61,8 @@ typedef struct {
 	history_t *history;
 	int return_value;
 } shell_t;
+
+extern jobs_t *list_jobs;
 
 char **add_arr(char **arr, char *str, int free_arr);
 char **clone_arr(char **arr);
@@ -130,7 +138,6 @@ int ptr_fg(comm_t *comm, shell_t *shell);
 int ptr_history(comm_t *comm, shell_t *shell);
 int ptr_setenv(comm_t *comm, shell_t *shell);
 int ptr_unsetenv(comm_t *comm, shell_t *shell);
-int remove_last_pid(void);
 int replace_alias(alias_t *node, comm_t *comm);
 int rm_alias(shell_t *shell, char **av);
 void rm_one_alias(char *alias, alias_t *current, shell_t *shell);
@@ -143,6 +150,12 @@ int search_local(char *name);
 int search_strtab(char **arr, char *to_find);
 int set_env_value(char ***env, char *var, char *value);
 int wait_for_it(pid_t pid);
+jobs_t *find_node_job(void);
+int get_nb_job(void);
+jobs_t *new_node(void);
+void remove_node(void);
+int add_pid_jobs(pid_t);
+void set_node_running_false(void);
 
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
