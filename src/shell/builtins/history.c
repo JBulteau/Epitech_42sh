@@ -51,8 +51,14 @@ void free_history(history_t *hist)
 
 int ptr_history(comm_t *comm, shell_t *shell)
 {
+	int i = 1;
+
+	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "del") || !strcmp(comm->argv[1], "delete") || !strcmp(comm->argv[1], "d"))) {
+		puts("TODO HISTORY DELETE");
+	}
 	for (history_t *curr = shell->history; curr != NULL; \
 curr = curr->next) {
-		puts((char *) curr->data);
+		printf("%i\t%s\n", i, (char *) curr->data);
+		i++;
 	}
 }
