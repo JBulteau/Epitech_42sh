@@ -50,7 +50,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include
+CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -77,4 +77,6 @@ fclean:		clean
 re:		fclean all
 
 debug:		CFLAGS += -g
-debug:		re
+debug:		$(OBJ)
+		$(MAKE) -C $(LIB_DIR)/my debug
+		$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(CFLAGS)

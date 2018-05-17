@@ -31,15 +31,15 @@ int exec_start(comm_t *comm)
 			return (ERROR_RETURN);
 		}
 	}
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 int exec_end(comm_t *comm)
 {
 	for (int i = 0; i < 4; i++)
-		if (comm->red[i] && (tokens[i].end_exec(comm) == -1))
-			return (-1);
-	return (0);
+		if (comm->red[i] && (tokens[i].end_exec(comm) == ERROR_RETURN))
+			return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
 }
 
 comm_t *init_comm(void)
@@ -55,6 +55,7 @@ comm_t *init_comm(void)
 	comm->argv[0] = NULL;
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
+	comm->separator = NONE;
 	return (comm);
 }
 

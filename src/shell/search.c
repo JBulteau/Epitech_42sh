@@ -24,7 +24,6 @@ void disp_rights(char *name, int exists, int exec)
 int search_local(char *name)
 {
 	int rights[2] = {0, 0};
-	int fd;
 
 	rights[0] = access(name, F_OK);
 	if (rights[0] != -1)

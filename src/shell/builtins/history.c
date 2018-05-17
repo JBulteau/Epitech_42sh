@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "minishell.h"
+#include "my.h"
 
 history_t *create_new_case(char *s)
 {
@@ -53,6 +54,7 @@ int ptr_history(comm_t *comm, shell_t *shell)
 {
 	int i = 1;
 
+	UNUSED(comm);
 	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "del") || !strcmp(comm->argv[1], "delete") || !strcmp(comm->argv[1], "d"))) {
 		puts("TODO HISTORY DELETE");
 	}
@@ -61,4 +63,5 @@ curr = curr->next) {
 		printf("%i\t%s\n", i, (char *) curr->data);
 		i++;
 	}
+	return (0);
 }

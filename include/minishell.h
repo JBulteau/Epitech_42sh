@@ -13,6 +13,35 @@
 
 extern pid_t *pid_job;
 
+enum {
+	D_RIGHT,
+	S_RIGHT,
+	D_LEFT,
+	S_LEFT,
+	PIPE
+};
+
+typedef enum {
+	NONE,
+	THEN,
+	OR
+} sep_t;
+
+enum {
+	READ,
+	WRITE
+};
+
+enum {
+	OUT,
+	IN
+};
+
+enum {
+        PREV,
+        NEXT
+};
+
 typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
@@ -36,6 +65,7 @@ struct redir_s {
 
 struct comm_s {
 	char **argv;
+	sep_t separator;
 	redir_t *red[4];
 	pipe_t *pipe[2];
 };
@@ -76,7 +106,7 @@ redir_t *init_redir(void);
 shell_t *init_shell(char **env);
 char *search_path(char **path, char *name);
 int add_alias(char **args, shell_t *shell);
-int add_env_value(char ***env, char *var, char *value, char *var_pre);
+int add_env_value(char ***env, char *value, char *var_pre);
 int add_to_pid(pid_t child);
 int ask_y_n(char *s, char *yes, char *no);
 void catch_ctrl_c(int sig);
@@ -146,28 +176,5 @@ int wait_for_it(pid_t pid);
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
-
-enum {
-	D_RIGHT,
-	S_RIGHT,
-	D_LEFT,
-	S_LEFT,
-	PIPE
-};
-
-enum {
-	READ,
-	WRITE
-};
-
-enum {
-	OUT,
-	IN
-};
-
-enum {
-        PREV,
-        NEXT
-};
 
 #endif
