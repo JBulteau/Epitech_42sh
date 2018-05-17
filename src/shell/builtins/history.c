@@ -32,7 +32,7 @@ int save_history(shell_t *shell, char *input)
 	history_t *nc = create_new_case(input);
 
 	if (!nc)
-		return (-1);
+		return (ERROR_RETURN);
 	if (!shell->history) {
 		shell->history = nc;
 	} else {
@@ -45,6 +45,7 @@ void free_history(history_t *hist)
 {
 	if (hist == NULL)
 		return;
+	puts(hist->data);
 	free(hist->data);
 	free_history(hist->next);
 	free(hist);
