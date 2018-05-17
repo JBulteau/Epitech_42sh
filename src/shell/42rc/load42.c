@@ -34,7 +34,6 @@ int ask_y_n(char *s, char *yes, char *no)
 
 int load42(shell_t *shell)
 {
-	int create = 0;
 	char *path42rc = concat(get_env_var(shell->env, "HOME="), \
 concat("/", ".42rc", 0, 0), 1, 1);
 

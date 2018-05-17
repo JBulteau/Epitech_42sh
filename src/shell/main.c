@@ -13,10 +13,11 @@
 
 int main(int ac, char **av, char **env)
 {
-	size_t size;
 	shell_t *shell = init_shell(env);
 	int return_code = SUCCESS_CODE;
 
+	UNUSED(av);
+	UNUSED(ac);
 	if (shell == NULL || init_signal() == -1)
 		return (ERROR_CODE);
 	disp_prompt();

@@ -49,7 +49,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include
+CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
 
 OBJ		=	$(SRC:%.c=%.o)
 
