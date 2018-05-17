@@ -67,10 +67,8 @@ int refill_arg(char **arg, char *cpy, char *current_path, int size_after)
 		(*arg)[inc++] = '/';
 		for (; save[inc_arg] != '\0'; inc_arg++);
 		inc_arg += 1;
-		printf("save : %s\n", save + inc_arg);
 		for (; save[inc_arg] != '\0'; inc_arg++)
 			(*arg)[inc++] = save[inc_arg];
-		printf("final test : %s\n", *arg);
 	}
 	return (0);
 }

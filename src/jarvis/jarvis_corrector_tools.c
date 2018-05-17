@@ -30,8 +30,9 @@ int check_same(char **both, int distance_allowed, int i, int b)
 char *prepare_copy(char **arg, char *current_path)
 {
 	char *res = NULL;
+	int index = 0;
 
-	if (index_of(*arg, '/') >= 0)
+	if ((index = index_of(*arg, '/')) >= 0 && (*arg)[index + 1] != '\0')
 		res = strdup((*arg) + strlen(current_path));
 	else
 		res = strdup(*arg);

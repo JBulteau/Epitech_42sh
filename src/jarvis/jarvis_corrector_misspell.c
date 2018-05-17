@@ -22,7 +22,7 @@ int pre_process_check(int *letter_nbr, char **arg, int pos, char **current_path)
 	}
 	if ((*arg)[pos] != '/')
 		return (1);
-	if ((*arg)[pos + 1] != '\0')
+	if ((*arg)[pos + 1] != '\0' && (*arg)[pos - 1] != '/')
 		(*arg)[pos] = '\0';
 	return (0);
 }
@@ -107,13 +107,8 @@ char *check_path_argv(int *nb_to_path, char **arg, jarg_t *corr)
 		else if (let != 0 && (let = misspell_process(arg, &pos, current_path, 0)))
 			return (NULL);
 		*nb_to_path = pos + 1;
-		printf("let : %i\n", let);
-		if (let == 2) {
-			printf("indeeeeed\n");
-			return (current_path);
-		}
-		else
-			corr->change = 1; //pb here due to misspell_process
+		if (let == 0)
+			corr->change = 1;
 		if (post_misspell_process(&let, arg, &current_path, pos))
 			return (NULL);
 	}

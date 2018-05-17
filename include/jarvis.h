@@ -33,6 +33,7 @@ enum inc {
 };
 
 /* jarvis corrector */
+int is_slash_ending(char **arg);
 int check_slash(char **arg, int i);
 void refill_last(char **arg, char *cpy, char *current_path);
 int misspell_process(char **arg, int *pos, char *current_path, int check);
