@@ -88,7 +88,6 @@ void debug_comm(comm_t *comm);
 void delete_shell(shell_t *shell);
 void destroy_pipe(pipe_t *pipe);
 int disp_aliases(alias_t *node);
-int disp_help(void);
 void disp_prompt(void);
 void disp_rights(char *name, int exists, int exec);
 void disp_wrong_arch(char *str, int num);
