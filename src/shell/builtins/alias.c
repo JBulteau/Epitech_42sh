@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "minishell.h"
 
-int disp_help(void)
+static int disp_help(void)
 {
 	puts("Usage: alias [rm] [name[=alias]]");
 	return (0);

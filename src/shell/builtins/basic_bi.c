@@ -52,9 +52,12 @@ int ptr_exit(comm_t *comm, shell_t *shell)
 
 int is_builtin(char *name)
 {
-	for (int i = 0; builtins[i].name != NULL; i++)
+	for (int i = 0; builtins[i].name != NULL; i++) {
+		if (builtins[i].name[0] == '!' && name[0] == '!')
+			return (i);
 		if (!strcmp(builtins[i].name, name))
 			return (i);
+	}
 	return (-1);
 }
 
