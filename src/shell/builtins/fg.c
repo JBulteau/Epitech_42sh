@@ -17,19 +17,11 @@ void set_node_running_false(void)
 	node->running = false;
 }
 
-int ptr_fg(comm_t *comm, shell_t *shell)
+int kill_cont_childs(jobs_t *node)
 {
+	char *name = NULL;
 	int i = 0;
-	jobs_t *node;
-	char *name;
 
-	remove_node();
-	node = find_node_job();
-	if (0 == get_nb_job() || node->pid_job[0] == 0) {
-		printf("No jobs running\n");
-		return (fflush(stdout), 1);
-	}
-	printf("\n[%d]", get_nb_job());
 	for (; node->pid_job[i] != 0; i++) {
 		if (kill(node->pid_job[i], SIGCONT) == -1) {
 			perror("kill");
@@ -41,5 +33,23 @@ int ptr_fg(comm_t *comm, shell_t *shell)
 	}
 	node->running = true;
 	fflush(stdout);
+	return (i);
+}
+
+int ptr_fg(comm_t *comm, shell_t *shell)
+{
+	int i;
+	jobs_t *node;
+
+	remove_node();
+	node = find_node_job();
+	if (0 == get_nb_job() || node->pid_job[0] == 0) {
+		printf("No jobs running\n");
+		return (fflush(stdout), 1);
+	}
+	printf("\n[%d]", get_nb_job());
+	i = kill_cont_childs(node);
+	if (i == -1)
+		return (-1);
 	return (wait_for_it(node->pid_job[i - 1]));
 }

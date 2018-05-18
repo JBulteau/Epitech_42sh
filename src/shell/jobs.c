@@ -58,6 +58,7 @@ void remove_node(void)
 		new = new->next;
 	}
 	save->next = NULL;
+	free(new->pid_job);
 	free(new);
 }
 

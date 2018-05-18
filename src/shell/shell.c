@@ -63,11 +63,12 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free_aliases(shell->aliases, 1);
 	free(shell);
-	//for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
-	//	if (kill(pid_job[i], SIGKILL) == -1)
-	//		perror("kill");
-	//}
-	//free(pid_job);
+	for (jobs_t *node; list_jobs != NULL;) {
+		node = list_jobs->next;
+		free(list_jobs->pid_job);
+		free(list_jobs);
+		list_jobs = node;
+	}
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);

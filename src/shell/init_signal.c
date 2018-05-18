@@ -78,11 +78,14 @@ int init_signal(void)
 	struct sigaction act_c;
 
 	list_jobs = malloc(sizeof(jobs_t));
-	list_jobs->running = false;
-	list_jobs->next = NULL;
 	if (memset(&act_z, '\0', sizeof(act_z) + 1) == NULL || \
 memset(&act_c, '\0', sizeof(act_z) + 1) == NULL || list_jobs == NULL)
 		return (-1);
+	list_jobs->pid_job = malloc(sizeof(int) * 2);
+	if (list_jobs->pid_job == NULL)
+		return (perror("Malloc"), -1);
+	list_jobs->running = false;
+	list_jobs->next = NULL;
 	act_z.sa_sigaction = (void *)catch_ctrl_z;
 	act_c.sa_sigaction = (void *)catch_ctrl_c;
 	sigaction(SIGTSTP, &act_z, NULL);
