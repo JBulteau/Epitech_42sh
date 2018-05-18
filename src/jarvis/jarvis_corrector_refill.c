@@ -33,6 +33,26 @@ char *my_strdup(char *arg)
 	return (res);
 }
 
+int refill_path_in_local(char *current_path, char **arg, int size, char *cpy)
+{
+	int inc = 0;
+	int inc_arg = 0;
+	char *save = my_strdup(*arg);
+
+	free(*arg);
+	*arg = malloc(sizeof(char) * (size + 2));
+	if (*arg == NULL)
+		return (1);
+	(*arg)[size] = '\0';
+	for (; cpy[inc] != '\0'; inc++)
+		(*arg)[inc] = cpy[inc];
+	(*arg)[inc++] = '/';
+	for (; save[inc_arg] != '\0'; inc_arg++);
+	inc_arg += 1;
+	for (; save[inc_arg] != '\0'; inc_arg++)
+		(*arg)[inc++] = save[inc_arg];
+}
+
 int refill_arg(char **arg, char *cpy, char *current_path, int size_after)
 {
 	int size = strlen(cpy) + size_after;
@@ -40,20 +60,9 @@ int refill_arg(char **arg, char *cpy, char *current_path, int size_after)
 	int inc_arg = 0;
 	char *save = my_strdup(*arg);
 
-	if (!(strcmp("./", current_path))) {
-		free(*arg);
-		*arg = malloc(sizeof(char) * (size + 2));
-		if (*arg == NULL)
-			return (1);
-		(*arg)[size] = '\0';
-		for (; cpy[inc] != '\0'; inc++)
-			(*arg)[inc] = cpy[inc];
-		(*arg)[inc++] = '/';
-		for (; save[inc_arg] != '\0'; inc_arg++);
-		inc_arg += 1;
-		for (; save[inc_arg] != '\0'; inc_arg++)
-			(*arg)[inc++] = save[inc_arg];
-	} else {
+	if (!(strcmp("./", current_path)))
+		refill_path_in_local(current_path, arg, size, cpy);
+	else {
 		free(*arg);
 		size += strlen(current_path);
 		*arg = malloc(sizeof(char) * (size + 2));
