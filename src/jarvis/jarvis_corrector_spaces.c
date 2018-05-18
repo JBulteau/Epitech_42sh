@@ -38,7 +38,7 @@ corr->infos[i + 1].pos != -1)
 		else if (corr->infos[i].correct == 0 && \
 corr->infos[i + 1].correct == 0)
 			break;
-		}
+	}
 	if (corr->nb_good_start < corr->nb_good_end)
 		if ((check = refill_comm_struct(comm, corr)) == -1)
 			return (-1);

@@ -61,7 +61,8 @@ int correct_long(char **result, glob_t *glob, char *curr_path)
 		count_correct = \
 count_correct_letter(distance_allowed, both);
 		if (((count_correct * 100) / strlen(*result)) > 70)
-			return (fill_result_correct(result, glob, i, curr_path));
+			return (fill_result_correct(result, \
+glob, i, curr_path));
 	}
 	return (1);
 }
