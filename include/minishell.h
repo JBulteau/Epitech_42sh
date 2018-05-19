@@ -14,17 +14,18 @@
 extern pid_t *pid_job;
 
 enum {
-	D_RIGHT,
-	S_RIGHT,
-	D_LEFT,
 	S_LEFT,
+	D_LEFT,
+	S_RIGHT,
+	D_RIGHT,
 	PIPE
 };
 
 typedef enum {
-	NONE,
+	NOTHING,
 	THEN,
-	OR
+	OR,
+	FG
 } sep_t;
 
 enum {

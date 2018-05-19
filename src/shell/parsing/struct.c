@@ -27,7 +27,7 @@ node_t *copy_node(node_t *dest, node_t *src)
 	return (dest);
 }
 
-node_t **realloc_node(node_t **node, int n, quote_type_t quote, separator_type_t separator)
+node_t **realloc_node(node_t **node, int n, quote_type_t quote)
 {
 	node_t **new_node = malloc(sizeof(node_t*) * (n + 1));
 
@@ -36,11 +36,11 @@ node_t **realloc_node(node_t **node, int n, quote_type_t quote, separator_type_t
 	for (int i = 0; i < n; i++) {
 		if (node != NULL && node[i] != NULL) {
 			new_node[i] = \
-			init_node(node[i]->buffer, node[i]->quote, node[i]->separator);
+			init_node(node[i]->buffer, node[i]->quote);
 			free(node[i]->buffer);
 			free(node[i]);
 		} else {
-			new_node[i] = init_node(NULL, quote, separator);
+			new_node[i] = init_node(NULL, quote);
 		}
 		if (new_node[i] == NULL)
 			return (NULL);
@@ -51,7 +51,7 @@ node_t **realloc_node(node_t **node, int n, quote_type_t quote, separator_type_t
 	return (new_node);
 }
 
-node_t *init_node(char *buffer, quote_type_t quote, separator_type_t separator)
+node_t *init_node(char *buffer, quote_type_t quote)
 {
 	node_t *node = malloc(sizeof(node_t));
 
@@ -67,7 +67,7 @@ node_t *init_node(char *buffer, quote_type_t quote, separator_type_t separator)
 		node->buffer = NULL;
 	}
 	node->quote = quote;
-	node->separator = separator;
+	node->separator = 0;
 	node->backslash = false;
 	node->next = NULL;
 	return (node);

@@ -19,7 +19,7 @@ int exec_loop(shell_t *shell)
 		if (exec_start(shell->comm[i]) == ERROR_RETURN || run_pipeline(shell, shell->comm[i]) == ERROR_RETURN || exec_end(shell->comm[i]) == ERROR_RETURN)
 			return (ERROR_RETURN);
 		if (!(((shell->comm[i]->separator == THEN) && (shell->return_value == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0)))) {
-			while (shell->comm[i]->separator != NONE)
+			while (shell->comm[i]->separator != NOTHING)
 				i++;
 		}
 	}

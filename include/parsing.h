@@ -22,19 +22,18 @@ enum quote_type {
 	PARENTHESES
 };
 
-
 typedef enum separator_type separator_type_t;
 
 enum separator_type {
 	SEMICOLON = 1,
-	D_PIPE,
 	D_AMPERSAND,
+	D_PIPE,
+	S_AMPERSAND,
 	S_PIPE,
 	S_ARROW_LEFT,
 	D_ARROW_LEFT,
 	S_ARROW_RIGHT,
-	D_ARROW_RIGHT,
-	S_AMPERSAND
+	D_ARROW_RIGHT
 };
 
 typedef struct node node_t;
@@ -47,14 +46,26 @@ struct node {
 	node_t **next;
 };
 
+#define REDIR(value) (value >= S_PIPE && value <= D_ARROW_RIGHT)
+
 /* parsing.c */
 
 comm_t **parsing(char *buffer);
 
+/* convert_node.c */
+
+comm_t **init_comm_array(comm_t **comm, node_t *node);
+int get_nb_comm(node_t *node);
+comm_t **convert_node(comm_t **comm, node_t *node);
+comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index);
+comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index);
+char **parse_argv(char **argv, node_t *node, int *comm_index);
+comm_t *apply_separator(comm_t *comm, node_t *node, int *comm_index);
+
 /* struct.c */
 
-node_t *init_node(char *buffer, quote_type_t quote, separator_type_t separator);
-node_t **realloc_node(node_t **node, int n, quote_type_t quote, separator_type_t separator);
+node_t *init_node(char *buffer, quote_type_t quote);
+node_t **realloc_node(node_t **node, int n, quote_type_t quote);
 node_t *copy_node(node_t *dest, node_t *src);
 
 /* quote.c */

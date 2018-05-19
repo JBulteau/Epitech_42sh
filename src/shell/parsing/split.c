@@ -48,7 +48,7 @@ node_t *parse_separators(node_t *node, char *buffer, int *i)
 	separator = is_separator(buffer, i, node);
 	if (separator != 0) {
 		if (node->next[n - 2]->buffer != NULL) {
-			node->next = realloc_node(node->next, n++, node->quote, node->separator);
+			node->next = realloc_node(node->next, n++, node->quote);
 			node->next[n - 3]->separator = separator;
 		}
 		if (node->next == NULL)
@@ -66,7 +66,7 @@ node_t *parse_separators(node_t *node, char *buffer, int *i)
 
 node_t *search_separators(node_t *node)
 {
-	node->next = realloc_node(node->next, 1, node->quote, node->separator);
+	node->next = realloc_node(node->next, 1, node->quote);
 	if (node->next == NULL)
 		return (NULL);
 	for (int i = 0; node->buffer[i] != '\0'; i++) {

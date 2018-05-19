@@ -23,7 +23,7 @@ int main(int ac, char **av, char **env)
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		if ((shell->comm = full_parse(shell->input)) == NULL)
+		if ((shell->comm = parsing(shell->input)) == NULL)
 			return (ERROR_CODE);
 		for (int i = 0; shell->comm[i] != NULL; i++)
 			if (replace_alias(shell->aliases, shell->comm[i]) == -1)

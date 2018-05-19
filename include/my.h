@@ -15,6 +15,11 @@ int	is_alphanum(const char *str);
 int	check_chars(const char *str, const char *valid);
 int	index_of(const char *str, const char c);
 
+/*	clean_str.c	*/
+char *clear_str(char *buffer);
+void spaces_handle(int *a, char *result, int *i, char *buffer);
+void init_clear_str(char *buffer, char **result);
+
 /*	maths.c		*/
 int	my_abs(const int x);
 int	my_pow(const int x, const int pow);

@@ -51,9 +51,9 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 	j = (*i == 0) ? 0 : j;
 	n = (*i == 0) ? 2 : n;
 	separator = check_cmd_separator(buffer, i, node);
-	if (separator != 0) {
+	if (separator != 0 && separator != S_AMPERSAND) {
 		if (node->next[n - 2]->buffer != NULL) {
-			node->next = realloc_node(node->next, n++, node->quote, node->separator);
+			node->next = realloc_node(node->next, n++, node->quote);
 			node->next[n - 3]->separator = separator;
 		}
 		if (node->next == NULL)
@@ -71,7 +71,7 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 
 node_t *search_cmd_separators(node_t *node)
 {
-	node->next = realloc_node(node->next, 1, node->quote, node->separator);
+	node->next = realloc_node(node->next, 1, node->quote);
 	if (node->next == NULL)
 		return (NULL);
 	for (int i = 0; node->buffer[i] != '\0'; i++) {
@@ -89,7 +89,7 @@ static node_t *browse_node(node_t *node)
 			node->next[i] = \
 			search_cmd_separators(node->next[i]);
 		} else {
-			node->next[i]->next = realloc_node(node->next[i]->next, 1, node->next[i]->quote, node->next[i]->separator);
+			node->next[i]->next = realloc_node(node->next[i]->next, 1, node->next[i]->quote);
 			node->next[i]->next[0] = copy_node(node->next[i]->next[0], node->next[i]);
 		}
 	}

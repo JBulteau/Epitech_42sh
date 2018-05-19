@@ -33,7 +33,7 @@ target);
 		case OR:
 			puts("||");
 			break;
-		case NONE:
+		case NOTHING:
 			puts(";");
 			break;
 		default:

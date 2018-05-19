@@ -59,6 +59,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(PARSING_DIR)cmd_separators.c\
 			$(PARSING_DIR)is_cmd_separator.c\
 			$(PARSING_DIR)free_node.c\
+			$(PARSING_DIR)convert_node.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

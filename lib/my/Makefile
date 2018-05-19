@@ -8,6 +8,7 @@
 NAME = my
 
 SRCS =	check_str.c\
+	clean_str.c\
 	maths.c\
 	my_put.c\
 	my_str.c\
