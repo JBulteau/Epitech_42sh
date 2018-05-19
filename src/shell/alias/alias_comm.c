@@ -61,16 +61,22 @@ int rm_alias(shell_t *shell, char *alias, comm_t *comm)
 		puts("Please specify an alias to remove");
 		return (EXIT_FAILURE);
 	}
-	if (shell->aliases == NULL) {
+	if (shell->aliases == NULL)
 		return (EXIT_SUCCESS);
-	}
 	for (alias_t *current = shell->aliases; current != NULL; current = current->nav[NEXT]) {
-		if (!strcmp(current->name, alias)) {
-			update_aliases(shell, comm, 1, 1);	
+		if (!strcmp(current->name, alias) && (shell->aliases == current)) {
+			shell->aliases = current->nav[NEXT];
 			free_aliases(current, 0);
-			//current = tmp;
+			current = shell->aliases;
+		} else if (!strcmp(current->name, alias)) {
+			update_aliases(shell, comm, 1, 1);
+			free_aliases(current, 0);
+			current = tmp;
+
 		}
-		//tmp = current;
+		tmp = current;
+		if (current == NULL)
+			break;
 	}
 	return (EXIT_SUCCESS);
 }
