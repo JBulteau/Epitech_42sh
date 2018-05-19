@@ -5,21 +5,22 @@
 ** Functions for double redirection right
 */
 
-#include "minishell.h"
-#include "my.h"
-#include "tokens.h"
-#include <sys/stat.h>
+#include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
+#include "minishell.h"
+#include "tokens.h"
+#include "my.h"
 
 char *handle_d_right(char *input, comm_t *comm)
 {
 	int len;
 
-	input += my_strlen(tokens[D_RIGHT].tk);
+	input += strlen(tokens[D_RIGHT].tk);
 	input = go_next_w(input, separators);
 	len = get_wlen(input, separators);
-	if ((comm->red[D_RIGHT]->target = my_strndup(input, len)) == NULL)
+	if ((comm->red[D_RIGHT]->target = strndup(input, len)) == NULL)
 		return (NULL);
 	input += len;
 	return (input);

@@ -24,24 +24,6 @@ void free_comm(comm_t *comm)
 	return;
 }
 
-int exec_start(comm_t *comm)
-{
-	for (int i = 0; i < 4; i++) {
-		if (comm->red[i]) {
-			if (tokens[i].fnc_exec(comm) == -1)
-				return (-1);
-		}
-	}
-}
-
-int exec_end(comm_t *comm)
-{
-	for (int i = 0; i < 4; i++)
-		if (comm->red[i])
-			if (tokens[i].end_exec(comm) == -1)
-			 	return (-1);
-}
-
 comm_t *init_comm(void)
 {
 	comm_t *comm = malloc(sizeof(comm_t) * 1);
@@ -53,6 +35,7 @@ comm_t *init_comm(void)
 	if ((comm->argv = malloc(sizeof(char **) * 1)) == NULL)
 		return (NULL);
 	comm->argv[0] = NULL;
+	comm->separator = NONE;
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
 	return (comm);
@@ -64,4 +47,16 @@ void free_comms(comm_t **comm)
 		free_comm(comm[i]);
 	}
 	free(comm);
+}
+
+int get_commidx(shell_t *shell, comm_t *comm)
+{
+	int i = 0;
+
+	if (shell == NULL || comm == NULL)
+		return (ERROR_RETURN);
+	for (; shell->comm[i]; i++)
+		if (shell->comm[i] == comm)
+			return (i);
+	return (ERROR_RETURN);
 }

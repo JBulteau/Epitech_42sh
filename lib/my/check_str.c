@@ -12,7 +12,7 @@ int is_num(const char *str)
 	if (str == NULL)
 		return (-1);
 	for (int i = 0; str[i]; i++) {
-		if ((i == 0) && (str[i] == '-'))
+		if ((i == 0) && ((str[i] == '-') || ((str[i] == '+'))))
 			continue;
 		if ((str[i] < '0') || (str[i] > '9'))
 			return (-1);

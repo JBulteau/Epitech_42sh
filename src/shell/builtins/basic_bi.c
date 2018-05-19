@@ -5,49 +5,66 @@
 ** Basic built-ins fnc
 */
 
-#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
-#include <unistd.h>
+#include "minishell.h"
 #include "my.h"
 #include "builtins.h"
-#include "minishell.h"
 
-int ptr_exit(comm_t *comm, char ***env, char pwd[2][PATH_MAX], int *retrun_code)
+int error_msg_exit(shell_t *shell, comm_t *comm)
 {
 	if (array_len((void **) comm->argv) > 3) {
 		puts("exit: Expression Syntax.");
-		*retrun_code = 1;
+		shell->return_value = 1;
+		return (1);
+	}
+	if (pid_job[find_last_pid()] != -1 && pid_job[find_last_pid()] != -2) {
+		shell->return_value = 0;
+		puts("Jobs still running (fg to continued).");
+		return (1);
+	}
+	return (0);
+}
+
+int ptr_exit(comm_t *comm, shell_t *shell)
+{
+	if (error_msg_exit(shell, comm))
 		return (0);
+	if (comm->argv[1] == NULL) {
+		shell->return_value = 0;
+		return (-ERROR_CODE);
 	}
 	if (is_num(comm->argv[1]) == 0) {
-		*retrun_code = my_getnbr(comm->argv[1]);
+		shell->return_value = atoi(comm->argv[1]);
+		return (-ERROR_CODE);
 	} else if (is_alphanum(comm->argv[1]) == 0 && (comm->argv[1][0] >= '0'\
 ) && (comm->argv[1][0] <= '9')) {
-		*retrun_code = 1;
+		shell->return_value = 1;
 		puts("exit: Badly formed number.");
 		return (0);
 	} else {
-		*retrun_code = 1;
+		shell->return_value = 1;
 		puts("exit: Expression Syntax.");
 		return (0);
 	}
-	return (-1);
+	return (-ERROR_CODE);
 }
 
 int is_builtin(char *name)
 {
-	for (int i = 0; builtins[i].name != NULL; i++)
-		if (!my_strcmp(builtins[i].name, name, 0))
+	for (int i = 0; builtins[i].name != NULL; i++) {
+		if (builtins[i].name[0] == '!' && name[0] == '!')
 			return (i);
+		if (!strcmp(builtins[i].name, name))
+			return (i);
+	}
 	return (-1);
 }
 
 int exec_bi(comm_t *comm, shell_t *shell)
 {
-	int bi_no = 0;
-
-	if ((comm == NULL) || (shell == NULL) || (shell->env == NULL) || (shell->pwd == NULL))
+	if ((comm == NULL) || (shell == NULL) || (shell->env == NULL) || \
+(shell->pwd == NULL))
 		return (-1);
-	bi_no = is_builtin(comm->argv[0]);
-	return (builtins[bi_no].fnc(comm, &(shell->env), shell->pwd, &(shell->return_value)));
+	return (builtins[is_builtin(comm->argv[0])].fnc(comm, shell));
 }
