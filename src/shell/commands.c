@@ -24,7 +24,6 @@ void free_comm(comm_t *comm)
 	return;
 }
 
-
 comm_t *init_comm(void)
 {
 	comm_t *comm = malloc(sizeof(comm_t) * 1);
@@ -57,6 +56,6 @@ int get_commidx(shell_t *shell, comm_t *comm)
 		return (ERROR_RETURN);
 	for (; shell->comm[i]; i++)
 		if (shell->comm[i] == comm)
-			return(i);
+			return (i);
 	return (ERROR_RETURN);
 }

@@ -35,7 +35,6 @@ static int disp_help_unset(void)
 	return (EXIT_SUCCESS);
 }
 
-
 int ptr_alias(comm_t *comm, shell_t *shell)
 {
 	if (comm->argv[1] == NULL)
@@ -47,7 +46,8 @@ int ptr_alias(comm_t *comm, shell_t *shell)
 			return (EXIT_FAILURE);
 		return (EXIT_SUCCESS);
 	}
-	if ((add_alias(comm->argv, shell) == ERROR_RETURN) || (update_aliases(shell, comm, 0, 1) == ERROR_RETURN))
+	if ((add_alias(comm->argv, shell) == ERROR_RETURN) || \
+(update_aliases(shell, comm, 0, 1) == ERROR_RETURN))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

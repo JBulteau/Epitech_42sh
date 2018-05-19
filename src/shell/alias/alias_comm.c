@@ -44,9 +44,11 @@ int update_aliases(shell_t *shell, comm_t *comm, int remove, int skip_curr)
 		return (SUCCESS_RETURN);
 	i += skip_curr;
 	for (;shell->comm[i]; i++) {
-		if (remove && (unalias_that_comm(shell->aliases, shell->comm[i]) == ERROR_RETURN)) {
+		if (remove && (unalias_that_comm(shell->aliases, shell->comm\
+[i]) == ERROR_RETURN)) {
 			return (ERROR_RETURN);
-		} else if (!remove && (alias_that_comm(shell->aliases, shell->comm[i]) == ERROR_RETURN)) {
+		} else if (!remove && (alias_that_comm(shell->aliases, shell->\
+comm[i]) == ERROR_RETURN)) {
 			return (ERROR_RETURN);
 		}
 	}
@@ -63,8 +65,10 @@ int rm_alias(shell_t *shell, char *alias, comm_t *comm)
 	}
 	if (shell->aliases == NULL)
 		return (EXIT_SUCCESS);
-	for (alias_t *current = shell->aliases; current != NULL; current = current->nav[NEXT]) {
-		if (!strcmp(current->name, alias) && (shell->aliases == current)) {
+	for (alias_t *current = shell->aliases; current != NULL; current = \
+current->nav[NEXT]) {
+		if (!strcmp(current->name, alias) && (shell->aliases == curren\
+t)) {
 			shell->aliases = current->nav[NEXT];
 			free_aliases(current, 0);
 			current = shell->aliases;

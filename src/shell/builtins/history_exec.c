@@ -15,7 +15,8 @@ int run_last(shell_t *shell)
 	comm_t **save = shell->comm;
 	history_t *hist = shell->history;
 
-	for (; hist->next != NULL && hist->next->next != NULL; hist = hist->next);
+	for (; hist->next != NULL && hist->next->next != NULL; hist = \
+hist->next);
 	free(shell->input);
 	shell->input = strdup(hist->data);
 	if (shell->input == NULL)
@@ -53,7 +54,8 @@ int run_n(shell_t *shell, int n)
 
 static int disp_help(void)
 {
-	printf("Usage\n\t!!\t\tre-run last command\n\t! [number]\tre-run [number] command\n");
+	printf("Usage\n\t!!\t\tre-run last command\n\t! [number]\tre-run \
+[number] command\n");
 	return (0);
 }
 
@@ -62,7 +64,7 @@ int ptr_exec_his(comm_t *comm, shell_t *shell)
 	int return_val = 0;
 
 	if (!strcmp(comm->argv[0], "!!"))
-		return(run_last(shell));
+		return (run_last(shell));
 	if (comm->argv[0][1] == '?')
 		return (ptr_history(comm, shell));
 	if (comm->argv[0][1] == '\0' || (comm->argv[1]))
