@@ -6,6 +6,7 @@
 */
 
 #include <my.h>
+#include "my.h"
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -18,8 +19,10 @@ int run_that(shell_t *shell)
 	if ((shell->comm = full_parse(shell->input)) == NULL)
 		return (ERROR_CODE);
 	for (int i = 0; shell->comm[i] != NULL; i++)
+	for (int i = 0; shell->comm[i] != NULL; i++) {
 		if (replace_alias(shell->aliases, shell->comm[i]) == -1)
 			return (ERROR_CODE);
+	}
 	return_code = exec_loop(shell);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);

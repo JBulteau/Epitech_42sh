@@ -69,6 +69,6 @@ int ptr_exec_his(comm_t *comm, shell_t *shell)
 		return (disp_help());
 	return_val = run_n(shell, atoi(comm->argv[0] + 1));
 	if (return_val == ERROR_RETURN)
-		return (disp_help);
+		return (disp_help());
 	return (return_val);
 }

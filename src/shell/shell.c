@@ -52,6 +52,9 @@ shell_t *init_shell(char **env)
 	getcwd(shell->pwd[0], PATH_MAX);
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';
+//	if ((shell->vars = init_vars()) == NULL)
+	if ((shell->vars = try_vars()) == NULL)
+		return (ERROR_CODE);
 	return (shell);
 }
 
@@ -68,6 +71,9 @@ void delete_shell(shell_t *shell)
 		if (kill(pid_job[i], SIGKILL) == -1)
 			perror("kill");
 	}
+	for (int i = 0; shell->vars[i]; i++)
+		free_var(shell->vars);
+	free(shell->vars);
 	free(pid_job);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);

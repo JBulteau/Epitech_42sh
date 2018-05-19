@@ -53,6 +53,23 @@ struct alias_s {
         struct alias_s *nav[2];
 };
 
+typedef enum {
+	NO_TYPE,
+	NBR,
+	STR
+} type_t;
+
+typedef union {
+	char *content;
+	int value;
+} data_t;
+
+typedef struct var_s {
+	type_t type;
+	char *name;
+	data_t data;
+} var_t;
+
 typedef struct history_s {
 	char *data;
 	struct history_s *next;
@@ -81,11 +98,14 @@ typedef struct {
 	char pwd[2][PATH_MAX];
 	char *input;
 	comm_t **comm;
+	var_t **vars;
 	alias_t *aliases;
 	history_t *history;
 	int return_value;
 } shell_t;
 
+var_t **try_vars(void);
+var_t *init_var(void);
 char **add_arr(char **arr, char *str, int free_arr);
 char **clone_arr(char **arr);
 comm_t **full_parse(char *input);
