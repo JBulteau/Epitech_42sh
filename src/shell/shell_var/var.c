@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "minishell.h"
 #include "my.h"
 
@@ -25,7 +26,8 @@ var_t *init_var(void)
 }
 
 void free_var(var_t *var) {
-	free(var->data.value);
+	if (var->type == STR)
+		free(var->data.content);
 	free(var->name);
 	free(var);
 }
@@ -40,39 +42,42 @@ var_t **init_var_arr(int size)
 	return (arr);
 }
 
-var_t *find_var(var_t **arr, char *name)
+int find_var(var_t **arr, char *name)
 {
 	if (arr == NULL)
-		return (-1);
+		return (ERROR_RETURN);
 	for (int i; arr[i] != NULL; i++)
 		if (!strcmp(arr[i]->name, name))
 			return (i);
-	return (-1);
+	return (ERROR_RETURN);
 }
 
 type_t get_type(char *content, int value)
 {
+	UNUSED(content);
+	UNUSED(value);
 	return (NO_TYPE);
 	return (STR);
 	return (NBR);
 }
 
-int edit_var(var_t *var, type_t type, data_t data, char *name)
+int edit_var(var_t *var, char *content, int value, char *name)
 {
 	free(var->name);
 	var->name = name;
-	if (var->type == STR);
+	if (var->type == STR)
 		free(var->data.content);
-	var->type = get_type(data.content, data.value);
-	var->data = data;
+	var->type = get_type(content, value);
+	if (var->type == STR)
+		var->data.content = content;
+	if (var->type == NBR)
+		var->data.value = value;
 	return (SUCCESS_RETURN);
 }
 
 int set_var(var_t **arr, char *name, char *content, int value)
 {
 	int id = find_var(arr, name);
-	type_t type = get_type(content, value);
-	data_t data;
 
 	if (id == -1) {
 		int len = 0;
@@ -82,7 +87,7 @@ int set_var(var_t **arr, char *name, char *content, int value)
 			return (ERROR_RETURN);
 		id = len;
 	}
-	if (edit_var(arr[id], type, (data_t) {.content = content, .value = value}, name) == ERROR_RETURN)
+	if (edit_var(arr[id], content, value, name) == ERROR_RETURN)
 		return (ERROR_RETURN);
 	return (SUCCESS_RETURN);
 }

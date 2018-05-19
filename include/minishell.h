@@ -232,5 +232,4 @@ int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 char **add_arr(char **arr, char *str, int free_arr);
 
-
 #endif

@@ -54,7 +54,7 @@ shell_t *init_shell(char **env)
 		shell->pwd[1][i] = '\0';
 //	if ((shell->vars = init_vars()) == NULL)
 	if ((shell->vars = try_vars()) == NULL)
-		return (ERROR_CODE);
+		return (NULL);
 	return (shell);
 }
 
@@ -66,14 +66,14 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
+	for (int i = 0; shell->vars[i]; i++)
+		free_var(shell->vars[i]);
+	free(shell->vars);
 	free(shell);
 	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
 		if (kill(pid_job[i], SIGKILL) == -1)
 			perror("kill");
 	}
-	for (int i = 0; shell->vars[i]; i++)
-		free_var(shell->vars);
-	free(shell->vars);
 	free(pid_job);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
