@@ -109,5 +109,5 @@ int wait_for_it(pid_t pid)
 	} while (last_pid != pid && last_pid != father && last_pid != -1);
 	if (last_pid != father && last_pid != -1)
 		remove_last_pid();
-	return (WEXITSTATUS(status));
+	return ((WTERMSIG(status)) ? status : WEXITSTATUS(status));
 }

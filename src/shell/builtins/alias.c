@@ -2,57 +2,37 @@
 ** EPITECH PROJECT, 2017
 ** alias.c
 ** File description:
-** Builtins alias
+** Alias builtins
 */
 
-#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "minishell.h"
+#include "my.h"
 
 int disp_help(void)
 {
 	puts("Usage: alias [rm] [name[=alias]]");
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
-int replace_alias(alias_t *node, comm_t *comm)
+int disp_aliases(alias_t *node)
 {
-	for (alias_t *curr = node; node != NULL; node = node->nav[NEXT]) {
-		if (!strcmp(comm->argv[0], curr->name)) {
-			free(comm->argv[0]);
-			comm->argv[0] = strdup(curr->alias);
-		}
-		if ((!strcmp(comm->argv[0], curr->name)) && (comm->argv[0] == \
-NULL))
-			return (-1);
+	if (node == NULL) {
+		puts("No alias set");
+		return (SUCCESS_RETURN);
 	}
-	return (0);
+	for (alias_t *current = node; current != NULL; current = \
+current->nav[NEXT])
+		printf("%s=%s\n", current->name, current->alias);
+	return (SUCCESS_RETURN);
 }
 
-void rm_one_alias(char *alias, alias_t *current, shell_t *shell)
+static int disp_help_unset(void)
 {
-	if (!strcmp(alias, current->name)) {
-		if (current->nav[PREV] == NULL)
-			shell->aliases = current->nav[NEXT];
-		free_aliases(current, 0);
-	}
-}
-
-int rm_alias(shell_t *shell, char **av)
-{
-	if (av[2] == NULL) {
-		puts("Please specify an alias to remove");
-		return (1);
-	}
-	if (shell->aliases == NULL) {
-		return (0);
-	}
-	for (alias_t *current = shell->aliases; current != NULL; current = \
-current->nav[NEXT]) {
-		for (int i = 2; av[i] != NULL; i++)
-			rm_one_alias(av[i], current, shell);
-	}
-	return (0);
+	puts("Usage: alias <name>");
+	return (EXIT_SUCCESS);
 }
 
 int ptr_alias(comm_t *comm, shell_t *shell)
@@ -61,7 +41,22 @@ int ptr_alias(comm_t *comm, shell_t *shell)
 		return (disp_aliases(shell->aliases));
 	if (!strcmp(comm->argv[1], "--help") || !strcmp(comm->argv[1], "-h"))
 		return (disp_help());
-	if (!strcmp(comm->argv[1], "rm") || !strcmp(comm->argv[1], "delete"))
-		return (rm_alias(shell, comm->argv));
-	return (add_alias(comm->argv, shell));
+	if (!strcmp(comm->argv[1], "rm") || !strcmp(comm->argv[1], "delete")) {
+		if (rm_alias(shell, comm->argv[2], comm) == ERROR_RETURN)
+			return (EXIT_FAILURE);
+		return (EXIT_SUCCESS);
+	}
+	if ((add_alias(comm->argv, shell) == ERROR_RETURN) || \
+(update_aliases(shell, comm, 0, 1) == ERROR_RETURN))
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+int ptr_unalias(comm_t *comm, shell_t *shell)
+{
+	if (!strcmp(comm->argv[1], "--help") || !strcmp(comm->argv[1], "-h"))
+		return (disp_help_unset());
+	if (rm_alias(shell, comm->argv[1], comm) == ERROR_RETURN)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

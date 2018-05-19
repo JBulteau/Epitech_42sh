@@ -9,22 +9,44 @@
 #include <unistd.h>
 #include <errno.h>
 #include "minishell.h"
+#include "tokens.h"
 #include "my.h"
+
+int exec_start(comm_t *comm)
+{
+	for (int i = 0; i < 4; i++) {
+		if (comm->red[i] && tokens[i].fnc_exec(comm) == -1) {
+			return (ERROR_RETURN);
+		}
+	}
+	return (SUCCESS_RETURN);
+}
+
+int exec_end(comm_t *comm)
+{
+	for (int i = 0; i < 4; i++)
+		if (comm->red[i] && (tokens[i].end_exec(comm) == ERROR_RETURN))
+			return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
+}
 
 int exec_loop(shell_t *shell)
 {
-	int return_code = 0;
+	int pipeline = 0;
 
-	for (int i = 0; shell->comm[i] != NULL; i++) {
-		exec_start(shell->comm[i]);
-		return_code = run_pipeline(shell, shell->comm[i]);
-		exec_end(shell->comm[i]);
-		if (return_code == -1)
-			return (1);
-		if (return_code == -ERROR_CODE)
-			return (-ERROR_CODE);
+	for (int i =0; shell->comm[i] != NULL; i++) {
+		if (exec_start(shell->comm[i]) == ERROR_RETURN || run_pipeline\
+(shell, shell->comm[i]) == ERROR_RETURN || exec_end(shell->comm[i]) == ERROR_R\
+ETURN)
+			return (ERROR_RETURN);
+		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
+alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
+)))) {
+			while (shell->comm[i]->separator != NONE)
+				i++;
+		}
 	}
-	return (return_code);
+	return (pipeline);
 }
 
 int exec_bin(comm_t *comm, char **env)
