@@ -7,6 +7,8 @@
 
 #include "builtins.h"
 #include "minishell.h"
+#include <string.h>
+#include <stdio.h>
 
 history_t *create_new_case(char *s)
 {
