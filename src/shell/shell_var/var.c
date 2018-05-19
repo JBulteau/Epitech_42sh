@@ -15,18 +15,18 @@
 
 var_t *init_var(void)
 {
-	var_t *var = malloc(sizeof (var_t) * 1);
+	var_t *var = malloc(sizeof(var_t) * 1);
 
 	var->type = NO_TYPE;
 	var->data.value = 0;
 	var->name = NULL;
-	
 	if (var == NULL)
 		return (NULL);
 	return (var);
 }
 
-void free_var(var_t *var) {
+void free_var(var_t *var)
+{
 	if (var->type == STR)
 		free(var->data.content);
 	free(var->name);
@@ -35,65 +35,11 @@ void free_var(var_t *var) {
 
 var_t **init_var_arr(void)
 {
-	var_t **arr = malloc(sizeof (var_t *) * 1);
+	var_t **arr = malloc(sizeof(var_t *) * 1);
 
 	if (arr == NULL)
 		return (NULL);
 	arr[0] = NULL;
-	return (arr);
-}
-
-int find_var(var_t **arr, char *name)
-{
-	if (arr == NULL)
-		return (ERROR_RETURN);
-	for (int i = 0; arr[i] != NULL; i++)
-		if (!strcmp(arr[i]->name, name))
-			return (i);
-	return (ERROR_RETURN);
-}
-
-type_t get_type(char *content)
-{
-	if (content == NULL)
-		return (NO_TYPE);
-	if (is_num(content) == 0)
-		return (NBR);	
-	return (STR);
-}
-
-int edit_var(var_t *var, char *content, char *name)
-{
-	if (name != var->name) {
-		free(var->name);
-		var->name = strdup(name);
-	}
-	if (var->type == STR)
-		free(var->data.content);
-	var->type = get_type(content);
-	if (var->type == STR)
-		var->data.content = strdup(content);
-	if (var->type == NBR)
-		var->data.value = atoi(content);
-	return (SUCCESS_RETURN);
-}
-
-var_t **set_var(var_t **arr, char *name, char *content)
-{
-	int id = find_var(arr, name);
-	int len;
-
-	if (id == -1) {
-		len = array_len((void *)arr) - 1;
-		arr = realloc(arr, sizeof(var_t *) * (len + 2));
-		arr[len] = init_var();
-		arr[len + 1] = NULL;
-		if (arr[len] == NULL)
-			return (NULL);
-		id = len;
-	}
-	if (edit_var(arr[id], content, name) == ERROR_RETURN)
-		return (NULL);
 	return (arr);
 }
 
@@ -110,12 +56,10 @@ void disp_vars(var_t **arr)
 			puts("NONE");
 			break;
 		case STR:
-			printf("STR\n\t\tcontent:%s\n", arr[i]->data.value);
+			printf("STR\n\t\tcontent:%s\n", arr[i]->data.content);
 			break;
 		case NBR:
 			printf("INT\n\t\tvalue:%i\n", arr[i]->data.value);
-			break;
-		default:
 			break;
 		}
 		puts("}");
@@ -125,7 +69,7 @@ void disp_vars(var_t **arr)
 var_t **try_vars(void)
 {
 	var_t **arr = init_var_arr();
-	if(arr == NULL)
+	if (arr == NULL)
 		return (NULL);
 	disp_vars(arr);
 	arr = set_var(arr, "var_name1", "content");

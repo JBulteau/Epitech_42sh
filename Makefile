@@ -50,6 +50,8 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(42RC_DIR)load42.c\
 \
 			$(VAR_DIR)var.c\
+			$(VAR_DIR)var_edition.c\
+			$(VAR_DIR)var_utils.c\
 \
 			$(ALIAS_DIR)alias_struc.c\
 			$(ALIAS_DIR)alias_comm.c\

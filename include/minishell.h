@@ -151,12 +151,16 @@ int ptr_history(comm_t *comm, shell_t *shell);
 var_t *init_var(void);
 void free_var(var_t *var);
 var_t **init_var_arr(void);
-int find_var(var_t **arr, char *name);
-type_t get_type(char *content);
-int edit_var(var_t *var, char *content, char *name);
-var_t **set_var(var_t **arr, char *name, char *content);
 void disp_vars(var_t **arr);
 var_t **try_vars(void);
+
+/*	shell/shell_var/var_utils.c	*/
+int find_var(var_t **arr, char *name);
+type_t get_type(char *content);
+
+/*	shell/shell_var/var_edition.c	*/
+int edit_var(var_t *var, char *content, char *name);
+var_t **set_var(var_t **arr, char *name, char *content);
 
 /*	shell/commands.c		*/
 void free_comm(comm_t *comm);
