@@ -5,6 +5,7 @@
 ** Shell var struct fncs
 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "minishell.h"

@@ -55,7 +55,8 @@ int ptr_history(comm_t *comm, shell_t *shell)
 	int i = 1;
 
 	UNUSED(comm);
-	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "del") || !strcmp(comm->argv[1], "delete") || !strcmp(comm->argv[1], "d"))) {
+	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "del") \
+|| !strcmp(comm->argv[1], "delete") || !strcmp(comm->argv[1], "d"))) {
 		puts("TODO HISTORY DELETE");
 	}
 	for (history_t *curr = shell->history; curr != NULL; \

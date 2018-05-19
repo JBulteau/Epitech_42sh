@@ -37,7 +37,8 @@ int parse_command(char *input, comm_t *comm)
 		input = go_next_w(input, separators);
 		tk = is_tk(input);
 		if (tk != -1) {
-			if (strcmp(tokens[tk].tk, "|") && (comm->red[tk] = init_redir()) == NULL)
+			if (strcmp(tokens[tk].tk, "|") && (comm->red[tk] = \
+init_redir()) == NULL)
 				return (-1);
 			input = tokens[tk].fnc(input, comm);
 		} else {

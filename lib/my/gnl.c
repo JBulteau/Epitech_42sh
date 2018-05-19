@@ -84,7 +84,6 @@ char *read_file(int fd, char *ptr)
 char *gnl (int fd)
 {
 	int i;
-	int rest;
 	static char ptr[READ_SIZE];
 	char *buf = read_file(fd, ptr);
 
@@ -98,5 +97,7 @@ char *gnl (int fd)
 		for (int k = 0; ptr[k] != '\0'; k++)
 			ptr[k] = '\0';
 	}
+	if (buf == NULL)
+		free(buf);
 	return (buf);
 }

@@ -31,7 +31,6 @@ int run_not_last(shell_t *shell, comm_t *curr)
 int run_last_pipeline(shell_t *shell, comm_t *curr)
 {
 	pid_t child_pid;
-	int return_c = 0;
 
 	if (is_builtin(curr->argv[0]) != -1) {
 		init_redir_pipe(curr);
