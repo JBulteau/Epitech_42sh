@@ -9,6 +9,16 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+void put_back_last_slash(char **arg)
+{
+	for (int i = 0; (*arg)[i] != '\0'; i++)
+		if ((*arg)[i + 1] == '\0') {
+			(*arg)[i + 1] = '/';
+			(*arg)[i + 2] = '\0';
+			break;
+		}
+}
+
 int jarvis_corrector_arg(comm_t *comm, char *filepath, char ***env)
 {
 	jarg_t *corr;

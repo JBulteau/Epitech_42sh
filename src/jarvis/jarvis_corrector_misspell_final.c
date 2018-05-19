@@ -28,41 +28,38 @@ char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr)
 	int usefull = 1;
 	int to_know = 0;
 
+	if (path == NULL)
+		return (NULL);
 	for (int i = 0; (*arg)[i] != '\0'; i++)
 		if ((*arg)[i] == '/')
 			check_slash(arg, i);
 	to_know = is_slash_ending(arg);
-	if (path == NULL)
+	if ((usefull = misspell_process(arg, &usefull, path, 1)) > 0)
 		return (NULL);
-	if ((usefull = misspell_process(arg, &usefull, path, 1)))
-		return (NULL);
-	corr->change = 1;
-	if (to_know == 1) {
-		for (int i = 0; (*arg)[i] != '\0'; i++)
-			if ((*arg)[i + 1] == '\0') {
-				(*arg)[i + 1] = '/';
-				(*arg)[i + 2] = '\0';
-				break;
-			}
-	}
+	corr->change = (usefull == 0) ? 1 : corr->change;
+	if (to_know == 1)
+		put_back_last_slash(arg);
 	return (path);
 }
 
-void refill_last(char **arg, char *cpy, char *current_path)
+int refill_last(char **arg, char *cpy, char *current_path)
 {
 	int size = strlen(current_path) + strlen(cpy);
 	int inc = 0;
 
 	if (strcmp(current_path, "./") == 0)
 		size -= strlen(current_path);
-	free (*arg);
+	free(*arg);
 	*arg = malloc(sizeof(char) * (size + 2));
+	if (!(*arg))
+		return (1);
 	(*arg)[size] = '\0';
 	(*arg)[size + 1] = '\0';
 	if (strcmp(current_path, "./") != 0) {
 		for (; current_path[inc] != '\0'; inc++)
 			(*arg)[inc] = current_path[inc];
 	}
-	for(int i = 0; cpy[i] != '\0'; i++)
+	for (int i = 0; cpy[i] != '\0'; i++)
 		(*arg)[inc++] = cpy[i];
+	return (0);
 }

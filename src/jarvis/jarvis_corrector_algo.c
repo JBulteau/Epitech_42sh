@@ -66,3 +66,13 @@ glob, i, curr_path));
 	}
 	return (1);
 }
+
+int put_back_ending_slash(int pos, char **arg, int to_know)
+{
+	if ((*arg)[pos + 1] == '\0' && to_know == 1) {
+		(*arg)[pos + 1] = '/';
+		(*arg)[pos + 2] = '\0';
+		return (1);
+	}
+	return (0);
+}

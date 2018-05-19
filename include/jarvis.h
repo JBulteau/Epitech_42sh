@@ -33,11 +33,16 @@ enum inc {
 };
 
 /* jarvis corrector */
+void put_back_last_slash(char **arg);
+int put_back_ending_slash(int pos, char **arg, int to_know);
+void remove_mutliple_ending_slash(char **arg);
+int success_case(int *pos, char **cpy_path, int *size_check, char **arg);
+int before_correct(char *cpy, char **arg, glob_t *pglob, char *concat_path_star);
 int check_lenght(glob_t *glob, char *curr_path, char **result, int i);
 void prepare_refill(jarg_t *corr, comm_t *comm, int *nb_change, int *nb_total);
 int is_slash_ending(char **arg);
 int check_slash(char **arg, int i);
-void refill_last(char **arg, char *cpy, char *current_path);
+int refill_last(char **arg, char *cpy, char *current_path);
 int misspell_process(char **arg, int *pos, char *current_path, int check);
 char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr);
 int refill_arg(char **arg, char *cpy, char *current_path, int size_after);
