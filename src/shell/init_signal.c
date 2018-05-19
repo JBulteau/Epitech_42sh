@@ -62,24 +62,13 @@ void catch_ctrl_z(int sig)
 	node->running = false;
 }
 
-void catch_ctrl_c(int sig)
-{
-	jobs_t *node = find_node_job();
-
-	if (node->running == false) {
-		printf("\033[2D  \n");
-		disp_prompt();
-	} // SIGINT TO ALL CHILD FOR REAL CTRL C
-}
-
 int init_signal(void)
 {
 	struct sigaction act_z;
-	struct sigaction act_c;
 
 	list_jobs = malloc(sizeof(jobs_t));
 	if (memset(&act_z, '\0', sizeof(act_z) + 1) == NULL || \
-memset(&act_c, '\0', sizeof(act_z) + 1) == NULL || list_jobs == NULL)
+list_jobs == NULL)
 		return (-1);
 	list_jobs->pid_job = malloc(sizeof(int) * 2);
 	if (list_jobs->pid_job == NULL)
@@ -88,9 +77,7 @@ memset(&act_c, '\0', sizeof(act_z) + 1) == NULL || list_jobs == NULL)
 	list_jobs->running = false;
 	list_jobs->next = NULL;
 	act_z.sa_sigaction = (void *)catch_ctrl_z;
-	act_c.sa_sigaction = (void *)catch_ctrl_c;
 	sigaction(SIGTSTP, &act_z, NULL);
-	sigaction(SIGINT, &act_c, NULL);
 	return (0);
 }
 
