@@ -69,6 +69,7 @@ int rm_alias(shell_t *shell, char *alias, comm_t *comm)
 current->nav[NEXT]) {
 		if (!strcmp(current->name, alias) && (shell->aliases == curren\
 t)) {
+			update_aliases(shell, comm, 1, 1);
 			shell->aliases = current->nav[NEXT];
 			free_aliases(current, 0);
 			current = shell->aliases;
