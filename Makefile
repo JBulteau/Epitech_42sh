@@ -13,6 +13,7 @@ SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
 42RC_DIR	=	$(SHELL_DIR)42rc/
+ALIAS_DIR	=	$(SHELL_DIR)alias/
 
 SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(SHELL_DIR)shell.c\
@@ -39,6 +40,9 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(BI_DIR)alias.c\
 			$(BI_DIR)echo.c\
 			$(BI_DIR)alias_struc.c\
+\
+			$(ALIAS_DIR)alias_struc.c\
+			$(ALIAS_DIR)alias_comm.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\

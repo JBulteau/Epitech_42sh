@@ -9,7 +9,26 @@
 #include <unistd.h>
 #include <errno.h>
 #include "minishell.h"
+#include "tokens.h"
 #include "my.h"
+
+int exec_start(comm_t *comm)
+{
+	for (int i = 0; i < 4; i++) {
+		if (comm->red[i] && tokens[i].fnc_exec(comm) == -1) {
+			return (ERROR_RETURN);
+		}
+	}
+	return (SUCCESS_RETURN);
+}
+
+int exec_end(comm_t *comm)
+{
+	for (int i = 0; i < 4; i++)
+		if (comm->red[i] && (tokens[i].end_exec(comm) == ERROR_RETURN))
+			return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
+}
 
 int exec_loop(shell_t *shell)
 {
