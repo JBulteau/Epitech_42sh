@@ -63,6 +63,7 @@ void delete_shell(shell_t *shell)
 	if (shell == NULL)
 		return;
 	free_array((void **) shell->env);
+	free_array((void **) shell->comm);
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
