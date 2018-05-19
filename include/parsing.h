@@ -73,6 +73,7 @@ node_t *copy_node(node_t *dest, node_t *src);
 node_t *parse_quote(node_t *node, char *buffer);
 node_t *fill_buffer(node_t *node, char *buffer, int *i);
 node_t *delete_quote(node_t *node, char *buffer, int i);
+node_t *no_quote(node_t *node, char *buffer, int i, int *j);
 int missing_quote(node_t *node, char *buffer);
 
 /* is_quote.c */
@@ -87,7 +88,7 @@ int is_magic(char c);
 node_t *parse_split(node_t *node);
 node_t *search_separators(node_t *node);
 node_t *parse_separators(node_t *node, char *buffer, int *i);
-separator_type_t is_separator(char *buffer, int *i, node_t *node);
+separator_type_t is_separator(char *buffer, int *i);
 
 /* parentheses.c */
 
@@ -107,7 +108,11 @@ node_t *parse_cmd_separators(node_t *node);
 node_t *search_cmd_separators(node_t *node);
 node_t *fill_cmd_separators(node_t *node, char *buffer, int *i);
 separator_type_t check_cmd_separator(char *buffer, int *i, node_t *node);
-separator_type_t check_arrow(char *buffer, int *i, separator_type_t arrow);
+
+/* browse_node.c */
+
+node_t *browse_sep_node(node_t *node);
+node_t *browse_glob_node(node_t *node);
 
 /* is_cmd_separator.c */
 

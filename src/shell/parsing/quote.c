@@ -29,6 +29,16 @@ int missing_quote(node_t *node, char *buffer)
 	return (0);
 }
 
+node_t *no_quote(node_t *node, char *buffer, int i, int *j)
+{
+	if ((node->buffer = \
+	realloc(node->buffer, (*j) + 2)) == NULL)
+		return (NULL);
+	node->buffer[(*j) + 1] = '\0';
+	node->buffer[(*j)++] = buffer[i];
+	return (node);
+}
+
 node_t *delete_quote(node_t *node, char *buffer, int i)
 {
 	static int j = 0;
@@ -38,24 +48,20 @@ node_t *delete_quote(node_t *node, char *buffer, int i)
 	&& !node->backslash) {
 		if (node->next[n - 2]->buffer != NULL)
 			node->next = realloc_node(node->next, n++, node->quote);
-		if (node->next == NULL)
-			return (NULL);
 		j = 0;
-		node->next[n - 2]->quote = index_of("'\"`", buffer[i]);
+		if (node->next != NULL)
+			node->next[n - 2]->quote = index_of("'\"`", buffer[i]);
 	} else if (node->next[n - 2]->quote == index_of("'\"`", buffer[i]) \
 	&& node->next[n - 2]->quote != NONE && !node->backslash) {
-		if ((node->next = realloc_node(node->next, n++, node->quote)) == NULL)
+		if ((node->next = \
+		realloc_node(node->next, n++, node->quote)) == NULL)
 			return (NULL);
 		j = 0;
 	} else {
-		if ((node->next[n - 2]->buffer = \
-		realloc(node->next[n - 2]->buffer, j + 2)) == NULL)
-			return (NULL);
-		node->next[n - 2]->buffer[j + 1] = '\0';
-		node->next[n - 2]->buffer[j++] = buffer[i];
+		node->next[n - 2] = no_quote(node->next[n - 2], buffer, i, &j);
 		node->backslash = false;
 	}
-	return (node);
+	return ((node->next == NULL) ? NULL : node);
 }
 
 node_t *fill_buffer(node_t *node, char *buffer, int *i)

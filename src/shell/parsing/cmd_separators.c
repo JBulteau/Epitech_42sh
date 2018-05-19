@@ -25,19 +25,15 @@ separator_type_t check_cmd_separator(char *buffer, int *i, node_t *node)
 	case '|' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (S_PIPE);
-		break;
 	case '>' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (check_arrow(buffer, i, S_ARROW_RIGHT));
-		break;
 	case '<' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (check_arrow(buffer, i, S_ARROW_LEFT));
-		break;
 	case '&' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (S_AMPERSAND);
-	default : break;
 	}
 	return (0);
 }
@@ -56,8 +52,6 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 			node->next = realloc_node(node->next, n++, node->quote);
 			node->next[n - 3]->separator = separator;
 		}
-		if (node->next == NULL)
-			return (NULL);
 		j = 0;
 	} else {
 		if ((node->next[n - 2]->buffer = \
@@ -66,7 +60,7 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 		node->next[n - 2]->buffer[j + 1] = '\0';
 		node->next[n - 2]->buffer[j++] = buffer[*i];
 	}
-	return (node);
+	return ((node->next == NULL) ? NULL : node);
 }
 
 node_t *search_cmd_separators(node_t *node)
@@ -82,24 +76,10 @@ node_t *search_cmd_separators(node_t *node)
 	return (node);
 }
 
-static node_t *browse_node(node_t *node)
-{
-	for (int i = 0; node->next[i] != NULL; i++) {
-		if (node->next[i]->quote == NONE) {
-			node->next[i] = \
-			search_cmd_separators(node->next[i]);
-		} else {
-			node->next[i]->next = realloc_node(node->next[i]->next, 1, node->next[i]->quote);
-			node->next[i]->next[0] = copy_node(node->next[i]->next[0], node->next[i]);
-		}
-	}
-	return (node);
-}
-
 node_t *parse_cmd_separators(node_t *node)
 {
 	for (int i = 0; node->next[i] != NULL; i++) {
-		node->next[i] = browse_node(node->next[i]);
+		node->next[i] = browse_sep_node(node->next[i]);
 		if (node->next[i] == NULL)
 			return (NULL);
 	}

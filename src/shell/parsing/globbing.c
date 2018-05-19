@@ -9,26 +9,12 @@
 #include "parsing.h"
 #include <string.h>
 
-node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
+node_t *fill_glob(node_t *node, glob_t pglob, int j, int total_len)
 {
-	int total_len = 0;
-	size_t buf_len = strlen(node->buffer);
-	int tmp = j;
 	int k = 0;
 	size_t n = 0;
 
-	for (size_t i = 0; i < pglob.gl_pathc; i++) {
-		total_len += strlen(pglob.gl_pathv[i]) + 1;
-	}
-	node->buffer = realloc(node->buffer, sizeof(char) * (buf_len + total_len - len + 3));
-	if (node->buffer == NULL)
-		return (NULL);
-	for (size_t i = 0; j + i + len <= buf_len && i <= len + 1; i++)
-		node->buffer[j + i - 1] = node->buffer[j + len + i];
-	for (; node->buffer[j] != '\0'; j++)
-		node->buffer[j + total_len - 4] = node->buffer[j];
-	node->buffer[j + total_len - 4] = '\0';
-	for (j = tmp; j < tmp + total_len && n < pglob.gl_pathc; j++) {
+	for (; j < total_len && n < pglob.gl_pathc; j++) {
 		if (pglob.gl_pathv[n][k] != '\0') {
 			node->buffer[j] = pglob.gl_pathv[n][k];
 			k++;
@@ -41,6 +27,28 @@ node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
 	return (node);
 }
 
+node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
+{
+	int total_len = 0;
+	size_t buf_len = strlen(node->buffer);
+	int tmp = j;
+
+	for (size_t i = 0; i < pglob.gl_pathc; i++)
+		total_len += strlen(pglob.gl_pathv[i]) + 1;
+	if ((node->buffer = realloc(node->buffer, \
+	sizeof(char) * (buf_len + total_len - len + 3))) == NULL)
+		return (NULL);
+	for (size_t i = 0; j + i + len <= buf_len && i <= len + 1; i++)
+		node->buffer[j + i - 1] = node->buffer[j + len + i];
+	for (; node->buffer[j] != '\0'; j++)
+		node->buffer[j + total_len - 4] = node->buffer[j];
+	node->buffer[j + total_len - 4] = '\0';
+	j = tmp;
+	total_len += tmp;
+	node = fill_glob(node, pglob, j, total_len);
+	return (node);
+}
+
 node_t *isolate_glob(node_t *node, int i)
 {
 	char *tmp = NULL;
@@ -50,8 +58,8 @@ node_t *isolate_glob(node_t *node, int i)
 
 	for (; i >= 0 && node->buffer[i] != ' ' && node->buffer[i] != '\t'; i--)
 		len++;
-	for (; node->buffer[j] != '\0' && node->buffer[j] != ' ' && node->buffer[j] != '\t'; j++)
-		len++;
+	for (; node->buffer[j] != '\0' && node->buffer[j] != ' ' \
+	&& node->buffer[j] != '\t'; UNUSED(j++ && len++));
 	tmp = malloc(sizeof(char) * len);
 	if (tmp == NULL)
 		return (NULL);
@@ -78,22 +86,10 @@ node_t *check_globbing(node_t *node)
 	return (node);
 }
 
-static node_t *browse_node(node_t *node)
-{
-	for (int i = 0; node->next[i] != NULL; i++) {
-		if (node->next[i]->quote == NONE)
-			node->next[i] = \
-			check_globbing(node->next[i]);
-		if (node->next[i] == NULL)
-			return (NULL);
-	}
-	return (node);
-}
-
 node_t *parse_globbing(node_t *node)
 {
 	for (int i = 0; node->next[i] != NULL; i++) {
-		node->next[i] = browse_node(node->next[i]);
+		node->next[i] = browse_glob_node(node->next[i]);
 		if (node->next[i] == NULL)
 			return (NULL);
 	}
