@@ -35,6 +35,7 @@ comm_t *init_comm(void)
 	if ((comm->argv = malloc(sizeof(char **) * 1)) == NULL)
 		return (NULL);
 	comm->argv[0] = NULL;
+	comm->separator = NONE;
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
 	return (comm);

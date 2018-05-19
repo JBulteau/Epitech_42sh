@@ -13,6 +13,7 @@ SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
 42RC_DIR	=	$(SHELL_DIR)42rc/
+VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
 
 SRC_FILES	=	$(SHELL_DIR)main.c	\
@@ -39,10 +40,6 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(BI_DIR)fg.c\
 			$(BI_DIR)alias.c\
 			$(BI_DIR)echo.c\
-			$(BI_DIR)alias_struc.c\
-\
-			$(ALIAS_DIR)alias_struc.c\
-			$(ALIAS_DIR)alias_comm.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\
@@ -51,10 +48,17 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 			$(RED_DIR)pipe.c\
 \
 			$(42RC_DIR)load42.c\
+\
+			$(VAR_DIR)var.c\
+			$(VAR_DIR)var_edition.c\
+			$(VAR_DIR)var_utils.c\
+\
+			$(ALIAS_DIR)alias_struc.c\
+			$(ALIAS_DIR)alias_comm.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
+CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow -lc
 
 OBJ		=	$(SRC:%.c=%.o)
 

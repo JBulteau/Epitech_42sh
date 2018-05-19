@@ -6,6 +6,7 @@
 */
 
 #include <my.h>
+#include "my.h"
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -37,7 +38,7 @@ int main(int ac, char **av, char **env)
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		return_code = run_that(shell);
+		shell->return_value = run_that(shell);
 		free(shell->input);
 		disp_prompt();
 	}
