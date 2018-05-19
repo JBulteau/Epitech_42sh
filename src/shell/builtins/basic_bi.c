@@ -18,11 +18,12 @@ int error_msg_exit(shell_t *shell, comm_t *comm)
 		shell->return_value = 1;
 		return (1);
 	}
-	//if (pid_job[find_last_pid()] != -1 && pid_job[find_last_pid()] != -2) {
-	//	shell->return_value = 0;
-	//	puts("Jobs still running (fg to continued).");
-	//	return (1);
-	//}
+	remove_node();
+	if (list_jobs->next != NULL) {
+		shell->return_value = 0;
+		puts("Jobs still running (fg to continued).");
+		return (1);
+	}
 	return (0);
 }
 

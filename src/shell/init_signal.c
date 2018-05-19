@@ -84,6 +84,7 @@ memset(&act_c, '\0', sizeof(act_z) + 1) == NULL || list_jobs == NULL)
 	list_jobs->pid_job = malloc(sizeof(int) * 2);
 	if (list_jobs->pid_job == NULL)
 		return (perror("Malloc"), -1);
+	list_jobs->pid_job[0] = 0;
 	list_jobs->running = false;
 	list_jobs->next = NULL;
 	act_z.sa_sigaction = (void *)catch_ctrl_z;
