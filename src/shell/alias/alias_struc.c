@@ -43,6 +43,7 @@ int add_alias(char **args, shell_t *shell)
 		split = strwordarr(args[i++], "=");
 		last->nav[NEXT] = create_alias(split[0], split[1], last);
 	}
+	free_array((void *)split);
 	return (SUCCESS_RETURN);
 }
 
