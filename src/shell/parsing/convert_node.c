@@ -36,11 +36,12 @@ comm_t *apply_separator(comm_t *comm, node_t *node, int *comm_index)
 char **parse_argv(char **argv, node_t *node, int *comm_index)
 {
 	int word_start = 0;
+	int i;
 
 	node->buffer = clear_str(node->buffer);
-	for (int i = 0; node->buffer[i] != '\0'; i++) {
+	for (i = 0; node->buffer[i] != '\0'; i++) {
 		if (node->buffer[i] == ' ') {
-			argv = realloc(argv, sizeof(char*) * (*comm_index) + 2);
+			argv = realloc(argv, sizeof(char*) * ((*comm_index) + 2));
 			argv[(*comm_index) + 1] = NULL;
 			argv[(*comm_index)] = \
 			strndup(&node->buffer[word_start], i - word_start);
@@ -48,6 +49,12 @@ char **parse_argv(char **argv, node_t *node, int *comm_index)
 			(*comm_index)++;
 		}
 	}
+	argv = realloc(argv, sizeof(char*) * ((*comm_index) + 2));
+	argv[(*comm_index) + 1] = NULL;
+	argv[(*comm_index)] = \
+	strndup(&node->buffer[word_start], i - word_start);
+	word_start = i + 1;
+	(*comm_index)++;
 	return (argv);
 }
 
@@ -78,10 +85,14 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 	&& node->next[i]->next[j]->next[k]->separator == 0; (*node_index)++) {
 		comm = convert_param(comm, \
 		node->next[i]->next[j]->next[k++], &comm_index);
-		k = (node->next[i]->next[j]->next[k] == NULL) ? 0 : k;
-		j += (node->next[i]->next[j]->next[k] == NULL) ? 1 : 0;
-		j = (node->next[i]->next[j] == NULL) ? 0 : j;
-		i += (node->next[i]->next[j] == NULL) ? 1 : 0;
+		if (node->next[i]->next[j]->next[k] == NULL) {
+			k = 0;
+			j++;
+		}
+		if (node->next[i]->next[j] == NULL) {
+			j = 0;
+			i++;
+		}
 	}
 	if (node->next[i] != NULL)
 		comm = apply_separator(comm, \

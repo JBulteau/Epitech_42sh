@@ -173,6 +173,7 @@ int search_local(char *name);
 int search_strtab(char **arr, char *to_find);
 int set_env_value(char ***env, char *var, char *value);
 int wait_for_it(pid_t pid);
+comm_t **parsing(char *buffer);
 
 static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";

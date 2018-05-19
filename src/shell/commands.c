@@ -48,7 +48,7 @@ comm_t *init_comm(void)
 
 	if (comm == NULL)
 		return (NULL);
-	for (int j = 0; j <= S_LEFT; j++)
+	for (int j = 0; j <= 3; j++)
 		comm->red[j] = NULL;
 	if ((comm->argv = malloc(sizeof(char **) * 1)) == NULL)
 		return (NULL);

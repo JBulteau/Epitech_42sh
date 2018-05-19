@@ -34,8 +34,9 @@ node_t *no_quote(node_t *node, char *buffer, int i, int *j)
 	if ((node->buffer = \
 	realloc(node->buffer, (*j) + 2)) == NULL)
 		return (NULL);
+	node->buffer[(*j)] = buffer[i];
 	node->buffer[(*j) + 1] = '\0';
-	node->buffer[(*j)++] = buffer[i];
+	(*j)++;
 	return (node);
 }
 
@@ -44,6 +45,8 @@ node_t *delete_quote(node_t *node, char *buffer, int i)
 	static int j = 0;
 	static int n = 2;
 
+	j = (i == 0) ? 0 : j;
+	n = (i == 0) ? 2 : n;
 	if (is_a_quote(buffer[i]) && (node->next[n - 2]->quote) == NONE \
 	&& !node->backslash) {
 		if (node->next[n - 2]->buffer != NULL)
