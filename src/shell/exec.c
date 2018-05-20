@@ -34,12 +34,16 @@ int exec_loop(shell_t *shell)
 {
 	int pipeline = 0;
 
+	for (int i = 0; shell->comm[i]; i++)
+		debug_comm(shell->comm[i]);
 	for (int i =0; shell->comm[i] != NULL; i++) {
 		if (run_pipeline(shell, shell->comm[i]) == ERROR_RETURN)
 			return (ERROR_RETURN);
-		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
-alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
-)))) {
+		printf("return --> %i\n", shell->return_value);
+		if (((shell->comm[i]->separator == THEN) && (shell->return_value == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0))) {
+			//puts("DO THE SHIT AFTER SEPARATORS");
+		} else if (shell->comm[i]->separator != NOTHING) {
+			//puts("SKIP");
 			while (shell->comm[i]->separator != NOTHING)
 				i++;
 		}
