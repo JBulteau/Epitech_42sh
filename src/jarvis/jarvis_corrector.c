@@ -9,6 +9,22 @@
 #include <sys/types.h>
 #include <dirent.h>
 
+int free_return_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb)
+{
+	free(*to_free);
+	if (to_free_2)
+		free(*to_free_2);
+	if (pglob)
+		globfree(pglob);
+	return (nb);
+}
+
+char *free_return_pointer(char **to_free, char *to_return)
+{
+	free(*to_free);
+	return (to_return);
+}
+
 void put_back_last_slash(char **arg)
 {
 	for (int i = 0; (*arg)[i] != '\0'; i++)

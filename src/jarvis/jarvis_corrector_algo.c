@@ -64,7 +64,7 @@ count_correct_letter(distance_allowed, both);
 			return (fill_result_correct(result, \
 glob, i, curr_path));
 	}
-	return (1);
+	return (42);
 }
 
 int put_back_ending_slash(int pos, char **arg, int to_know)

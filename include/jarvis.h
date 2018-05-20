@@ -33,6 +33,8 @@ enum inc {
 };
 
 /* jarvis corrector */
+char *free_return_pointer(char **to_free, char *to_return);
+int free_return_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb);
 void put_back_last_slash(char **arg);
 int put_back_ending_slash(int pos, char **arg, int to_know);
 void remove_mutliple_ending_slash(char **arg);
