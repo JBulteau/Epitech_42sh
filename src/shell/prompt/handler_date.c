@@ -32,7 +32,7 @@ int ptr_handle_date(shell_t *shell)
                 tm = *localtime(&t);
         else
                 return (ERROR_RETURN);
-        printf("%d-%d-%d", tm.tm_mday, tm.tm_mon, tm.tm_year + 1900);
+        printf("%d-%d-%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
         return (SUCCESS_CODE);}
 
 int ptr_handle_week(shell_t *shell)
