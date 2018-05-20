@@ -12,6 +12,8 @@ int my_strlen(const char *str)
 {
 	int len;
 
+	if (str == NULL)
+		return (-1);
 	for (len = 0; str[len]; len++);
 	return (len);
 }
@@ -62,7 +64,7 @@ char *my_revstr(const char *str)
 	char *res = my_strndup(str, 0);
 	int len = my_strlen(str);
 
-	if (str == NULL)
+	if (str == NULL || res == NULL)
 		return (NULL);
 	for (int i = 0; i < len; i++)
 		res[i] = str[len - i - 1];

@@ -6,6 +6,7 @@
 */
 
 #include <my.h>
+#include "my.h"
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -23,15 +24,7 @@ int main(int ac, char **av, char **env)
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		if ((shell->comm = parsing(shell->input)) == NULL)
-			return (ERROR_CODE);
-		for (int i = 0; shell->comm[i] != NULL; i++)
-			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
-				return (ERROR_CODE);
-		exec = exec_loop(shell);
-		free_comms(shell->comm);
-		if (exec == ERROR_RETURN)
-			break;
+		shell->return_value = run_that(shell);
 		free(shell->input);
 		disp_prompt();
 	}

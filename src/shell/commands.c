@@ -5,8 +5,8 @@
 ** Functions that manages commands
 */
 
-#include "minishell.h"
 #include "tokens.h"
+#include "minishell.h"
 #include "my.h"
 
 void free_comm(comm_t *comm)
@@ -22,24 +22,6 @@ void free_comm(comm_t *comm)
 	free_red(comm->red[D_RIGHT]);
 	free(comm);
 	return;
-}
-
-int exec_start(comm_t *comm)
-{
-	for (int i = 0; i < 4; i++) {
-		if (comm->red[i] && tokens[i].fnc_exec(comm) == -1) {
-			return (ERROR_RETURN);
-		}
-	}
-	return (SUCCESS_RETURN);
-}
-
-int exec_end(comm_t *comm)
-{
-	for (int i = 0; i < 4; i++)
-		if (comm->red[i] && (tokens[i].end_exec(comm) == ERROR_RETURN))
-			return (ERROR_RETURN);
-	return (SUCCESS_RETURN);
 }
 
 comm_t *init_comm(void)
@@ -65,4 +47,30 @@ void free_comms(comm_t **comm)
 		free_comm(comm[i]);
 	}
 	free(comm);
+}
+
+int get_commidx(shell_t *shell, comm_t *comm)
+{
+	int i = 0;
+
+	if (shell == NULL || comm == NULL)
+		return (ERROR_RETURN);
+	for (; shell->comm[i]; i++)
+		if (shell->comm[i] == comm)
+			return (i);
+	return (ERROR_RETURN);
+}
+
+int run_that(shell_t *shell)
+{
+	int return_code = 0;
+
+	if ((shell->comm = parsing(shell->input)) == NULL)
+		return (ERROR_CODE);
+	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
+		return (ERROR_CODE);
+	return_code = exec_loop(shell);
+	if (shell->comm != NULL)
+		free_comms(shell->comm);
+	return (return_code);
 }

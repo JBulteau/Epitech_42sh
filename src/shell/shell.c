@@ -52,6 +52,8 @@ shell_t *init_shell(char **env)
 	getcwd(shell->pwd[0], PATH_MAX);
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';
+	if ((shell->vars = init_var_arr()) == NULL)
+		return (NULL);
 	return (shell);
 }
 
@@ -63,6 +65,9 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
+	for (int i = 0; shell->vars[i]; i++)
+		free_var(shell->vars[i]);
+	free(shell->vars);
 	free(shell);
 	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
 		if (kill(pid_job[i], SIGKILL) == -1)

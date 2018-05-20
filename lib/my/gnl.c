@@ -75,8 +75,10 @@ static char *read_file(int fd, char *ptr)
 		if (buf == NULL)
 			return (NULL);
 		result = read(fd, &buf[READ_SIZE * j], READ_SIZE);
-		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0')
+		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0') {
+			free(buf);
 			return (NULL);
+		}
 	} while (find_line_break(buf, READ_SIZE * ++j));
 	return (buf);
 }

@@ -24,19 +24,15 @@ target);
 		puts("PIPED INTO");
 		debug_comm(comm->pipe[OUT]->output);
 	}
-	
-	switch (comm->separator)
-	{
-		case THEN:
-			puts("&&");
-			break;
-		case OR:
-			puts("||");
-			break;
-		case NOTHING:
-			puts(";");
-			break;
-		default:
-			break;
+	switch (comm->separator) {
+	case THEN:
+		puts("&&");
+		break;
+	case OR:
+		puts("||");
+		break;
+	case NOTHING:
+		puts(";");
+		break;
 	}
 }
