@@ -17,7 +17,6 @@ pipe_t *init_pipe(comm_t *in, comm_t *out)
 	pipe_->input = in;
 	in->pipe[OUT] = pipe_;
 	pipe_->output = out;
-	pipe_->done = 0;
 	out->pipe[IN] = pipe_;
 	if (pipe(pipe_->fd) == -1)
 		return (NULL);

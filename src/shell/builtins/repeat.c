@@ -16,6 +16,17 @@ static int disp_help(void)
         return (SUCCESS_CODE);
 }
 
+static int les_oeufs_de_paques(comm_t *comm)
+{
+        if ((comm->argv) && (comm->argv[1]) && (atoi(comm->argv[1]) > 0) && \
+(comm->argv[2]) && !strcmp(comm->argv[2], "repeat") && (comm->argv[3]) && \
+(atoi(comm->argv[3]) > 0) && (comm->argv[4] == NULL)) {
+                puts("Not this time :)");
+                return (ERROR_RETURN);
+        }
+        return (SUCCESS_RETURN);
+}
+
 int ptr_repeat(comm_t *comm, shell_t *shell)
 {
         int repeat = 0;
@@ -27,8 +38,10 @@ int ptr_repeat(comm_t *comm, shell_t *shell)
         repeat = atoi(comm->argv[1]);
         if (repeat == 0) {
                 puts("Please enter a positive integer");
-                return (shell->return_value = 0);
+                return (shell->return_value = SUCCESS_CODE);
         }
+        if (les_oeufs_de_paques(comm) == ERROR_RETURN)
+                return (shell->return_value = SUCCESS_CODE);
         if (comm_id == -1)
                 repeat = 1;
         for (int i = 0; i < repeat; i++) {
