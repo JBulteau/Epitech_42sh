@@ -37,6 +37,7 @@ node_t **realloc_node(node_t **node, int n, quote_type_t quote)
 		if (node != NULL && node[i] != NULL) {
 			new_node[i] = \
 			init_node(node[i]->buffer, node[i]->quote);
+			new_node[i]->separator = node[i]->separator;
 			free(node[i]->buffer);
 			free(node[i]);
 		} else {

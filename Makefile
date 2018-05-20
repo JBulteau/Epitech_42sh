@@ -17,7 +17,7 @@ RED_DIR		=	$(SHELL_DIR)redirections/
 42RC_DIR	=	$(SHELL_DIR)42rc/
 VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
-PARSING_DIR	=	$(SHELL_DIR)parsing/
+PARSING_DIR	=	parsing/
 
 SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
