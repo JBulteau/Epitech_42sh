@@ -21,12 +21,13 @@ int main(int ac, char **av, char **env)
 	UNUSED(ac);
 	if (shell == NULL || init_signal() == ERROR_RETURN)
 		return (ERROR_CODE);
-	disp_prompt();
+	disp_prompt(shell);
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
 		shell->return_value = run_that(shell);
 		free(shell->input);
-		disp_prompt();
+		if (disp_prompt(shell) == ERROR_RETURN)
+			break;
 	}
 	if (shell->input == NULL && isatty(0))
 		puts("exit");

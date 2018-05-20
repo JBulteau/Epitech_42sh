@@ -17,6 +17,7 @@ RED_DIR		=	$(SHELL_DIR)redirections/
 42RC_DIR	=	$(SHELL_DIR)42rc/
 VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
+PROMPT_DIR	=	$(SHELL_DIR)prompt/
 
 SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
@@ -58,6 +59,15 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 \
 			$(ALIAS_DIR)alias_struc.c\
 			$(ALIAS_DIR)alias_comm.c\
+\
+			$(PROMPT_DIR)display.c\
+			$(PROMPT_DIR)handler_basic.c\
+			$(PROMPT_DIR)handler_colors.c\
+			$(PROMPT_DIR)handler_time.c\
+			$(PROMPT_DIR)system_get.c\
+			$(PROMPT_DIR)handler_vars.c\
+			$(PROMPT_DIR)handler_date.c\
+			$(PROMPT_DIR)handler_get_from_shell.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
