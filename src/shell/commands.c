@@ -61,16 +61,17 @@ int get_commidx(shell_t *shell, comm_t *comm)
 	return (ERROR_RETURN);
 }
 
-int run_that(shell_t *shell)
+int run_that(shell_t *shell, int parse, int aliases, int free_cmm)
 {
 	int return_code = 0;
-
-	if ((shell->comm = full_parse(shell->input)) == NULL)
-		return (ERROR_CODE);
-	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
-		return (ERROR_CODE);
+	if (parse)
+		if ((shell->comm = full_parse(shell->input)) == NULL)
+			return (ERROR_CODE);
+	if (aliases)
+		if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
+			return (ERROR_CODE);
 	return_code = exec_loop(shell);
-	if (shell->comm != NULL)
+	if (free_cmm && shell->comm != NULL)
 		free_comms(shell->comm);
 	return (return_code);
 }

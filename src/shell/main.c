@@ -24,7 +24,7 @@ int main(int ac, char **av, char **env)
 	disp_prompt();
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		shell->return_value = run_that(shell);
+		shell->return_value = run_that(shell, 1, 1, 1);
 		free(shell->input);
 		disp_prompt();
 	}

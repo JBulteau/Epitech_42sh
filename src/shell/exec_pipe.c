@@ -67,6 +67,8 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 		} else {
 			return_c = run_not_last(shell, curr);
 		}
+		if (curr->pipe[OUT] && curr->pipe[OUT]->done)
+			break;
 	}
 	return (return_c);
 }

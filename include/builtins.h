@@ -21,6 +21,7 @@ int ptr_fg(comm_t *comm, shell_t *shell);
 int ptr_alias(comm_t *comm, shell_t *shell);
 int ptr_unalias(comm_t *comm, shell_t *shell);
 int ptr_echo(comm_t *comm, shell_t *shell);
+int ptr_repeat(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
@@ -37,6 +38,7 @@ static const struct {
 	{"alias", &ptr_alias},
 	{"unalias", &ptr_unalias},
 	{"echo", &ptr_echo},
+	{"repeat", &ptr_repeat},
 	{NULL, NULL}
 };
 
