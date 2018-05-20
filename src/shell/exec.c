@@ -47,7 +47,7 @@ alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
 	return (pipeline);
 }
 
-int exec_bin(comm_t *comm, char **env)
+int exec_bin(comm_t *comm, char **env, shell_t *shell)
 {
 	int is_local = (!strncmp(comm->argv[0], "./", 2)) || \
 (index_of(comm->argv[0], '/') != -1);
@@ -55,25 +55,24 @@ int exec_bin(comm_t *comm, char **env)
 	char *filepath = NULL;
 
 	if (is_local == 1 && !search_local(comm->argv[0])) {
-		return (run_bin(comm, strdup(comm->argv[0]), env));
+		return (run_bin(comm, strdup(comm->argv[0]), env, shell));
 	} else if (is_local == 0) {
 		if ((path = get_path(env)) == NULL) {
 			disp_rights(comm->argv[0], -1, 0);
-			exit(1);
+			clean_exit(shell);
 		}
 		filepath = search_path(path, comm->argv[0]);
 		free_array((void **) path);
 		if (filepath == NULL)
-			exit(1);
-		return (run_bin(comm, filepath, env));
+			clean_exit(shell);
+		return (run_bin(comm, filepath, env, shell));
 	}
-	exit(1);
+	clean_exit(shell, 1);
 }
 
-int run_bin(comm_t *comm, char *path, char **env)
+int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
 {
-	if (execve(path, comm->argv, env) == -1) {
+	if (execve(path, comm->argv, env) == -1)
 		disp_wrong_arch(comm->argv[0], errno);
-	}
-	exit(1);
+	clean_exit(shell, 1);
 }

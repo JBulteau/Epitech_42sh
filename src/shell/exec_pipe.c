@@ -19,9 +19,9 @@ int run_not_last(shell_t *shell, comm_t *curr)
 		exec_start(curr);
 		init_redir_pipe(curr);
 		if (is_builtin(curr->argv[0]) != -1)
-			exit(exec_bi(curr, shell));
+			clean_exit(shell, exec_bi(curr, shell));
 		else
-			exec_bin(curr, shell->env);
+			exec_bin(curr, shell->env, shell);
 	}
 	if (curr->pipe[OUT])
 		close(curr->pipe[OUT]->fd[WRITE]);
@@ -45,7 +45,7 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 		else if (child_pid == 0) {
 			exec_start(curr);
 			init_redir_pipe(curr);
-			exec_bin(curr, shell->env);
+			exec_bin(curr, shell->env, shell);
 		}
 		shell->return_value = wait_for_it(child_pid);
 	}

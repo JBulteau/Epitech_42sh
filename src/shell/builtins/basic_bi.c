@@ -65,6 +65,6 @@ int exec_bi(comm_t *comm, shell_t *shell)
 {
 	if ((comm == NULL) || (shell == NULL) || (shell->env == NULL) || \
 (shell->pwd == NULL))
-		return (-1);
+		return (ERROR_RETURN);
 	return (builtins[is_builtin(comm->argv[0])].fnc(comm, shell));
 }

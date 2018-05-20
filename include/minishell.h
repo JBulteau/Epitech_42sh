@@ -186,8 +186,8 @@ int run_pipeline(shell_t *shell, comm_t *comm);
 int exec_start(comm_t *comm);
 int exec_end(comm_t *comm);
 int exec_loop(shell_t *shell);
-int exec_bin(comm_t *comm, char **env);
-int run_bin(comm_t *comm, char *path, char **env);
+int exec_bin(comm_t *comm, char **env,shell_t *shell);
+int run_bin(comm_t *comm, char *path, char **env, shell_t *shell);
 /*	shell/init_signal.c		*/
 char* get_proc_name(pid_t pid);
 void catch_ctrl_z(int sig);
