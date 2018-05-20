@@ -17,12 +17,14 @@ separator_type_t is_separator(char *buffer, int *i)
 			for (;buffer[*i + 1] == ';'; (*i)++);
 			return (SEMICOLON);
 		}
+		break;
 	case '|' :
 		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
 		&& buffer[*i - 1] != '&')) && buffer[(*i) + 1] == '|') {
 			(*i)++;
 			return (D_PIPE);
 		}
+		break;
 	case '&' :
 		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
 		&& buffer[*i - 1] != '&')) && buffer[++*i] == '&')

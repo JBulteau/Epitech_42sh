@@ -75,7 +75,6 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
 TEST_FOLDER	=	tests
 
 CFLAGS		=	-W -Wextra -Wall -Wshadow -I include

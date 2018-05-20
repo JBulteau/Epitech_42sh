@@ -12,6 +12,7 @@
 comm_t *apply_separator(comm_t *comm, node_t *node, int *comm_index, separator_type_t separator)
 {
 	comm_t *new_comm = NULL;
+	int new_index = 0;
 
 	node->buffer = clear_str(node->buffer);
 	for (int i = 0; node->buffer[i] != '\0'; i++)
@@ -26,7 +27,7 @@ comm_t *apply_separator(comm_t *comm, node_t *node, int *comm_index, separator_t
 	} else if (separator == S_PIPE) {
 		new_comm = init_comm();
 		comm->pipe[OUT] = init_pipe(comm, new_comm);
-		new_comm = convert_param(new_comm, node, comm_index);
+		comm->pipe[OUT]->output = convert_param(comm->pipe[OUT]->output, node, &new_index);
 	} else {
 		comm->red[separator - 6] = init_redir();
 		comm->red[separator - 6]->target = strdup(node->buffer);
@@ -61,7 +62,6 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 
 comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
 {
-	puts("BITE");
 	if (node->quote == NONE) {
 		comm->argv = parse_argv(comm->argv, node, comm_index, 0);
 		if (comm->argv == NULL)
@@ -87,12 +87,10 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 		comm = convert_param(comm, \
 		node->next[i]->next[j]->next[k++], &comm_index);
 		if (node->next[i]->next[j]->next[k] == NULL) {
-			putchar('a');
 			k = 0;
 			j++;
 		}
 		if (node->next[i]->next[j] == NULL) {
-			putchar('b');
 			j = 0;
 			i++;
 		}
