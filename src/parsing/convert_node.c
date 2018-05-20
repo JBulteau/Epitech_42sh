@@ -103,18 +103,20 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 		}
 	}
 	while (node->next[i] != NULL && node->next[i]->next[j] != NULL && node->next[i]->next[j]->next[k] != NULL) {
-		if (node->next[i]->next[j]->separator <= D_PIPE) {
-			separator = node->next[i]->next[j - 1]->separator;
-			node->next[i]->next[j - 1]->separator = 0;
-			comm = apply_separator(comm, \
-			(node_t*[2]){node->next[i]->next[j], node}, &comm_index, separator);
-			break;
-		} else if (node->next[i]->next[j]->next[k]->separator >= S_AMPERSAND) {
+		if (k > 0 && node->next[i]->next[j]->next[k - 1]->separator >= S_AMPERSAND) {
 			separator = node->next[i]->next[j]->next[k - 1]->separator;
 			node->next[i]->next[j]->next[k - 1]->separator = 0;
 			comm = apply_separator(comm, \
 			(node_t*[2]){node->next[i]->next[j]->next[k], node}, &comm_index, separator);
 			k++;
+		} else if (j > 0 && node->next[i]->next[j - 1]->separator <= D_PIPE && node->next[i]->next[j - 1]->separator >= SEMICOLON) {
+			separator = node->next[i]->next[j - 1]->separator;
+			node->next[i]->next[j - 1]->separator = 0;
+			comm = apply_separator(comm, \
+			(node_t*[2]){node->next[i]->next[j], node}, &comm_index, separator);
+			break;
+		} else {
+			break;
 		}
 	}
 	return (comm);
