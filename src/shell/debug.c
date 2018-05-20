@@ -17,14 +17,16 @@ void debug_comm(comm_t *comm)
 target);
 		}
 	for (int j = 0; comm->argv[j]; j++) {
-		printf("%s ", comm->argv[j]);
+		printf("%s\n", comm->argv[j]);
 	}
-	putchar('\n');
 	if (comm->pipe[OUT]) {
 		puts("PIPED INTO");
 		debug_comm(comm->pipe[OUT]->output);
 	}
 	switch (comm->separator) {
+	case FG:
+		puts("&");
+		break;
 	case THEN:
 		puts("&&");
 		break;
