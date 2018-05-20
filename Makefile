@@ -7,6 +7,8 @@
 
 NAME		=	42sh
 
+TESTS_DIR	=	$(realpath ./tests)
+
 SRC_DIR		=	$(realpath ./src)
 
 SHELL_DIR	=	shell/
@@ -16,7 +18,7 @@ RED_DIR		=	$(SHELL_DIR)redirections/
 VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
 
-SRC_FILES	=	$(SHELL_DIR)main.c	\
+SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
 			$(SHELL_DIR)utils.c\
 			$(SHELL_DIR)search.c\
@@ -58,7 +60,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c	\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow -lc
+CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -77,10 +79,12 @@ $(NAME):	$(OBJ)
 clean:
 		$(RM) $(OBJ)
 		$(MAKE) clean -C $(LIB_DIR)/my
+		$(MAKE) clean -C $(TESTS_DIR)
 
 fclean:		clean
 		$(RM) $(NAME)
 		$(MAKE) fclean -C $(LIB_DIR)/my
+		$(MAKE) fclean -C $(TESTS_DIR)
 
 re:		fclean all
 
@@ -88,3 +92,7 @@ debug:		CFLAGS += -g
 debug:		$(OBJ)
 		$(MAKE) -C $(LIB_DIR)/my debug
 		$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(CFLAGS)
+
+units:
+		$(MAKE) -C $(TESTS_DIR)
+		$(TESTS_DIR)/test
