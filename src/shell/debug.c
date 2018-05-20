@@ -20,6 +20,7 @@ target);
 		printf("%s\n", comm->argv[j]);
 	}
 	if (comm->pipe[OUT]) {
+		putchar('\n');
 		puts("PIPED INTO");
 		debug_comm(comm->pipe[OUT]->output);
 	}

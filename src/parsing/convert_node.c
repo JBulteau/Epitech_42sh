@@ -108,7 +108,7 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 			node->next[i]->next[j]->next[k - 1]->separator = 0;
 			comm = apply_separator(comm, \
 			(node_t*[2]){node->next[i]->next[j]->next[k], node}, &comm_index, separator);
-			k++;
+			k += (separator == S_PIPE) ? 0 : 1;
 		} else if (j > 0 && node->next[i]->next[j - 1]->separator <= D_PIPE && node->next[i]->next[j - 1]->separator >= SEMICOLON) {
 			separator = node->next[i]->next[j - 1]->separator;
 			node->next[i]->next[j - 1]->separator = 0;

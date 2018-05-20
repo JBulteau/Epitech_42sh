@@ -19,7 +19,7 @@ separator_type_t check_arrow(char *buffer, int *i, separator_type_t arrow)
 
 separator_type_t check_cmd_separator(char *buffer, int *i, node_t *node)
 {
-	if (node->quote != NONE || node->separator != 0)
+	if (node->quote != NONE)
 		return (0);
 	switch (buffer[*i]) {
 	case '|' :
