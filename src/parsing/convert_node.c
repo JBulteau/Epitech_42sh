@@ -84,9 +84,15 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 	i = (*node_index == 0) ? 0 : i;
 	j = (*node_index == 0) ? 0 : j;
 	k = (*node_index == 0) ? 0 : k;
-	for (; node->next[i] != NULL && (k == 0 || node->next[i]->next[j]->next[k - 1]->separator == 0); (*node_index)++) {
-		comm = convert_param(comm, \
-		node->next[i]->next[j]->next[k++], &comm_index);
+	for (; node->next[i] != NULL && (j == 0 || node->next[i]->next[j - 1]->separator == 0) && (k == 0 || node->next[i]->next[j]->next[k - 1]->separator == 0); (*node_index)++) {
+		if (node->next[i]->next[j] != NULL && node->next[i]->next[j]->next[k] != NULL)
+			comm = convert_param(comm, \
+			node->next[i]->next[j]->next[k++], &comm_index);
+		if (node->next[i]->next[j] == NULL) {
+			j = 0;
+			i++;
+			continue;
+		}
 		if (node->next[i]->next[j]->next[k] == NULL) {
 			k = 0;
 			j++;
@@ -96,12 +102,20 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 			i++;
 		}
 	}
-	while (node->next[i] != NULL && node->next[i]->next[j]->next[k] != NULL) {
-		separator = node->next[i]->next[j]->next[k - 1]->separator;
-		node->next[i]->next[j]->next[k - 1]->separator = 0;
-		comm = apply_separator(comm, \
-		(node_t*[2]){node->next[i]->next[j]->next[k], node}, &comm_index, separator);
-		k++;
+	while (node->next[i] != NULL && node->next[i]->next[j] != NULL && node->next[i]->next[j]->next[k] != NULL) {
+		if (node->next[i]->next[j]->separator <= D_PIPE) {
+			separator = node->next[i]->next[j - 1]->separator;
+			node->next[i]->next[j - 1]->separator = 0;
+			comm = apply_separator(comm, \
+			(node_t*[2]){node->next[i]->next[j], node}, &comm_index, separator);
+			break;
+		} else if (node->next[i]->next[j]->next[k]->separator >= S_AMPERSAND) {
+			separator = node->next[i]->next[j]->next[k - 1]->separator;
+			node->next[i]->next[j]->next[k - 1]->separator = 0;
+			comm = apply_separator(comm, \
+			(node_t*[2]){node->next[i]->next[j]->next[k], node}, &comm_index, separator);
+			k++;
+		}
 	}
 	return (comm);
 }

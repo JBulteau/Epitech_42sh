@@ -37,4 +37,5 @@ target);
 		puts(";");
 		break;
 	}
+	putchar('\n');
 }

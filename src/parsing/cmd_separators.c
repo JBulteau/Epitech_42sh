@@ -73,6 +73,9 @@ node_t *search_cmd_separators(node_t *node)
 		if (node == NULL)
 			return (NULL);
 	}
+	for (int i = 0; node->next[i] != NULL; i++)
+		if (node->next[i + 1] == NULL)
+			node->next[i]->separator = node->separator;
 	return (node);
 }
 
