@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "minishell.h"
+#include "builtins.h"
 #include "my.h"
 
 int run_last(shell_t *shell)

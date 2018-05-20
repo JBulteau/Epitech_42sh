@@ -127,13 +127,15 @@ void free_aliases(alias_t *alias, int free_next);
 /*	shell/builtins/alias.c		*/
 /*	shell/builtins/basic_bi.c	*/
 int error_msg_exit(shell_t *shell, comm_t *comm);
-int ptr_exit(comm_t *comm, shell_t *shell);
 int is_builtin(char *name);
 int exec_bi(comm_t *comm, shell_t *shell);
 
 /*	shell/builtins/cd.c		*/
 /*	shell/builtins/echo.c		*/
 /*	shell/builtins/env.c		*/
+int add_env_value(char ***env, char *value, char *var_pre);
+int set_env_value(char ***env, char *var, char *value);
+
 /*	shell/builtins/fg.c		*/
 /*	shell/builtins/history_exec.c	*/
 /*	shell/builtins/history.c	*/
@@ -141,7 +143,6 @@ history_t *create_new_case(char *s);
 history_t *get_last(history_t *node);
 int save_history(shell_t *shell, char *input);
 void free_history(history_t *hist);
-int ptr_history(comm_t *comm, shell_t *shell);
 
 /*	shell/redirections/d_left.c	*/
 /*	shell/redirections/s_left.c	*/
@@ -237,4 +238,15 @@ int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 char **add_arr(char **arr, char *str, int free_arr);
 
+/*	shell/infos.c			*/
+int set_infos(char ***env);
+
+/* Uncomment that when we will be able to do that
+** #define __OSTYPE__ "Unknown"
+** #define __MACHTYPE__ "Unknown"
+** #define __VENDOR__ "Unknown"
+** #ifdef __MACHTYPE__ && __OSTYPE__
+	#define __HOSTTYPE__ "Unknown"
+** #endif
+*/
 #endif

@@ -25,6 +25,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)exec.c\
 			$(SHELL_DIR)debug.c\
 			$(SHELL_DIR)parsing.c\
+			$(SHELL_DIR)infos.c\
 			$(SHELL_DIR)commands.c\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
