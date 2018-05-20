@@ -167,6 +167,7 @@ void free_comm(comm_t *comm);
 comm_t *init_comm(void);
 void free_comms(comm_t **comm);
 int get_commidx(shell_t *shell, comm_t *comm);
+int run_that(shell_t *shell);
 
 /*	shell/debug.c			*/
 /*	shell/display.c			*/
@@ -198,7 +199,6 @@ int remove_last_pid(void);
 int add_to_pid(pid_t child);
 
 /*	shell/main.c			*/
-int run_that(shell_t *shell);
 int main(int ac, char **av, char **env);
 
 /*	shell/parsing.c			*/
