@@ -46,6 +46,7 @@ shell_t *init_shell(char **env)
 	if (shell == NULL || (shell->env = clone_arr(env)) == NULL)
 		return (NULL);
 	shell->return_value = 0;
+	shell->history_exec = 0;
 	shell->history = NULL;
 	shell->aliases = NULL;
 	shell->input = NULL;

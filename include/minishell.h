@@ -101,6 +101,7 @@ typedef struct {
 	var_t **vars;
 	alias_t *aliases;
 	history_t *history;
+	int history_exec;
 	int return_value;
 } shell_t;
 

@@ -22,7 +22,9 @@ hist->next);
 	shell->input = strdup(hist->data);
 	if (shell->input == NULL)
 		return (ERROR_RETURN);
+	shell->history_exec = 1;
 	return_c = run_that(shell);
+	shell->history_exec = 0;
 	shell->comm = save;
 	return (return_c);
 }
@@ -48,7 +50,9 @@ int run_n(shell_t *shell, int n)
 	shell->input = strdup(hist->data);
 	if (shell->input == NULL)
 		return (ERROR_RETURN);
+	shell->history_exec = 1;
 	return_c = run_that(shell);
+	shell->history_exec = 0;
 	shell->comm = save;
 	return (return_c);
 }
@@ -68,10 +72,17 @@ int ptr_exec_his(comm_t *comm, shell_t *shell)
 		return (run_last(shell));
 	if (comm->argv[0][1] == '?')
 		return (ptr_history(comm, shell));
+	if (shell->history_exec) {
+		puts("History recursion not allowed");
+		shell->return_value = 1;
+		return (1);
+	}
+	if (!strcmp(comm->argv[0], "!!"))
+		return (run_last(shell));
 	if (comm->argv[0][1] == '\0' || (comm->argv[1]))
 		return (disp_help());
 	return_val = run_n(shell, atoi(comm->argv[0] + 1));
 	if (return_val == ERROR_RETURN)
-		return (disp_help());
+		return (return_val);
 	return (return_val);
 }
