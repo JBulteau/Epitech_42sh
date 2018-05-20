@@ -11,20 +11,31 @@
 
 int ptr_handle_return(shell_t *shell)
 {
+        printf("%i", shell->return_value);
         return (SUCCESS_RETURN);
 }
 
 int ptr_handle_pwd(shell_t *shell)
 {
+        printf("%s", shell->pwd[0]);
         return (SUCCESS_RETURN);
 }
 
 int ptr_handle_history(shell_t *shell)
 {
+        int i = 0;
+
+        for (history_t *curr = shell->history; curr; curr = curr->next)
+                i++;
+        printf("%i", i);
         return (SUCCESS_RETURN);
 }
 
 int ptr_handle_jobs(shell_t *shell)
 {
+        int i = 0;
+
+        for (; pid_job[i] != NULL; i++);
+        printf("Mike je te laisse faire", i);
         return (SUCCESS_RETURN);
 }

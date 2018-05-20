@@ -27,7 +27,7 @@ int printf_prompt(shell_t *shell)
 
         for (int i = 0; prompt_var[i]; i++) {
                 if (prompt_var[i] == '%') {
-                        if ((index = find_hanlder(prompt_var[++i])) != ERROR_RETURN && puts("GOTCHA"))
+                        if ((index = find_hanlder(prompt_var[++i])) != ERROR_RETURN)
                                 displayed += prompt[index].handler(shell);
                         else
                                 i++;
