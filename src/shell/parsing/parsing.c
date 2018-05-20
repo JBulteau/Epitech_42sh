@@ -20,6 +20,8 @@ comm_t **parsing(char *buffer)
 		return (NULL);
 	comm = init_comm_array(comm, node);
 	comm = convert_node(comm, node);
+	debug_comm(comm[0]);
+	debug_comm(comm[0]->pipe[OUT]->output);
 	free_node(node);
 	return (comm);
 }
