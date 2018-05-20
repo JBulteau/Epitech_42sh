@@ -83,6 +83,7 @@ struct redir_s {
 
 struct comm_s {
 	char **argv;
+	comm_t *next;
 	sep_t separator;
 	redir_t *red[4];
 	pipe_t *pipe[2];
