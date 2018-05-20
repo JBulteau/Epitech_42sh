@@ -20,6 +20,8 @@ void free_comm(comm_t *comm)
 	free_red(comm->red[S_LEFT]);
 	free_red(comm->red[D_LEFT]);
 	free_red(comm->red[D_RIGHT]);
+	if (comm->next)
+		free_comm(comm->next);
 	free(comm);
 	return;
 }
@@ -38,6 +40,7 @@ comm_t *init_comm(void)
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
 	comm->separator = NOTHING;
+	comm->next = NULL;
 	return (comm);
 }
 
@@ -69,6 +72,16 @@ int run_that(shell_t *shell)
 		return (ERROR_CODE);
 	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
 		return (ERROR_CODE);
+
+	/*DEBUG
+	shell->comm[0]->next = shell->comm[1];
+	shell->comm[1]->next = shell->comm[2];
+	shell->comm[2]->next = shell->comm[3];
+	shell->comm[3]->next = NULL;
+	shell->comm[1] = NULL;
+	shell->comm[2] = NULL;
+	shell->comm[3] = NULL;
+	/*END OF DEBUG*/
 	return_code = exec_loop(shell);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);

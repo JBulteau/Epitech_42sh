@@ -30,23 +30,25 @@ int exec_end(comm_t *comm)
 	return (SUCCESS_RETURN);
 }
 
+int exec_pl_separators(shell_t *shell, comm_t *comm)
+{
+	if (run_pipeline(shell, comm) == ERROR_RETURN)
+		return (ERROR_RETURN);
+	if ((((comm->separator == THEN) && (shell->return_value == 0)) || ((comm->separator == OR) && (shell->return_value != 0))) && comm->next) {
+		return (exec_pl_separators(shell, comm->next));
+	} else if (comm->separator != NOTHING) {
+		while (comm && comm->separator != NOTHING)
+			comm = comm->next;
+	}
+}
+
 int exec_loop(shell_t *shell)
 {
-	int pipeline = 0;
-
-	for (int i =0; shell->comm[i] != NULL; i++) {
-		if (run_pipeline(shell, shell->comm[i]) == ERROR_RETURN)
-			return (ERROR_RETURN);
-		printf("return --> %i\n", shell->return_value);
-		if (((shell->comm[i]->separator == THEN) && (shell->return_value == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0))) {
-			//puts("DO THE SHIT AFTER SEPARATORS");
-		} else if (shell->comm[i]->separator != NOTHING) {
-			//puts("SKIP");
-			while (shell->comm[i]->separator != NOTHING)
-				i++;
-		}
-	}
-	return (pipeline);
+	//for (int i = 0; shell->comm[i]; i++)
+	//	debug_comm(shell->comm[i]);
+	for (int i =0; shell->comm[i]; i++)
+		exec_pl_separators(shell, shell->comm[i]);
+	return (shell->return_value);
 }
 
 int exec_bin(comm_t *comm, char **env)
