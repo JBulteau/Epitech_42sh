@@ -43,35 +43,35 @@ int post_misspell_process(int *let, char **arg, char **current_path, int pos)
 
 int misspell_process(char **arg, int *pos, char *current_path, int check)
 {
-	char *cpy_path[2] = {prepare_copy(arg, current_path), current_path};
-	glob_t pglob;
-	char *path_star = concat(cpy_path[1], "*", 0, 0);
+	char *cp_path[2] = {prepare_copy(arg, current_path), current_path};
+	glob_t pg;
+	char *path_star = concat(cp_path[1], "*", 0, 0);
 	int size_check[2] = {0, check};
 
-	if ((check = before_correct(cpy_path[0], arg, &pglob, path_star)))
-		return (free_return_nb(&path_star, &(cpy_path[0]), NULL, check));
-	size_check[0] = strlen(cpy_path[0]);
-	if (size_check[0] >= 4) {
-		if ((check = correct_long(&(cpy_path[0]), &pglob, cpy_path[1])))
-			return ((check != 42) ? free_return_nb(&path_star, &(cpy_path[0]), &pglob, 2) : free_return_nb(&path_star, &(cpy_path[0]), &pglob, 42));
+	if ((check = before_correct(cp_path[0], arg, &pg, path_star)))
+		return (free_ret_nb(&path_star, &(cp_path[0]), NULL, check));
+	if (((size_check[0] = strlen(cp_path[0])) || 1) && size_check[0] >= 4) {
+		if ((check = correct_long(&(cp_path[0]), &pg, cp_path[1])))
+			return ((check != 42) ? free_ret_nb(&path_star, \
+&(cp_path[0]), &pg, 2) : free_ret_nb(&path_star, &(cp_path[0]), &pg, 42));
 		else
-			check = success_case(pos, cpy_path, size_check, arg);
+			check = success_case(pos, cp_path, size_check, arg);
 	} else {
-		if (correct_short(&(cpy_path[0]), &pglob, cpy_path[1]))
-			return (free_return_nb(&path_star, &(cpy_path[0]), &pglob, 2));
+		if (correct_short(&(cp_path[0]), &pg, cp_path[1]))
+			return (free_ret_nb(&path_star, &(cp_path[0]), &pg, 2));
 		else
-			check = success_case(pos, cpy_path, size_check, arg);
+			check = success_case(pos, cp_path, size_check, arg);
 	}
-	return (free_return_nb(&path_star, &(cpy_path[0]), &pglob, ((check == 0) ? 0 : 1)));
+	return (free_ret_nb(&path_star, &(cp_path[0]), \
+&pg, ((check == 0) ? 0 : 1)));
 }
 
 char *check_path_argv(int *nb_to_path, char **arg, jarg_t *corr)
 {
 	char *current_path = strdup("./");
 	int to_know = is_slash_ending(arg);
-	int let = 0;
+	int let = remove_mutliple_ending_slash(arg);
 
-	remove_mutliple_ending_slash(arg);
 	for (int pos = 0; (*arg)[pos] != '\0'; pos++) {
 		if (put_back_ending_slash(pos, arg, to_know))
 			break;
@@ -81,7 +81,8 @@ char *check_path_argv(int *nb_to_path, char **arg, jarg_t *corr)
 			return (free_return_pointer(&current_path, NULL));
 		else if (let != 0 && \
 (let = misspell_process(arg, &pos, current_path, 0)) > 0)
-			return ((let != 42) ? free_return_pointer(&current_path, NULL) : current_path);
+			return ((let != 42) ? \
+free_return_pointer(&current_path, NULL) : current_path);
 		*nb_to_path = pos + 1;
 		corr->change = (let == 0) ? 1 : corr->change;
 		if (post_misspell_process(&let, arg, &current_path, pos))
@@ -108,7 +109,7 @@ final_check_path(path, nb_to_path, &(comm->argv[i + 1]), corr);
 			check = 1;
 		}
 		if (check == 1 && path == NULL)
-			return (free_return_nb(&path, NULL, NULL, -1));
+			return (free_ret_nb(&path, NULL, NULL, -1));
 	}
 	free(path);
 	return (0);

@@ -56,9 +56,10 @@ int before_correct(char *cpy, char **arg, glob_t *pglob, char *concat_path_star)
 	return (0);
 }
 
-void remove_mutliple_ending_slash(char **arg)
+int remove_mutliple_ending_slash(char **arg)
 {
 	for (int i = 0; (*arg)[i] != '\0'; i++)
 		if ((*arg)[i] == '/')
 			check_slash(arg, i);
+	return (0);
 }

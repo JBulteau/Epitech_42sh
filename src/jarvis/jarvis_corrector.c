@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-int free_return_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb)
+int free_ret_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb)
 {
 	free(*to_free);
 	if (to_free_2)

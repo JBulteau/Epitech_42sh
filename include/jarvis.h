@@ -34,10 +34,10 @@ enum inc {
 
 /* jarvis corrector */
 char *free_return_pointer(char **to_free, char *to_return);
-int free_return_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb);
+int free_ret_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb);
 void put_back_last_slash(char **arg);
 int put_back_ending_slash(int pos, char **arg, int to_know);
-void remove_mutliple_ending_slash(char **arg);
+int remove_mutliple_ending_slash(char **arg);
 int success_case(int *pos, char **cpy_path, int *size_check, char **arg);
 int before_correct(char *cpy, char **arg, glob_t *pglob, char *concat_path_star);
 int check_lenght(glob_t *glob, char *curr_path, char **result, int i);

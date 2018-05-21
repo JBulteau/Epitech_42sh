@@ -89,10 +89,10 @@ int refill_arg(char **arg, char *cpy, char *current_path, int size_after)
 
 	if (!(strcmp("./", current_path))) {
 		if (refill_path_in_local(current_path, arg, size, cpy))
-			return (free_return_nb(&save, NULL, NULL, 1));
+			return (free_ret_nb(&save, NULL, NULL, 1));
 	} else {
 		if (refill_path_no_local(current_path, arg, size, cpy))
-			return (free_return_nb(&save, NULL, NULL, 1));
+			return (free_ret_nb(&save, NULL, NULL, 1));
 	}
 	free(save);
 	return (0);
