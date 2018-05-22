@@ -13,7 +13,7 @@
 int ptr_handle_return(shell_t *shell, char *input)
 {
         UNUSED(input);
-        printf("[BUGGY] %i", shell->return_value);
+        printf("%i", shell->return_value);
         return (SUCCESS_RETURN);
 }
 

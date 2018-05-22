@@ -27,7 +27,7 @@ int run_not_last(shell_t *shell, comm_t *curr)
 		close(curr->pipe[OUT]->fd[WRITE]);
 	close_in(curr);
 	exec_end(curr);
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 int run_last_pipeline(shell_t *shell, comm_t *curr)
@@ -51,7 +51,7 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 	}
 	exec_end(curr);
 	close_in(curr);
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 int run_pipeline(shell_t *shell, comm_t *comm)

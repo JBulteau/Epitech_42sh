@@ -10,8 +10,8 @@
 
 #include "minishell.h"
 
-#define DEBUG_PS1       "PATH [%EPATH]\nPS1 [%$PS1]\n(%D) [(%T)] (%t) (%*) (%w) (%H) (%h) [%%] [j%j] [!%!] [%m] [%u] [#/] [%~] [%?] %#"
-#define DEFAULT_PS1 "%u@%m [%/]%# "
+#define DEBUG_PS1       "PATH [%EPATH]\nPS1 [%$PS1]\n(%D) [(%T)] (%t) (%*) (%w) (%H) (%h) [%%] [j%j] [!%!] [%m] [%u] [%/] [%~] [%?] %#"
+#define DEFAULT_PS1 "%u@%m [%/] [%?]%# "
 
 int ptr_modulo(shell_t *shell, char *input);
 int ptr_handle_host(shell_t *shell, char *input);
