@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "minishell.h"
+#include "my.h"
 
 history_t *create_new_case(char *s)
 {
@@ -31,7 +32,7 @@ int save_history(shell_t *shell, char *input)
 	history_t *nc = create_new_case(input);
 
 	if (!nc)
-		return (-1);
+		return (ERROR_RETURN);
 	if (!shell->history) {
 		shell->history = nc;
 	} else {
@@ -51,8 +52,17 @@ void free_history(history_t *hist)
 
 int ptr_history(comm_t *comm, shell_t *shell)
 {
+	int i = 1;
+
+	UNUSED(comm);
+	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "del") \
+|| !strcmp(comm->argv[1], "delete") || !strcmp(comm->argv[1], "d"))) {
+		puts("TODO HISTORY DELETE");
+	}
 	for (history_t *curr = shell->history; curr != NULL; \
 curr = curr->next) {
-		puts((char *) curr->data);
+		printf("%i\t%s\n", i, (char *) curr->data);
+		i++;
 	}
+	return (0);
 }

@@ -17,43 +17,51 @@ int run_not_last(shell_t *shell, comm_t *curr)
 	if ((child_pid = fork()) == -1)
 		return (ERROR_RETURN);
 	if (child_pid == 0) {
+		exec_start(curr);
 		init_redir_pipe(curr);
 		if (is_builtin(curr->argv[0]) != -1)
-			exit(exec_bi(curr, shell));
+			clean_exit(shell, exec_bi(curr, shell));
 		else
-			exec_bin(curr, shell->env);
+			exec_bin(curr, shell->env, shell);
 	}
 	if (add_pid_jobs(child_pid) == -1)
 		return (ERROR_RETURN);
 	if (curr->pipe[OUT])
 		close(curr->pipe[OUT]->fd[WRITE]);
 	close_in(curr);
-	return (0);
+	exec_end(curr);
+	return (SUCCESS_RETURN);
 }
 
 int run_last_pipeline(shell_t *shell, comm_t *curr)
 {
+	int bi_return = 0;
 	pid_t child_pid;
-	int return_c = 0;
 
 	if (is_builtin(curr->argv[0]) != -1) {
+		exec_start(curr);
 		init_redir_pipe(curr);
 		if (find_node_job()->pid_job[0] == 0)
 			remove_node();
-		return_c = exec_bi(curr, shell);
+		if ((bi_return = exec_bi(curr, shell)) == -ERROR_CODE) {
+			return (-ERROR_CODE);
+		} else
+			shell->return_value = bi_return;
 	} else {
 		if ((child_pid = fork()) == -1)
 			return (ERROR_RETURN);
 		else if (child_pid == 0) {
+			exec_start(curr);
 			init_redir_pipe(curr);
-			exec_bin(curr, shell->env);
+			exec_bin(curr, shell->env, shell);
 		}
 		if (add_pid_jobs(child_pid) == -1)
 			return (ERROR_RETURN);
-		return_c = wait_for_it(child_pid);
+		shell->return_value = wait_for_it(child_pid);
 	}
+	exec_end(curr);
 	close_in(curr);
-	return (return_c);
+	return (SUCCESS_RETURN);
 }
 
 int run_pipeline(shell_t *shell, comm_t *comm)

@@ -1,0 +1,9 @@
+ls;alias ls=exa;echo SHOULD ADD;ls;unalias ls;echo SHOULD RM;ls
+echo -----------OTHER RUN----------
+ls
+alias ls=exa
+echo SHOULD ADD
+ls
+unalias ls
+echo SHOULD RM
+ls

@@ -6,6 +6,7 @@
 */
 
 #include <my.h>
+#include "my.h"
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -13,30 +14,25 @@
 
 int main(int ac, char **av, char **env)
 {
-	size_t size;
 	shell_t *shell = init_shell(env);
-	int return_code = SUCCESS_CODE;
+	int exec = SUCCESS_CODE;
 
-	if (shell == NULL || init_signal() == -1)
+	UNUSED(av);
+	UNUSED(ac);
+	if (shell == NULL || init_signal() == ERROR_RETURN)
 		return (ERROR_CODE);
-	disp_prompt();
+	disp_prompt(shell);
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		if ((shell->comm = full_parse(shell->input)) == NULL)
-			return (ERROR_CODE);
-		for (int i = 0; shell->comm[i] != NULL; i++)
-			if (replace_alias(shell->aliases, shell->comm[i]) == -1)
-				return (ERROR_CODE);
-		return_code = exec_loop(shell);
-		free_comms(shell->comm);
-		if (return_code == -1 || return_code == -ERROR_CODE)
+		if (run_that(shell) == -ERROR_CODE)
 			break;
 		free(shell->input);
-		disp_prompt();
+		if (disp_prompt(shell) == ERROR_RETURN)
+			break;
 	}
-	free(shell->input);
-	if ((shell->input == NULL) && isatty(0))
+	if (shell->input == NULL && isatty(0))
 		puts("exit");
+	exec = shell->return_value;
 	delete_shell(shell);
-	return (return_code);
+	return (exec);
 }

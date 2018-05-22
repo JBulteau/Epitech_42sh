@@ -7,6 +7,7 @@
 
 #include <signal.h>
 #include "minishell.h"
+#include "my.h"
 #include <stdio.h>
 #include <unistd.h>
 

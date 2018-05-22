@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "minishell.h"
+#include "my.h"
 
 jobs_t *list_jobs;
 
@@ -55,6 +56,7 @@ void catch_ctrl_z(int sig)
 {
 	jobs_t *node = find_node_job();
 
+	UNUSED(sig);
 	printf("\033[2D  \033[2D");
 	fflush(stdout);
 	if (node->running == false)

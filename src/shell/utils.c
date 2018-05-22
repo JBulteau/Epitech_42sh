@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "my.h"
+#include "minishell.h"
 
 int search_strtab(char **arr, char *to_find)
 {
@@ -46,4 +47,11 @@ char **add_arr(char **arr, char *str, int free_arr)
 	if (free_arr)
 		free(arr);
 	return (new_arr);
+}
+
+void clean_exit(shell_t *shell, int exit_code)
+{
+	free_comms(shell->comm);
+	delete_shell(shell);
+	exit(exit_code);
 }
