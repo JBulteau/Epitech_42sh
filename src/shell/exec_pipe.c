@@ -5,6 +5,7 @@
 ** Pipe execution functions
 */
 
+#include <string.h>
 #include <unistd.h>
 #include "my.h"
 #include "minishell.h"
@@ -37,6 +38,8 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 
 	if (is_builtin(curr->argv[0]) != -1) {
 		init_redir_pipe(curr);
+		if (find_node_job()->pid_job[0] == 0)
+			remove_node();
 		return_c = exec_bi(curr, shell);
 	} else {
 		if ((child_pid = fork()) == -1)

@@ -35,16 +35,10 @@ char *get_proc_name(pid_t pid)
 	return (name);
 }
 
-void catch_ctrl_z(int sig)
+void loop_ctrl_z(jobs_t *node)
 {
-	jobs_t *node = find_node_job();
 	char *name;
 
-	printf("\033[2D  \033[2D");
-	fflush(stdout);
-	if (node->running == false)
-		return;
-	printf("\n[%d]", get_nb_job());
 	for (int i = 0; node->pid_job[i] != 0; i++) {
 		if (kill(node->pid_job[i], SIGSTOP) == -1) {
 			perror("kill");
@@ -55,9 +49,21 @@ void catch_ctrl_z(int sig)
 		free(name);
 	}
 	fflush(stdout);
+}
+
+void catch_ctrl_z(int sig)
+{
+	jobs_t *node = find_node_job();
+
+	printf("\033[2D  \033[2D");
+	fflush(stdout);
+	if (node->running == false)
+		return;
+	printf("\n[%d]", get_nb_job());
+	loop_ctrl_z(node);
 	if (raise(SIGCONT) == -1) {
 		perror("raise");
-		return;
+		exit(84);
 	}
 	node->running = false;
 }

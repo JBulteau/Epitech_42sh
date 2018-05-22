@@ -21,6 +21,7 @@ char *get_proc_name_line(jobs_t *node)
 		free(name);
 		name = get_proc_name(node->pid_job[i]);
 		rslt = realloc(rslt, strlen(rslt) + strlen(name) + 2);
+		//rslt = strcat(rslt, " ");
 		rslt = strcat(rslt, name);
 	}
 	free(name);
@@ -33,12 +34,11 @@ int ptr_jobs(comm_t *comm, shell_t *shell)
 	jobs_t *node = list_jobs;
 
 	node = node->next;
-	for (int i = 1; node->next != NULL; i++) {
+	for (int i = 1; node != NULL; i++) {
 		name = get_proc_name_line(node);
 		printf("[%d]\tsuspended\t%s\n", i, name);
 		node = node->next;
 		free(name);
 	}
-	remove_node();
 	return (0);
 }

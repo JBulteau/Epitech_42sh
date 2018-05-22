@@ -18,10 +18,10 @@ int error_msg_exit(shell_t *shell, comm_t *comm)
 		shell->return_value = 1;
 		return (1);
 	}
-	remove_node();
 	if (list_jobs->next != NULL) {
 		shell->return_value = 0;
-		puts("Jobs still running (fg to continued).");
+		puts("Jobs still running (fg to continued or ctrl + D \
+to quit).");
 		return (1);
 	}
 	return (0);
