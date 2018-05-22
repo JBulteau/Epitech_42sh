@@ -14,6 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "minishell.h"
+#include "prompt.h"
 #include "my.h"
 
 char **clone_arr(char **arr)
@@ -110,6 +111,9 @@ shell_t *init_shell(char **env)
 		return (NULL);
 	if ((shell->vars = init_var_arr()) == NULL)
 		return (NULL);
+	if (isatty(STDIN_FILENO))
+		if ((shell->vars = set_var(shell->vars, "PS1", DEFAULT_PS1)) == NULL)
+			return (NULL);
 	return (shell);
 }
 
@@ -121,7 +125,7 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
-	for (int i = 0; shell->vars[i]; i++)
+	for (int i = 0; shell->vars && shell->vars[i]; i++)
 		free_var(shell->vars[i]);
 	free(shell->vars);
 	free(shell);

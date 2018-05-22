@@ -59,15 +59,16 @@ int exec_bin(comm_t *comm, char **env, shell_t *shell)
 	} else if (is_local == 0) {
 		if ((path = get_path(env)) == NULL) {
 			disp_rights(comm->argv[0], -1, 0);
-			clean_exit(shell);
+			clean_exit(shell, 1);
 		}
 		filepath = search_path(path, comm->argv[0]);
 		free_array((void **) path);
 		if (filepath == NULL)
-			clean_exit(shell);
+			clean_exit(shell, 1);
 		return (run_bin(comm, filepath, env, shell));
 	}
 	clean_exit(shell, 1);
+	return (ERROR_RETURN);
 }
 
 int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
@@ -75,4 +76,5 @@ int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
 	if (execve(path, comm->argv, env) == -1)
 		disp_wrong_arch(comm->argv[0], errno);
 	clean_exit(shell, 1);
+	return (ERROR_RETURN);
 }

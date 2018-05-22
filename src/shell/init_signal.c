@@ -68,7 +68,8 @@ void catch_ctrl_c(int sig)
 	if (pid_job[i] == -1 || pid_job[i] == -2 || \
 (pid_job[i + 1] && pid_job[i + 1] == -2)) {
 		printf("\033[2D  \n");
-		disp_prompt();
+		//DESO MIKE JE CHERCHE PLUS TARD SI Y'A MOY DEFAIRE AUTREMENT
+		//disp_prompt();
 	}
 }
 

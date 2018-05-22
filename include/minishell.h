@@ -105,7 +105,6 @@ typedef struct {
 	int return_value;
 } shell_t;
 
-static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
 
@@ -159,6 +158,8 @@ var_t **try_vars(void);
 /*	shell/shell_var/var_utils.c	*/
 int find_var(var_t **arr, char *name);
 type_t get_type(char *content);
+void clean_exit(shell_t *shell, int exit_code);
+char *get_var_str(var_t *var);
 
 /*	shell/shell_var/var_edition.c	*/
 int edit_var(var_t *var, char *content, char *name);
@@ -175,7 +176,7 @@ int run_that(shell_t *shell);
 /*	shell/display.c			*/
 void disp_wrong_arch(char *str, int num);
 void display_signal(int status);
-void disp_prompt(void);
+int disp_prompt(shell_t *shell);
 
 /*	shell/exec_pipe.c		*/
 int run_not_last(shell_t *shell, comm_t *curr);
@@ -241,12 +242,15 @@ char **add_arr(char **arr, char *str, int free_arr);
 /*	shell/infos.c			*/
 int set_infos(char ***env);
 
+/*	prompt/display.c	*/
+int printf_prompt(shell_t *shell);
+
 /* Uncomment that when we will be able to do that
 ** #define __OSTYPE__ "Unknown"
 ** #define __MACHTYPE__ "Unknown"
 ** #define __VENDOR__ "Unknown"
 ** #ifdef __MACHTYPE__ && __OSTYPE__
-	#define __HOSTTYPE__ "Unknown"
+**	#define __HOSTTYPE__ "Unknown"
 ** #endif
 */
 #endif

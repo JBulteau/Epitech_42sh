@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "minishell.h"
+#include "my.h"
 
 void disp_wrong_arch(char *str, int num)
 {
@@ -30,9 +31,11 @@ void display_signal(int status)
 	}
 }
 
-void disp_prompt(void)
+int disp_prompt(shell_t *shell)
 {
 	if (isatty(STDIN_FILENO))
-		printf(prompt);
+		if (printf_prompt(shell) == ERROR_RETURN)
+			return (ERROR_RETURN);
 	fflush(stdout);
+	return (SUCCESS_RETURN);
 }
