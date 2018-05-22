@@ -51,8 +51,7 @@ int ptr_handle_shell_var(shell_t *shell, char *input)
         str_var = get_var_str(shell->vars[id]);
         if (str_var == NULL)
                 return (ERROR_RETURN);
-        printf("|%s|", str_var);
-        //write(1, str_var, strlen(str_var));
+        write(1, str_var, strlen(str_var));
         input[index] = save;
         free(str_var);
         return (SUCCESS_RETURN + len);

@@ -22,7 +22,7 @@ int ptr_handle_hour_24(shell_t *shell, char *input)
                 tm = *localtime(&t);
         else
                 return (ERROR_RETURN);
-        printf("%d", tm.tm_hour);
+        printf("%02d", tm.tm_hour);
         return (SUCCESS_RETURN);
 }
 
@@ -37,7 +37,7 @@ int ptr_handle_hour_12(shell_t *shell, char *input)
                 tm = *localtime(&t);
         else
                 return (ERROR_RETURN);
-        printf("%d", (tm.tm_hour % 13) + 1);
+        printf("%02d", (tm.tm_hour % 13) + 1);
         return (SUCCESS_RETURN);
 }
 
