@@ -14,9 +14,10 @@ int find_var(var_t **arr, char *name)
 {
 	if (arr == NULL)
 		return (ERROR_RETURN);
-	for (int i = 0; arr[i] != NULL; i++)
+	for (int i = 0; arr[i] != NULL; i++) {
 		if (!strcmp(arr[i]->name, name))
 			return (i);
+	}
 	return (ERROR_RETURN);
 }
 

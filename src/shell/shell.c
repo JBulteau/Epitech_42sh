@@ -112,7 +112,7 @@ shell_t *init_shell(char **env)
 	if ((shell->vars = init_var_arr()) == NULL)
 		return (NULL);
 	if (isatty(STDIN_FILENO))
-		if ((shell->vars = set_var(shell->vars, "PS1", concat(DEFAULT_PS1, concat(PS1_O_CLOCK, VAR_PS1, 0, 0), 0, 1))) == NULL)
+		if ((shell->vars = set_var(shell->vars, "PS1", DEFAULT_PS1)) == NULL)
 			return (NULL);
 	return (shell);
 }
@@ -125,7 +125,7 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
-	for (int i = 0; shell->vars[i]; i++)
+	for (int i = 0; shell->vars && shell->vars[i]; i++)
 		free_var(shell->vars[i]);
 	free(shell->vars);
 	free(shell);

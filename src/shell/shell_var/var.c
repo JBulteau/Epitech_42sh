@@ -50,7 +50,7 @@ void disp_vars(var_t **arr)
 	if (arr[0] == NULL)
 		return ((void)puts("NO VARS SET"));
 	for (int i = 0; arr[i]; i++) {
-		printf("{\n\t\tTYPE: ");
+		printf("{\n\t\tNAME: %s\n\t\tTYPE: ", arr[i]->name);
 		switch (arr[i]->type) {
 		case NONE:
 			puts("NONE");

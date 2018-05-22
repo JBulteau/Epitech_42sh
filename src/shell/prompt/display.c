@@ -28,7 +28,7 @@ int printf_prompt(shell_t *shell)
         int len;
         int tmp;
 
-        if (id == -1) {
+        if (id == ERROR_RETURN) {
                 printf("> ");
                 return (SUCCESS_CODE);
         }
