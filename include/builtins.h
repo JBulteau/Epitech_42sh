@@ -18,6 +18,7 @@ int ptr_exit(comm_t *comm, shell_t *shell);
 int ptr_history(comm_t *comm, shell_t *shell);
 int ptr_exec_his(comm_t *comm, shell_t *shell);
 int ptr_fg(comm_t *comm, shell_t *shell);
+int ptr_jobs(comm_t *comm, shell_t *shell);
 int ptr_alias(comm_t *comm, shell_t *shell);
 int ptr_unalias(comm_t *comm, shell_t *shell);
 int ptr_echo(comm_t *comm, shell_t *shell);
@@ -34,6 +35,7 @@ static const struct {
 	{"history", &ptr_history},
 	{"!", &ptr_exec_his},
 	{"fg", &ptr_fg},
+	{"jobs", &ptr_jobs},
 	{"alias", &ptr_alias},
 	{"unalias", &ptr_unalias},
 	{"echo", &ptr_echo},

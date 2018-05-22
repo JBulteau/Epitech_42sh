@@ -10,8 +10,7 @@
 
 #include <stdlib.h>
 #include <linux/limits.h>
-
-extern pid_t *pid_job;
+#include <stdbool.h>
 
 enum {
 	D_RIGHT,
@@ -46,6 +45,13 @@ typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 typedef struct alias_s alias_t;
+typedef struct jobs_s jobs_t; 
+ 
+struct jobs_s { 
+  bool running; 
+  pid_t *pid_job; 
+  jobs_t *next; 
+};
 
 struct alias_s {
 	char *name;
@@ -197,9 +203,13 @@ int init_signal(void);
 int wait_for_it(pid_t pid);
 
 /*	shell/jobs.c			*/
-int find_last_pid(void);
-int remove_last_pid(void);
-int add_to_pid(pid_t child);
+jobs_t *find_node_job(void);
+int get_nb_job(void);
+jobs_t *new_node(void);
+void remove_node(void);
+int add_pid_jobs(pid_t child);
+void set_node_running_false(void);
+
 
 /*	shell/main.c			*/
 int main(int ac, char **av, char **env);
@@ -253,4 +263,7 @@ int printf_prompt(shell_t *shell);
 **	#define __HOSTTYPE__ "Unknown"
 ** #endif
 */
+
+extern jobs_t *list_jobs; 
+
 #endif

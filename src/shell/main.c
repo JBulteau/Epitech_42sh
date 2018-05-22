@@ -24,7 +24,8 @@ int main(int ac, char **av, char **env)
 	disp_prompt(shell);
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {
 		save_history(shell, shell->input);
-		run_that(shell);
+		if (run_that(shell) == -ERROR_CODE)
+			break;
 		free(shell->input);
 		if (disp_prompt(shell) == ERROR_RETURN)
 			break;

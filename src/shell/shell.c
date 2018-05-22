@@ -117,6 +117,19 @@ shell_t *init_shell(char **env)
 	return (shell);
 }
 
+void free_jobs()
+{
+	jobs_t *node;
+
+	node = list_jobs->next;
+	for (int i = 0; list_jobs->pid_job[i] != 0; i++)
+		if (kill(list_jobs->pid_job[i], SIGKILL))
+			perror("kill");
+	free(list_jobs->pid_job);
+	free(list_jobs);
+	list_jobs = node;
+}
+
 void delete_shell(shell_t *shell)
 {
 	if (shell == NULL)
@@ -129,11 +142,9 @@ void delete_shell(shell_t *shell)
 		free_var(shell->vars[i]);
 	free(shell->vars);
 	free(shell);
-	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
-		if (kill(pid_job[i], SIGKILL) == -1)
-			perror("kill");
-	}
-	free(pid_job);
+	if (list_jobs)
+		for (jobs_t *node; list_jobs != NULL;)
+			free_jobs();
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);

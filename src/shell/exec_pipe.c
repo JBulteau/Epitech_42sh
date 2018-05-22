@@ -5,6 +5,7 @@
 ** Pipe execution functions
 */
 
+#include <string.h>
 #include <unistd.h>
 #include "my.h"
 #include "minishell.h"
@@ -23,6 +24,8 @@ int run_not_last(shell_t *shell, comm_t *curr)
 		else
 			exec_bin(curr, shell->env, shell);
 	}
+	if (add_pid_jobs(child_pid) == -1)
+		return (ERROR_RETURN);
 	if (curr->pipe[OUT])
 		close(curr->pipe[OUT]->fd[WRITE]);
 	close_in(curr);
@@ -32,13 +35,18 @@ int run_not_last(shell_t *shell, comm_t *curr)
 
 int run_last_pipeline(shell_t *shell, comm_t *curr)
 {
+	int bi_return = 0;
 	pid_t child_pid;
 
 	if (is_builtin(curr->argv[0]) != -1) {
 		exec_start(curr);
 		init_redir_pipe(curr);
-		if (exec_bi(curr, shell) == -ERROR_CODE)
-			return (ERROR_RETURN);
+		if (find_node_job()->pid_job[0] == 0)
+			remove_node();
+		if ((bi_return = exec_bi(curr, shell)) == -ERROR_CODE) {
+			return (-ERROR_CODE);
+		} else
+			shell->return_value = bi_return;
 	} else {
 		if ((child_pid = fork()) == -1)
 			return (ERROR_RETURN);
@@ -47,6 +55,8 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 			init_redir_pipe(curr);
 			exec_bin(curr, shell->env, shell);
 		}
+		if (add_pid_jobs(child_pid) == -1)
+			return (ERROR_RETURN);
 		shell->return_value = wait_for_it(child_pid);
 	}
 	exec_end(curr);
@@ -58,7 +68,7 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 {
 	int return_c = 0;
 
-	if ((shell == NULL) || (comm == NULL))
+	if ((shell == NULL) || (comm == NULL) || new_node() == NULL)
 		return (-ERROR_CODE);
 	for (comm_t *curr = comm; curr; curr = (curr->pipe[OUT] && curr->pipe\
 [OUT]->output) ? curr->pipe[OUT]->output : NULL) {
