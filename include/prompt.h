@@ -12,7 +12,7 @@
 
 #define DEFAULT_PS1 "[%%] [j%j] [!%!] [%m] [%u] [#/] [%~] [%?%#]"
 #define PS1_O_CLOCK "(%D) [(%T)] (%t) (%*) (%w) (%H) (%h)"
-#define VAR_PS1 "Variable env %EPATH\nShell var %$PS1\n-->"
+#define VAR_PS1 "Env var %EPATH\nShell var %$PS1\n-->"
 //#define		DEFAULT_PS1	"Modulo %%\nHost %m\nUser %u\nRoot %#\nLast return %?\nHome %~\nPWD %/\nHISTORY NUMBER%!\nJob counter %j\nyy-mm-dd %D\nhh:mm (24) %T\nhh:mm (12)%t\nhh:mm:ss %*\nday-dd %w\nhh (24) %H\nhh (12) %h\nVariable env %$PATH\nShell var $Etest-->"
 
 int ptr_modulo(shell_t *shell, char *input);

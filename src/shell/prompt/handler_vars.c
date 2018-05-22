@@ -35,5 +35,25 @@ int ptr_handle_env_var(shell_t *shell, char *input)
 
 int ptr_handle_shell_var(shell_t *shell, char *input)
 {
-        return (SUCCESS_RETURN);
+        int index;
+        char save;
+        int len;
+        int id;
+        char *str_var = NULL;
+
+        for (index = 0; isalnum(input[index]); index++);
+        save = input[index];
+        input[index] = '\0';
+        len = strlen(input);
+        id = find_var(shell->vars, input);
+        if (id == ERROR_RETURN)
+                return (ERROR_RETURN);
+        str_var = get_var_str(shell->vars[id]);
+        if (str_var == NULL)
+                return (ERROR_RETURN);
+        printf("|%s|", str_var);
+        //write(1, str_var, strlen(str_var));
+        input[index] = save;
+        free(str_var);
+        return (SUCCESS_RETURN + len);
 }
