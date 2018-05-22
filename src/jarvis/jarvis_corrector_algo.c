@@ -12,6 +12,10 @@
 #include <unistd.h>
 #include <string.h>
 
+/*static const char *commands[] = {
+	"line",
+};*/
+
 int count_correct_letter(int dist_allow, char **both)
 {
 	int res = 0;
@@ -43,6 +47,14 @@ int fill_result_correct(char **result, glob_t *pglob, int i, char *current_path)
 
 int correct_short(char **result, glob_t *pglob, char *curr_path)
 {
+	char *c = NULL;
+
+	if ((c = switch_two_adj_letter(result, pglob, curr_path)) || \
+(c = add_letter(result, pglob, curr_path)) /*|| other way */) {
+		free(*result);
+		(*result) = strdup(c);
+		return (0);
+	}
 	return (1);
 }
 

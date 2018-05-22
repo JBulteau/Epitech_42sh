@@ -33,6 +33,7 @@ enum inc {
 };
 
 /* jarvis corrector */
+char *switch_two_adj_letter(char **result, glob_t *pglob, char *curr_path);
 char *free_return_pointer(char **to_free, char *to_return);
 int free_ret_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb);
 void put_back_last_slash(char **arg);
