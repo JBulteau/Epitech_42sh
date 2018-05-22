@@ -41,7 +41,7 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 	int i;
 
 	node->buffer = clear_str(node->buffer);
-	for (i = index; node->buffer[i] != '\0'; i++) {
+	for (i = index; node->buffer && node->buffer[i] != '\0'; i++) {
 		if (node->buffer[i] == ' ') {
 			argv = realloc(argv, sizeof(char*) * ((*comm_index) + 2));
 			argv[(*comm_index) + 1] = NULL;

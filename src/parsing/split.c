@@ -63,7 +63,7 @@ node_t *search_separators(node_t *node)
 	node->next = realloc_node(node->next, 1, node->quote);
 	if (node->next == NULL)
 		return (NULL);
-	for (int i = 0; node->buffer[i] != '\0'; i++) {
+	for (int i = 0; node->buffer != NULL && node->buffer[i] != '\0'; i++) {
 		node = parse_separators(node, node->buffer, &i);
 		if (node == NULL)
 			return (NULL);

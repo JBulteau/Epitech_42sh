@@ -14,6 +14,8 @@ node_t *check_parentheses(node_t *node, char *buffer)
 	int i;
 	int j;
 
+	if (buffer == NULL)
+		return (node);
 	for (i = 0; buffer[i] == ' ' || buffer[i] == '\t'; i++);
 	for (j = (strlen(node->buffer) - 1); j >= 0 && (buffer[j] == ' ' \
 	|| buffer[j] == '\t'); j--);

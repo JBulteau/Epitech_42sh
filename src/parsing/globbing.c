@@ -76,7 +76,7 @@ node_t *isolate_glob(node_t *node, int i)
 
 node_t *check_globbing(node_t *node)
 {
-	for (int i = 0; node->buffer[i] != '\0'; i++) {
+	for (int i = 0; node->buffer && node->buffer[i] != '\0'; i++) {
 		if (node->buffer[i] == '*') {
 			node = isolate_glob(node, i);
 		}
