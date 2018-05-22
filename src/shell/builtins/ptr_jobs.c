@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "my.h"
 #include "minishell.h"
 #include "builtins.h"
 
@@ -33,6 +34,8 @@ int ptr_jobs(comm_t *comm, shell_t *shell)
 	char *name = NULL;
 	jobs_t *node = list_jobs;
 
+	UNUSED(shell);
+	UNUSED(comm);
 	node = node->next;
 	for (int i = 1; node != NULL; i++) {
 		name = get_proc_name_line(node);

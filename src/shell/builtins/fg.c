@@ -6,10 +6,10 @@
 */
 
 #include <signal.h>
-#include "minishell.h"
-#include "my.h"
 #include <stdio.h>
+#include "minishell.h"
 #include <unistd.h>
+#include "my.h"
 
 void set_node_running_false(void)
 {
@@ -42,6 +42,8 @@ int ptr_fg(comm_t *comm, shell_t *shell)
 	int i;
 	jobs_t *node;
 
+	UNUSED(shell);
+	UNUSED(comm);
 	node = find_node_job();
 	if (0 == get_nb_job() || node->pid_job[0] == 0) {
 		printf("No jobs running\n");
