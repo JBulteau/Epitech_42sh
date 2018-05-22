@@ -5,16 +5,50 @@
 ** Handler time
 */
 
+#include <stdio.h>
 #include <time.h>
 #include "prompt.h"
 #include "minishell.h"
 #include "my.h"
 
-int ptr_handle_hour_24(shell_t *shell)
+int ptr_handle_hour_24(shell_t *shell, char *input)
 {
         time_t t = time(NULL);
         struct tm tm;
 
+        UNUSED(input);
+        UNUSED(shell);
+        if (t != -1)
+                tm = *localtime(&t);
+        else
+                return (ERROR_RETURN);
+        printf("%d", tm.tm_hour);
+        return (SUCCESS_RETURN);
+}
+
+int ptr_handle_hour_12(shell_t *shell, char *input)
+{
+        time_t t = time(NULL);
+        struct tm tm;
+
+        UNUSED(input);
+        UNUSED(shell);
+        if (t != -1)
+                tm = *localtime(&t);
+        else
+                return (ERROR_RETURN);
+        printf("%d", (tm.tm_hour % 13) + 1);
+        return (SUCCESS_RETURN);
+}
+
+
+int ptr_handle_time_24(shell_t *shell, char *input)
+{
+        time_t t = time(NULL);
+        struct tm tm;
+
+        UNUSED(input);
+        UNUSED(shell);
         if (t != -1)
                 tm = *localtime(&t);
         else
@@ -23,50 +57,33 @@ int ptr_handle_hour_24(shell_t *shell)
         return (SUCCESS_RETURN);
 }
 
-int ptr_handle_hour_12(shell_t *shell)
+int ptr_handle_time_12(shell_t *shell, char *input)
 {
         time_t t = time(NULL);
         struct tm tm;
 
+        UNUSED(input);
+        UNUSED(shell);
         if (t != -1)
                 tm = *localtime(&t);
         else
                 return (ERROR_RETURN);
-        printf("%d:%d", tm.tm_hour % 13, tm.tm_min);
+        printf("%d:%d", (tm.tm_hour % 13) + 1, tm.tm_min);
+        return (SUCCESS_RETURN);
 }
 
-int ptr_handle_time_24(shell_t *shell)
+
+int ptr_handle_sec(shell_t *shell, char *input)
 {
         time_t t = time(NULL);
         struct tm tm;
 
-        if (t != -1)
-                tm = *localtime(&t);
-        else
-                return (ERROR_RETURN);
-        printf("%d:%d", tm.tm_hour, tm.tm_min);
-}
-
-int ptr_handle_time_12(shell_t *shell)
-{
-        time_t t = time(NULL);
-        struct tm tm;
-
-        if (t != -1)
-                tm = *localtime(&t);
-        else
-                return (ERROR_RETURN);
-        printf("%d:%d", tm.tm_hour % 13, tm.tm_min);
-}
-
-int ptr_handle_sec(shell_t *shell)
-{
-        time_t t = time(NULL);
-        struct tm tm;
-
+        UNUSED(input);
+        UNUSED(shell);
         if (t != -1)
                 tm = *localtime(&t);
         else
                 return (ERROR_RETURN);
         printf("%d:%d:%d", tm.tm_hour, tm.tm_min, tm.tm_sec);
+        return (SUCCESS_RETURN);
 }

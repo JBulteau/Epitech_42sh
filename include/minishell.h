@@ -158,6 +158,8 @@ var_t **try_vars(void);
 /*	shell/shell_var/var_utils.c	*/
 int find_var(var_t **arr, char *name);
 type_t get_type(char *content);
+void clean_exit(shell_t *shell, int exit_code);
+char *get_var_str(var_t *var);
 
 /*	shell/shell_var/var_edition.c	*/
 int edit_var(var_t *var, char *content, char *name);

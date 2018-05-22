@@ -5,40 +5,57 @@
 ** Functions handlers that get from libc fnc
 */
 
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 #include <pwd.h>
 #include <limits.h>
 #include "prompt.h"
 #include "my.h"
 #include "minishell.h"
 
-int ptr_handle_host(shell_t *shell)
+int ptr_handle_host(shell_t *shell, char *input)
 {
-        char host[HOST_NAME_MAX];
+	char host[HOST_NAME_MAX];
 
-        gethostname(host, HOST_NAME_MAX);
-        printf("%s", host);
-        return (SUCCESS_RETURN);
+	UNUSED(input);
+	UNUSED(shell);
+	gethostname(host, HOST_NAME_MAX);
+	printf("%s", host);
+	return (SUCCESS_RETURN);
 }
 
-int ptr_handle_user(shell_t *shell)
+int ptr_handle_user(shell_t *shell, char *input)
 {
        	struct passwd *p = getpwuid(getuid());
-        printf("%s", p->pw_name);
-        return (SUCCESS_RETURN);
+
+	UNUSED(shell);
+	UNUSED(input);
+	printf("%s", p->pw_name);
+	return (SUCCESS_RETURN);
 }
 
-int ptr_handle_root(shell_t *shell)
+int ptr_handle_root(shell_t *shell, char *input)
 {
 	struct passwd *p = getpwuid(getuid());
-        if (!strcmp(p->pw_name, "root"))
-                putchar('#');
-        putchar('>');
-        return (SUCCESS_RETURN);
+
+	UNUSED(shell);
+	UNUSED(input);
+	if (!strcmp(p->pw_name, "root"))
+		putchar('#');
+	putchar('>');
+	return (SUCCESS_RETURN);
 }
 
-int ptr_handle_home(shell_t *shell)
+int ptr_handle_home(shell_t *shell, char *input)
 {
-        struct passwd *p = getpwuid(getuid());
-        printf("%s <--> %s", p->pw_dir, shell->pwd[0]);
-        return (SUCCESS_RETURN);
+	struct passwd *p = getpwuid(getuid());
+	char *new_start = strstr(shell->pwd[0], p->pw_dir);
+
+	UNUSED(input);
+	if (new_start == NULL)
+		printf("%s", shell->pwd[0]);
+	else
+		printf("~%s", new_start + strlen(p->pw_dir));
+	return (SUCCESS_RETURN);
 }

@@ -109,11 +109,11 @@ shell_t *init_shell(char **env)
 		shell->pwd[1][i] = '\0';
 	if ((create_default_env && (setup_default_env(&(shell->env), shell) == ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE))
 		return (NULL);
-	if (isatty(STDIN_FILENO))
-		if (set_env_value(&(shell->env), "PS1", DEFAULT_PS1) == ERROR_RETURN)
-			return (NULL);
 	if ((shell->vars = init_var_arr()) == NULL)
 		return (NULL);
+	if (isatty(STDIN_FILENO))
+		if ((shell->vars = set_var(shell->vars, "PS1", VAR_PS1)) == NULL)
+			return (NULL);
 	return (shell);
 }
 

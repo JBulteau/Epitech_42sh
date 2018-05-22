@@ -6,7 +6,13 @@
 */
 
 #include <stdio.h>
+#include "minishell.h"
+#include "my.h"
 
-int ptr_modulo() {
-        return (putchar('%'));
+int ptr_modulo(shell_t *shell, char *input)
+{
+        UNUSED(input);
+        UNUSED(shell);
+        putchar('%');
+        return (0);
 }
