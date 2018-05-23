@@ -15,10 +15,16 @@ comm_t **parsing(char *buffer)
 
 	if (node == NULL)
 		return (NULL);
+	if (buffer == NULL || buffer[0] == '\0') {
+		free_node(node);
+		return (NULL);
+	}
 	node = parse_quote(node, buffer);
 	if (node == NULL)
 		return (NULL);
 	comm = init_comm_array(comm, node);
+	if (comm == NULL)
+		return (NULL);
 	comm = convert_node(comm, node);
 	free_node(node);
 	return (comm);

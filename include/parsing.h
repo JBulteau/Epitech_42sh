@@ -42,6 +42,7 @@ struct node {
 	char *buffer;
 	quote_type_t quote;
 	separator_type_t separator;
+	bool fg;
 	bool backslash;
 	node_t **next;
 };

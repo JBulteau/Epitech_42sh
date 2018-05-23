@@ -47,12 +47,16 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 	j = (*i == 0) ? 0 : j;
 	n = (*i == 0) ? 2 : n;
 	separator = check_cmd_separator(buffer, i, node);
-	if (separator != 0 && separator != S_AMPERSAND) {
-		if (node->next[n - 2]->buffer != NULL) {
+	if (separator != 0) {
+		if (node->next[n - 2]->buffer != NULL && node->next[n - 2]->fg == false) {
 			node->next = realloc_node(node->next, n++, node->quote);
 			node->next[n - 3]->separator = separator;
 		}
 		j = 0;
+		if (separator == S_AMPERSAND && buffer[*i + 1] == '\0') {
+			free_node(node->next[n - 2]);
+			node->next[n - 2] = NULL;
+		}
 	} else {
 		if ((node->next[n - 2]->buffer = \
 		realloc(node->next[n - 2]->buffer, j + 2)) == NULL)
@@ -68,6 +72,8 @@ node_t *search_cmd_separators(node_t *node)
 	node->next = realloc_node(node->next, 1, node->quote);
 	if (node->next == NULL)
 		return (NULL);
+	if (node->quote == NONE)
+		node->buffer = clear_str(node->buffer);
 	for (int i = 0; node->buffer && node->buffer[i] != '\0'; i++) {
 		node = fill_cmd_separators(node, node->buffer, &i);
 		if (node == NULL)

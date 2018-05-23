@@ -13,7 +13,7 @@ separator_type_t is_separator(char *buffer, int *i)
 	switch (buffer[*i]) {
 	case ';' :
 		if (*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
-		&& buffer[*i - 1] != '&')) {
+		&& (*i < 2 || (buffer[*i - 1] != '&' || buffer[*i - 2] != '&')))) {
 			for (;buffer[*i + 1] == ';'; (*i)++);
 			return (SEMICOLON);
 		}
@@ -27,7 +27,7 @@ separator_type_t is_separator(char *buffer, int *i)
 		break;
 	case '&' :
 		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
-		&& buffer[*i - 1] != '&')) && buffer[++*i] == '&')
+		&& buffer[*i - 1] != '&')) && buffer[*i + 1] == '&')
 			return (D_AMPERSAND);
 	}
 	return (0);

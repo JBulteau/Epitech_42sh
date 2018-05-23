@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <linux/limits.h>
+#include <stdbool.h>
 
 extern pid_t *pid_job;
 
@@ -24,8 +25,7 @@ enum {
 typedef enum {
 	NOTHING,
 	THEN,
-	OR,
-	FG
+	OR
 } sep_t;
 
 enum {
@@ -84,6 +84,7 @@ struct redir_s {
 struct comm_s {
 	char **argv;
 	comm_t *next;
+	bool fg;
 	sep_t separator;
 	redir_t *red[4];
 	pipe_t *pipe[2];
