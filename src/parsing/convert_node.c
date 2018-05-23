@@ -9,28 +9,18 @@
 #include "parsing.h"
 #include <string.h>
 
-comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
-separator_type_t separator)
+comm_t *set_separator(comm_t *comm, node_t *node[2], \
+separator_type_t separator, int *new_index)
 {
 	comm_t *new_comm = NULL;
-	int new_index = 1;
 
-	node[0]->buffer = clear_str(node[0]->buffer);
-	for (int i = 0; node[0]->buffer && node[0]->buffer[i] != '\0'; i++)
-		if (node[0]->buffer[i] == ' ' && separator >= S_ARROW_LEFT \
-		&& separator <= D_ARROW_RIGHT) {
-			comm->argv = \
-			parse_argv(comm->argv, node[0], comm_index, i);
-			node[0]->buffer[i] = '\0';
-			break;
-		}
 	if (separator <= D_PIPE) {
 		comm->separator = separator - 1;
 	} else if (separator == S_PIPE) {
 		new_comm = init_comm();
 		comm->pipe[OUT] = init_pipe(comm, new_comm);
 		comm->pipe[OUT]->output = \
-		fill_comm(comm->pipe[OUT]->output, node[1], &new_index);
+		fill_comm(comm->pipe[OUT]->output, node[1], new_index);
 	} else {
 		if (separator == S_AMPERSAND) {
 			comm->fg = true;
@@ -42,6 +32,25 @@ separator_type_t separator)
 				return (NULL);
 		}
 	}
+	return (comm);
+}
+
+comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
+separator_type_t separator)
+{
+	int new_index = 1;
+
+	node[0]->buffer = clear_str(node[0]->buffer);
+	for (int i = 0; node[0]->buffer && node[0]->buffer[i] != '\0'; i++) {
+		if (node[0]->buffer[i] == ' ' && separator >= S_ARROW_LEFT \
+		&& separator <= D_ARROW_RIGHT) {
+			comm->argv = \
+			parse_argv(comm->argv, node[0], comm_index, i);
+			node[0]->buffer[i] = '\0';
+			break;
+		}
+	}
+	comm = set_separator(comm, node, separator, &new_index);
 	return (comm);
 }
 
