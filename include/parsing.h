@@ -74,6 +74,7 @@ node_t *copy_node(node_t *dest, node_t *src);
 node_t *parse_quote(node_t *node, char *buffer);
 node_t *fill_buffer(node_t *node, char *buffer, int *i);
 node_t *delete_quote(node_t *node, char *buffer, int i);
+node_t *new_quoted_node(node_t *node, int index[], char *buffer, int i);
 node_t *no_quote(node_t *node, char *buffer, int i, int *j);
 int missing_quote(node_t *node, char *buffer);
 
@@ -108,6 +109,7 @@ node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len);
 node_t *parse_cmd_separators(node_t *node);
 node_t *search_cmd_separators(node_t *node);
 node_t *fill_cmd_separators(node_t *node, char *buffer, int *i);
+node_t *attribute_cmd_separator(node_t *node, int index[], int *i, char *buffer);
 separator_type_t check_cmd_separator(char *buffer, int *i, node_t *node);
 
 /* browse_node.c */

@@ -40,28 +40,36 @@ node_t *no_quote(node_t *node, char *buffer, int i, int *j)
 	return (node);
 }
 
+node_t *new_quoted_node(node_t *node, int index[], char *buffer, int i)
+{
+	if (node->next[index[1] - 2]->buffer != NULL)
+		node->next = \
+		realloc_node(node->next, (index[1])++, node->quote);
+	index[0] = 0;
+	if (node->next != NULL)
+		node->next[index[1] - 2]->quote = index_of("'\"`", buffer[i]);
+	return (node);
+}
+
 node_t *delete_quote(node_t *node, char *buffer, int i)
 {
-	static int j = 0;
-	static int n = 2;
+	static int index[2] = {0, 2};
 
-	j = (i == 0) ? 0 : j;
-	n = (i == 0) ? 2 : n;
-	if (is_a_quote(buffer[i]) && (node->next[n - 2]->quote) == NONE \
+	index[0] = (i == 0) ? 0 : index[0];
+	index[1] = (i == 0) ? 2 : index[1];
+	if (is_a_quote(buffer[i]) && (node->next[index[1] - 2]->quote) == NONE \
 	&& !node->backslash) {
-		if (node->next[n - 2]->buffer != NULL)
-			node->next = realloc_node(node->next, n++, node->quote);
-		j = 0;
-		if (node->next != NULL)
-			node->next[n - 2]->quote = index_of("'\"`", buffer[i]);
-	} else if (node->next[n - 2]->quote == index_of("'\"`", buffer[i]) \
-	&& node->next[n - 2]->quote != NONE && !node->backslash) {
+		node = new_quoted_node(node, index, buffer, i);
+	} else if (node->next[index[1] - 2]->quote == \
+	index_of("'\"`", buffer[i]) && node->next[index[1] - 2]->quote != NONE \
+	&& !node->backslash) {
 		if ((node->next = \
-		realloc_node(node->next, n++, node->quote)) == NULL)
+		realloc_node(node->next, index[1]++, node->quote)) == NULL)
 			return (NULL);
-		j = 0;
+		index[0] = 0;
 	} else {
-		node->next[n - 2] = no_quote(node->next[n - 2], buffer, i, &j);
+		node->next[index[1] - 2] = no_quote(node->next[index[1] - 2], \
+		buffer, i, &index[0]);
 		node->backslash = false;
 	}
 	return ((node->next == NULL) ? NULL : node);
