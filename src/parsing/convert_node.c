@@ -9,50 +9,6 @@
 #include "parsing.h"
 #include <string.h>
 
-comm_t *set_separator(comm_t *comm, node_t *node[2], \
-separator_type_t separator, int *new_index)
-{
-	comm_t *new_comm = NULL;
-
-	if (separator <= D_PIPE) {
-		comm->separator = separator - 1;
-	} else if (separator == S_PIPE) {
-		new_comm = init_comm();
-		comm->pipe[OUT] = init_pipe(comm, new_comm);
-		comm->pipe[OUT]->output = \
-		fill_comm(comm->pipe[OUT]->output, node[1], new_index);
-	} else
-		if (separator != S_AMPERSAND) {
-			comm->red[separator - 6] = init_redir();
-			comm->red[separator - 6]->target = \
-			strdup(node[0]->buffer);
-		} else
-			comm->fg = true;
-	if ((separator >= S_ARROW_LEFT && separator <= D_ARROW_RIGHT) \
-	&& comm->red[separator - 6] && comm->red[separator - 6]->target == NULL)
-		return (NULL);
-	return (comm);
-}
-
-comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
-separator_type_t separator)
-{
-	int new_index = 1;
-
-	node[0]->buffer = clear_str(node[0]->buffer);
-	for (int i = 0; node[0]->buffer && node[0]->buffer[i] != '\0'; i++) {
-		if (node[0]->buffer[i] == ' ' && separator >= S_ARROW_LEFT \
-		&& separator <= D_ARROW_RIGHT) {
-			comm->argv = \
-			parse_argv(comm->argv, node[0], comm_index, i);
-			node[0]->buffer[i] = '\0';
-			break;
-		}
-	}
-	comm = set_separator(comm, node, separator, &new_index);
-	return (comm);
-}
-
 char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 {
 	int word_start = index;
@@ -92,16 +48,33 @@ comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
 	return (comm);
 }
 
+void check_node(node_t *node, int index[3])
+{
+	if (node->next[index[0]]->next[index[1]] == NULL) {
+		index[1] = 0;
+		index[0]++;
+		return;
+	}
+	if (node->next[index[0]]->next[index[1]]->\
+	next[index[2]] == NULL) {
+		index[2] = 0;
+		index[1]++;
+	}
+	if (node->next[index[0]]->next[index[1]] == NULL) {
+		index[1] = 0;
+		index[0]++;
+	}
+}
+
 comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 {
 	static int index[3] = {0, 0, 0};
 	int comm_index = 0;
-	separator_type_t sep;
 
 	index[0] = (*node_index == 0) ? 0 : index[0];
 	index[1] = (*node_index == 0) ? 0 : index[1];
 	index[2] = (*node_index == 0) ? 0 : index[2];
-	for (; node->next[index[0]] && (index[1] == 0 || \
+	for (; comm && node->next[index[0]] && (index[1] == 0 || \
 	node->next[index[0]]->next[index[1] - 1]->separator == 0) \
 	&& (index[2] == 0 || node->next[index[0]]->next[index[1]]->\
 	next[index[2] - 1]->separator == 0); (*node_index)++) {
@@ -109,54 +82,9 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 		&& node->next[index[0]]->next[index[1]]->next[index[2]])
 			comm = convert_param(comm, node->next[index[0]]->\
 			next[index[1]]->next[index[2]++], &comm_index);
-		if (comm == NULL)
-			return (NULL);
-		if (node->next[index[0]]->next[index[1]] == NULL) {
-			index[1] = 0;
-			index[0]++;
-			continue;
-		}
-		if (node->next[index[0]]->next[index[1]]->\
-		next[index[2]] == NULL) {
-			index[2] = 0;
-			index[1]++;
-		}
-		if (node->next[index[0]]->next[index[1]] == NULL) {
-			index[1] = 0;
-			index[0]++;
-		}
+		check_node(node, index);
 	}
-	while (node->next[index[0]] && node->next[index[0]]->next[index[1]] \
-	&& node->next[index[0]]->next[index[1]]->next[index[2]]) {
-		if (index[2] > 0 && node->next[index[0]]->next[index[1]]->\
-		next[index[2] - 1]->separator >= S_AMPERSAND) {
-			sep = node->next[index[0]]->next[index[1]]->\
-			next[index[2] - 1]->separator;
-			node->next[index[0]]->next[index[1]]->\
-			next[index[2] - 1]->separator = 0;
-			comm = apply_separator(comm, (node_t*[2]){node->\
-			next[index[0]]->next[index[1]]->next[index[2]], node}, \
-			&comm_index, sep);
-			if (comm == NULL)
-				return (NULL);
-			index[2] += (sep == S_PIPE || sep == S_AMPERSAND) ? 0 : 1;
-		} else if (index[1] > 0 && node->next[index[0]]->\
-		next[index[1] - 1]->separator <= D_PIPE && node->\
-		next[index[0]]->next[index[1] - 1]->separator >= SEMICOLON) {
-			sep = \
-			node->next[index[0]]->next[index[1] - 1]->separator;
-			node->next[index[0]]->next[index[1] - 1]->separator = 0;
-			comm = apply_separator(comm, (node_t*[2])\
-			{node->next[index[0]]->next[index[1]], node}, \
-			&comm_index, sep);
-			if (comm == NULL)
-				return (NULL);
-			break;
-		} else {
-			break;
-		}
-	}
-	return (comm);
+	return (handle_separators(comm, node, index, &comm_index));
 }
 
 comm_t **convert_node(comm_t **comm, node_t *node)
