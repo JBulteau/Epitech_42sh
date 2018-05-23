@@ -38,7 +38,8 @@ separator_type_t separator)
 			comm->red[separator - 6] = init_redir();
 			comm->red[separator - 6]->target = \
 			strdup(node[0]->buffer);
-			//TODO verifier
+			if (comm->red[separator - 6]->target == NULL)
+				return (NULL);
 		}
 	}
 	return (comm);

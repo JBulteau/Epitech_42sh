@@ -52,7 +52,8 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 	n = (*i == 0) ? 2 : n;
 	separator = check_cmd_separator(buffer, i, node);
 	if (separator != 0) {
-		if (node->next[n - 2]->buffer != NULL && node->next[n - 2]->fg == false) {
+		if (node->next[n - 2]->buffer != NULL \
+		&& node->next[n - 2]->fg == false) {
 			node->next = realloc_node(node->next, n++, node->quote);
 			node->next[n - 3]->separator = separator;
 		}
