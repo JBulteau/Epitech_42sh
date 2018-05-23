@@ -39,7 +39,7 @@ int exec_loop(shell_t *shell)
 {
 	int pipeline = 0;
 
-	for (int i =0; shell->comm[i] != NULL; i++) {
+	for (int i = 0; shell->comm[i] != NULL; i++) {
 		if ((pipeline = run_pipeline(shell, shell->comm[i])) == \
 ERROR_RETURN)
 			return (ERROR_RETURN);
