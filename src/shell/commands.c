@@ -69,8 +69,10 @@ int run_that(shell_t *shell)
 {
 	int return_code = 0;
 
-	if ((shell->comm = parsing(shell->input)) == NULL)
+	if ((shell->comm = full_parse(shell->input)) == NULL) {
+		shell->return_code = 1;
 		return (ERROR_CODE);
+	}
 	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
 		return (ERROR_CODE);
 
