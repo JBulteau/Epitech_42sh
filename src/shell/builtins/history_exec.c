@@ -24,7 +24,7 @@ hist->next);
 	if (shell->input == NULL)
 		return (ERROR_RETURN);
 	shell->history_exec = 1;
-	return_c = run_that(shell, 1, 1, 1);
+	return_c = run_that(shell);
 	shell->history_exec = 0;
 	shell->comm = save;
 	return (return_c);
@@ -56,7 +56,7 @@ int run_n(shell_t *shell, int n)
 	if (shell->input == NULL)
 		return (ERROR_RETURN);
 	shell->history_exec = 1;
-	return_c = run_that(shell, 1, 1, 1);
+	return_c = run_that(shell);
 	shell->history_exec = 0;
 	shell->comm = save;
 	return (return_c);

@@ -178,7 +178,7 @@ void free_comm(comm_t *comm);
 comm_t *init_comm(void);
 void free_comms(comm_t **comm);
 int get_commidx(shell_t *shell, comm_t *comm);
-int run_that(shell_t *shell, int parse, int alias, int free);
+int run_that(shell_t *shell);
 
 /*	shell/debug.c			*/
 /*	shell/display.c			*/
