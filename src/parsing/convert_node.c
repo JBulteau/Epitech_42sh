@@ -21,17 +21,16 @@ separator_type_t separator, int *new_index)
 		comm->pipe[OUT] = init_pipe(comm, new_comm);
 		comm->pipe[OUT]->output = \
 		fill_comm(comm->pipe[OUT]->output, node[1], new_index);
-	} else {
-		if (separator == S_AMPERSAND) {
-			comm->fg = true;
-		} else {
+	} else
+		if (separator != S_AMPERSAND) {
 			comm->red[separator - 6] = init_redir();
 			comm->red[separator - 6]->target = \
 			strdup(node[0]->buffer);
-			if (comm->red[separator - 6]->target == NULL)
-				return (NULL);
-		}
-	}
+		} else
+			comm->fg = true;
+	if ((separator >= S_ARROW_LEFT && separator <= D_ARROW_RIGHT) \
+	&& comm->red[separator - 6] && comm->red[separator - 6]->target == NULL)
+		return (NULL);
 	return (comm);
 }
 
@@ -60,8 +59,9 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 	int i;
 
 	node->buffer = clear_str(node->buffer);
-	for (i = index; node->buffer && node->buffer[i] != '\0'; i++) {
-		if (node->buffer[i] == ' ') {
+	for (i = index; node->buffer \
+	&& (i == 0 || node->buffer[i - 1] != '\0'); i++) {
+		if (node->buffer[i] == '\0' || node->buffer[i] == ' ') {
 			argv = \
 			realloc(argv, sizeof(char*) * ((*comm_index) + 2));
 			argv[(*comm_index) + 1] = NULL;
@@ -70,19 +70,10 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 			word_start = i + 1;
 			(*comm_index)++;
 		}
-		if (node->buffer[i] == ' ' && argv[(*comm_index) - 1] == NULL)
+		if ((node->buffer[i] == '\0' || node->buffer[i] == ' ') \
+		&& argv[(*comm_index) - 1] == NULL)
 			return (NULL);
 	}
-	argv = realloc(argv, sizeof(char*) * ((*comm_index) + 2));
-	if (argv == NULL)
-		return (NULL);
-	argv[(*comm_index) + 1] = NULL;
-	argv[(*comm_index)] = \
-	strndup(&node->buffer[word_start], i - word_start);
-	if (argv[(*comm_index)] == NULL)
-		return (NULL);
-	word_start = i + 1;
-	(*comm_index)++;
 	return (argv);
 }
 
