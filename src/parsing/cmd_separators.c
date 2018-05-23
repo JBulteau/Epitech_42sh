@@ -8,7 +8,8 @@
 #include "my.h"
 #include "parsing.h"
 
-separator_type_t check_arrow(char *buffer, int *i, separator_type_t arrow)
+separator_type_t check_arrow(char *buffer, int *i, \
+separator_type_t arrow)
 {
 	if (buffer[(*i) + 1] == buffer[*i]) {
 		(*i)++;

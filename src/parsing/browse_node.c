@@ -15,8 +15,8 @@ node_t *browse_sep_node(node_t *node)
 			node->next[i] = \
 			search_cmd_separators(node->next[i]);
 		} else {
-			node->next[i]->next = realloc_node(node->next[i]->next,\
-			 1, node->next[i]->quote);
+			node->next[i]->next = realloc_node\
+			(node->next[i]->next, 1, node->next[i]->quote);
 			node->next[i]->next[0] = \
 			copy_node(node->next[i]->next[0], node->next[i]);
 		}

@@ -9,7 +9,8 @@
 #include "parsing.h"
 #include <string.h>
 
-comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, separator_type_t separator)
+comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
+separator_type_t separator)
 {
 	comm_t *new_comm = NULL;
 	int new_index = 1;
@@ -18,7 +19,8 @@ comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, separato
 	for (int i = 0; node[0]->buffer && node[0]->buffer[i] != '\0'; i++)
 		if (node[0]->buffer[i] == ' ' && separator >= S_ARROW_LEFT \
 		&& separator <= D_ARROW_RIGHT) {
-			comm->argv = parse_argv(comm->argv, node[0], comm_index, i);
+			comm->argv = \
+			parse_argv(comm->argv, node[0], comm_index, i);
 			node[0]->buffer[i] = '\0';
 			break;
 		}
@@ -27,13 +29,15 @@ comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, separato
 	} else if (separator == S_PIPE) {
 		new_comm = init_comm();
 		comm->pipe[OUT] = init_pipe(comm, new_comm);
-		comm->pipe[OUT]->output = fill_comm(comm->pipe[OUT]->output, node[1], &new_index);
+		comm->pipe[OUT]->output = \
+		fill_comm(comm->pipe[OUT]->output, node[1], &new_index);
 	} else {
 		if (separator == S_AMPERSAND) {
 			comm->fg = true;
 		} else {
 			comm->red[separator - 6] = init_redir();
-			comm->red[separator - 6]->target = strdup(node[0]->buffer);
+			comm->red[separator - 6]->target = \
+			strdup(node[0]->buffer);
 			//TODO verifier
 		}
 	}
@@ -48,21 +52,25 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 	node->buffer = clear_str(node->buffer);
 	for (i = index; node->buffer && node->buffer[i] != '\0'; i++) {
 		if (node->buffer[i] == ' ') {
-			argv = realloc(argv, sizeof(char*) * ((*comm_index) + 2));
+			argv = \
+			realloc(argv, sizeof(char*) * ((*comm_index) + 2));
 			argv[(*comm_index) + 1] = NULL;
 			argv[(*comm_index)] = \
 			strndup(&node->buffer[word_start], i - word_start);
-			//TODO verifier
 			word_start = i + 1;
 			(*comm_index)++;
 		}
+		if (node->buffer[i] == ' ' && argv[(*comm_index) - 1] == NULL)
+			return (NULL);
 	}
 	argv = realloc(argv, sizeof(char*) * ((*comm_index) + 2));
-	//TODO verifier
+	if (argv == NULL)
+		return (NULL);
 	argv[(*comm_index) + 1] = NULL;
 	argv[(*comm_index)] = \
 	strndup(&node->buffer[word_start], i - word_start);
-	//TODO verifier
+	if (argv[(*comm_index)] == NULL)
+		return (NULL);
 	word_start = i + 1;
 	(*comm_index)++;
 	return (argv);
@@ -76,7 +84,8 @@ comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
 			return (NULL);
 	} else {
 		comm->argv[(*comm_index)] = strdup(node->buffer);
-		//TODO verifier
+		if (comm->argv[(*comm_index)] == NULL)
+			return (NULL);
 		(*comm_index)++;
 	}
 	return (comm);
@@ -88,15 +97,19 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 	static int j = 0;
 	static int k = 0;
 	int comm_index = 0;
-	separator_type_t separator;
+	separator_type_t sep;
 
 	i = (*node_index == 0) ? 0 : i;
 	j = (*node_index == 0) ? 0 : j;
 	k = (*node_index == 0) ? 0 : k;
-	for (; node->next[i] && (j == 0 || node->next[i]->next[j - 1]->separator == 0) && (k == 0 || node->next[i]->next[j]->next[k - 1]->separator == 0); (*node_index)++) {
-		if (node->next[i]->next[j] != NULL && node->next[i]->next[j]->next[k] != NULL)
+	for (; node->next[i] && (j == 0 || \
+	node->next[i]->next[j - 1]->separator == 0) && (k == 0 || \
+	node->next[i]->next[j]->next[k - 1]->separator == 0); (*node_index)++) {
+		if (node->next[i]->next[j] && node->next[i]->next[j]->next[k])
 			comm = convert_param(comm, \
 			node->next[i]->next[j]->next[k++], &comm_index);
+		if (comm == NULL)
+			return (NULL);
 		if (node->next[i]->next[j] == NULL) {
 			j = 0;
 			i++;
@@ -111,18 +124,26 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 			i++;
 		}
 	}
-	while (node->next[i] != NULL && node->next[i]->next[j] != NULL && node->next[i]->next[j]->next[k] != NULL) {
-		if (k > 0 && node->next[i]->next[j]->next[k - 1]->separator >= S_AMPERSAND) {
-			separator = node->next[i]->next[j]->next[k - 1]->separator;
+	while (node->next[i] && node->next[i]->next[j] \
+	&& node->next[i]->next[j]->next[k]) {
+		if (k > 0 && node->next[i]->next[j]->next[k - 1]->separator >= \
+		S_AMPERSAND) {
+			sep = \
+			node->next[i]->next[j]->next[k - 1]->separator;
 			node->next[i]->next[j]->next[k - 1]->separator = 0;
-			comm = apply_separator(comm, \
-			(node_t*[2]){node->next[i]->next[j]->next[k], node}, &comm_index, separator);
-			k += (separator == S_PIPE || separator == S_AMPERSAND) ? 0 : 1;
-		} else if (j > 0 && node->next[i]->next[j - 1]->separator <= D_PIPE && node->next[i]->next[j - 1]->separator >= SEMICOLON) {
-			separator = node->next[i]->next[j - 1]->separator;
+			comm = apply_separator(comm, (node_t*[2]){node->\
+			next[i]->next[j]->next[k], node}, &comm_index, sep);
+			if (comm == NULL)
+				return (NULL);
+			k += (sep == S_PIPE || sep == S_AMPERSAND) ? 0 : 1;
+		} else if (j > 0 && node->next[i]->next[j - 1]->separator <= \
+		D_PIPE && node->next[i]->next[j - 1]->separator >= SEMICOLON) {
+			sep = node->next[i]->next[j - 1]->separator;
 			node->next[i]->next[j - 1]->separator = 0;
-			comm = apply_separator(comm, \
-			(node_t*[2]){node->next[i]->next[j], node}, &comm_index, separator);
+			comm = apply_separator(comm, (node_t*[2])\
+			{node->next[i]->next[j], node}, &comm_index, sep);
+			if (comm == NULL)
+				return (NULL);
 			break;
 		} else {
 			break;
