@@ -32,26 +32,21 @@ int exec_end(comm_t *comm)
 
 int exec_pl_separators(shell_t *shell, comm_t *comm)
 {
-	if (run_pipeline(shell, comm) == ERROR_RETURN)
-		return (ERROR_RETURN);
-	if ((((comm->separator == THEN) && (shell->return_value == 0)) || ((comm->separator == OR) && (shell->return_value != 0))) && comm->next) {
-		return (exec_pl_separators(shell, comm->next));
-	} else if (comm->separator != NOTHING) {
-		while (comm && comm->separator != NOTHING)
-			comm = comm->next;
+	int pipeline = 0;
+
+	for (int i =0; shell->comm[i] != NULL; i++) {
+		if ((pipeline = run_pipeline(shell, shell->comm[i])) == ERROR_RETURN)
+			return (ERROR_RETURN);
+		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
+alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
+)))) {
+			while (shell->comm[i]->separator != NONE)
+				i++;
+		}
 	}
 }
 
-int exec_loop(shell_t *shell)
-{
-	//for (int i = 0; shell->comm[i]; i++)
-	//	debug_comm(shell->comm[i]);
-	for (int i =0; shell->comm[i]; i++)
-		exec_pl_separators(shell, shell->comm[i]);
-	return (shell->return_value);
-}
-
-int exec_bin(comm_t *comm, char **env)
+int exec_bin(comm_t *comm, char **env, shell_t *shell)
 {
 	int is_local = (!strncmp(comm->argv[0], "./", 2)) || \
 (index_of(comm->argv[0], '/') != -1);
@@ -59,25 +54,26 @@ int exec_bin(comm_t *comm, char **env)
 	char *filepath = NULL;
 
 	if (is_local == 1 && !search_local(comm->argv[0])) {
-		return (run_bin(comm, strdup(comm->argv[0]), env));
+		return (run_bin(comm, strdup(comm->argv[0]), env, shell));
 	} else if (is_local == 0) {
 		if ((path = get_path(env)) == NULL) {
 			disp_rights(comm->argv[0], -1, 0);
-			exit(1);
+			clean_exit(shell, 1);
 		}
 		filepath = search_path(path, comm->argv[0]);
 		free_array((void **) path);
 		if (filepath == NULL)
-			exit(1);
-		return (run_bin(comm, filepath, env));
+			clean_exit(shell, 1);
+		return (run_bin(comm, filepath, env, shell));
 	}
-	exit(1);
+	clean_exit(shell, 1);
+	return (ERROR_RETURN);
 }
 
-int run_bin(comm_t *comm, char *path, char **env)
+int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
 {
-	if (execve(path, comm->argv, env) == -1) {
+	if (execve(path, comm->argv, env) == -1)
 		disp_wrong_arch(comm->argv[0], errno);
-	}
-	exit(1);
+	clean_exit(shell, 1);
+	return (ERROR_RETURN);
 }

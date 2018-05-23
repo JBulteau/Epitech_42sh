@@ -14,6 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "minishell.h"
+#include "prompt.h"
 #include "my.h"
 
 char **clone_arr(char **arr)
@@ -110,7 +111,23 @@ shell_t *init_shell(char **env)
 		return (NULL);
 	if ((shell->vars = init_var_arr()) == NULL)
 		return (NULL);
+	if (isatty(STDIN_FILENO))
+		if ((shell->vars = set_var(shell->vars, "PS1", DEFAULT_PS1)) == NULL)
+			return (NULL);
 	return (shell);
+}
+
+void free_jobs()
+{
+	jobs_t *node;
+
+	node = list_jobs->next;
+	for (int i = 0; list_jobs->pid_job[i] != 0; i++)
+		if (kill(list_jobs->pid_job[i], SIGKILL))
+			perror("kill");
+	free(list_jobs->pid_job);
+	free(list_jobs);
+	list_jobs = node;
 }
 
 void delete_shell(shell_t *shell)
@@ -121,15 +138,13 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
-	for (int i = 0; shell->vars[i]; i++)
+	for (int i = 0; shell->vars && shell->vars[i]; i++)
 		free_var(shell->vars[i]);
 	free(shell->vars);
 	free(shell);
-	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
-		if (kill(pid_job[i], SIGKILL) == -1)
-			perror("kill");
-	}
-	free(pid_job);
+	if (list_jobs)
+		for (jobs_t *node; list_jobs != NULL;)
+			free_jobs();
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);

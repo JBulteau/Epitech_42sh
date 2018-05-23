@@ -18,6 +18,7 @@ RED_DIR		=	$(SHELL_DIR)redirections/
 VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
 PARSING_DIR	=	parsing/
+PROMPT_DIR	=	$(SHELL_DIR)prompt/
 
 SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
@@ -42,6 +43,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(BI_DIR)history.c\
 			$(BI_DIR)history_exec.c\
 			$(BI_DIR)fg.c\
+			$(BI_DIR)ptr_jobs.c\
 			$(BI_DIR)alias.c\
 			$(BI_DIR)echo.c\
 \
@@ -59,6 +61,15 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 \
 			$(ALIAS_DIR)alias_struc.c\
 			$(ALIAS_DIR)alias_comm.c\
+\
+			$(PROMPT_DIR)display.c\
+			$(PROMPT_DIR)handler_basic.c\
+			$(PROMPT_DIR)handler_colors.c\
+			$(PROMPT_DIR)handler_time.c\
+			$(PROMPT_DIR)system_get.c\
+			$(PROMPT_DIR)handler_vars.c\
+			$(PROMPT_DIR)handler_date.c\
+			$(PROMPT_DIR)handler_get_from_shell.c\
 \
 			$(PARSING_DIR)parsing.c\
 			$(PARSING_DIR)struct.c\

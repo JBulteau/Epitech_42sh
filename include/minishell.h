@@ -12,8 +12,6 @@
 #include <linux/limits.h>
 #include <stdbool.h>
 
-extern pid_t *pid_job;
-
 enum {
 	S_LEFT,
 	D_LEFT,
@@ -47,6 +45,13 @@ typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 typedef struct alias_s alias_t;
+typedef struct jobs_s jobs_t; 
+ 
+struct jobs_s { 
+  bool running; 
+  pid_t *pid_job; 
+  jobs_t *next; 
+};
 
 struct alias_s {
 	char *name;
@@ -108,7 +113,6 @@ typedef struct {
 	int return_value;
 } shell_t;
 
-static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
 
@@ -162,6 +166,8 @@ var_t **try_vars(void);
 /*	shell/shell_var/var_utils.c	*/
 int find_var(var_t **arr, char *name);
 type_t get_type(char *content);
+void clean_exit(shell_t *shell, int exit_code);
+char *get_var_str(var_t *var);
 
 /*	shell/shell_var/var_edition.c	*/
 int edit_var(var_t *var, char *content, char *name);
@@ -178,7 +184,7 @@ int run_that(shell_t *shell);
 /*	shell/display.c			*/
 void disp_wrong_arch(char *str, int num);
 void display_signal(int status);
-void disp_prompt(void);
+int disp_prompt(shell_t *shell);
 
 /*	shell/exec_pipe.c		*/
 int run_not_last(shell_t *shell, comm_t *curr);
@@ -189,8 +195,8 @@ int run_pipeline(shell_t *shell, comm_t *comm);
 int exec_start(comm_t *comm);
 int exec_end(comm_t *comm);
 int exec_loop(shell_t *shell);
-int exec_bin(comm_t *comm, char **env);
-int run_bin(comm_t *comm, char *path, char **env);
+int exec_bin(comm_t *comm, char **env,shell_t *shell);
+int run_bin(comm_t *comm, char *path, char **env, shell_t *shell);
 /*	shell/init_signal.c		*/
 char* get_proc_name(pid_t pid);
 void catch_ctrl_z(int sig);
@@ -199,9 +205,13 @@ int init_signal(void);
 int wait_for_it(pid_t pid);
 
 /*	shell/jobs.c			*/
-int find_last_pid(void);
-int remove_last_pid(void);
-int add_to_pid(pid_t child);
+jobs_t *find_node_job(void);
+int get_nb_job(void);
+jobs_t *new_node(void);
+void remove_node(void);
+int add_pid_jobs(pid_t child);
+void set_node_running_false(void);
+
 
 /*	shell/main.c			*/
 int main(int ac, char **av, char **env);
@@ -245,12 +255,18 @@ comm_t **parsing(char *buffer);
 /*	shell/infos.c			*/
 int set_infos(char ***env);
 
+/*	prompt/display.c	*/
+int printf_prompt(shell_t *shell);
+
 /* Uncomment that when we will be able to do that
 ** #define __OSTYPE__ "Unknown"
 ** #define __MACHTYPE__ "Unknown"
 ** #define __VENDOR__ "Unknown"
 ** #ifdef __MACHTYPE__ && __OSTYPE__
-	#define __HOSTTYPE__ "Unknown"
+**	#define __HOSTTYPE__ "Unknown"
 ** #endif
 */
+
+extern jobs_t *list_jobs; 
+
 #endif
