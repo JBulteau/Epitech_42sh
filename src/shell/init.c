@@ -47,8 +47,7 @@ int setup_default_env(char ***env, shell_t *shell)
 ERROR_RETURN)
 	#endif
 		return (ERROR_RETURN);
-	if (set_basic_env(shell, env) == ERROR_RETURN || set_infos(env) == \
-ERROR_RETURN)
+	if (set_basic_env(shell, env) == ERROR_RETURN)
 		return (ERROR_RETURN);
 	return (SUCCESS_RETURN);
 }

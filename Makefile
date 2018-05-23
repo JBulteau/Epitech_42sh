@@ -20,23 +20,18 @@ VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
 PROMPT_DIR	=	$(SHELL_DIR)prompt/
 EXEC_DIR	=	$(SHELL_DIR)exec/
+JOBS_DIR	=	$(SHELL_DIR)jobs/
 
 SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
 			$(SHELL_DIR)utils.c\
 			$(SHELL_DIR)search.c\
-			$(SHELL_DIR)exec.c\
 			$(SHELL_DIR)debug.c\
-			$(SHELL_DIR)infos.c\
 			$(SHELL_DIR)init.c\
 			$(SHELL_DIR)commands.c\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
 			$(SHELL_DIR)pipe.c\
-			$(SHELL_DIR)exec_pipe.c\
-			$(SHELL_DIR)redir_pipe.c\
-			$(SHELL_DIR)init_signal.c\
-			$(SHELL_DIR)jobs.c\
 \
 			$(BI_DIR)basic_bi.c\
 			$(BI_DIR)env.c\
@@ -86,8 +81,14 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PARSING_DIR)convert_node.c\
 \
 			$(EXEC_DIR)exec_pipe.c\
+			$(EXEC_DIR)redir_pipe.c\
 			$(EXEC_DIR)exec.c\
 			$(EXEC_DIR)run_bin.c\
+\
+			$(JOBS_DIR)init_signal.c\
+			$(JOBS_DIR)jobs.c\
+			$(JOBS_DIR)signals.c\
+			$(JOBS_DIR)sig_handlers.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

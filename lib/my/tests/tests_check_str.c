@@ -25,7 +25,7 @@ Test(check_str, is_alpha)
 	cr_expect(is_alpha("-aze") == -1);
 	cr_expect(is_alpha("aze-") == -1);
 	cr_expect(is_alpha("-aze-") == -1);
-       	cr_expect(is_alpha("AZE") == 0);
+	cr_expect(is_alpha("AZE") == 0);
 	cr_expect(is_alpha("-AZE") == -1);
 	cr_expect(is_alpha("AZE-") == -1);
 	cr_expect(is_alpha("-AZE-") == -1);
@@ -39,7 +39,7 @@ Test(check_str, is_alphanum)
 	cr_expect(is_alphanum("-aze") == -1);
 	cr_expect(is_alphanum("aze-") == -1);
 	cr_expect(is_alphanum("-aze-") == -1);
-       	cr_expect(is_alphanum("AZE") == 0);
+	cr_expect(is_alphanum("AZE") == 0);
 	cr_expect(is_alphanum("-AZE") == -1);
 	cr_expect(is_alphanum("AZE-") == -1);
 	cr_expect(is_alphanum("-AZE-") == -1);
@@ -61,6 +61,6 @@ Test(check_str, check_chars)
 {
 	cr_expect(check_chars(NULL, "abc") == -1);
 	cr_expect(check_chars("abc", NULL) == -1);
-        cr_expect(check_chars("Nope", "abcdefijklmnopqrstuvwxyz") == -1);
-        cr_expect(check_chars("yes", "abcdefijklmnopqrstuvwxyz") == 0);
+	cr_expect(check_chars("Nope", "abcdefijklmnopqrstuvwxyz") == -1);
+	cr_expect(check_chars("yes", "abcdefijklmnopqrstuvwxyz") == 0);
 }

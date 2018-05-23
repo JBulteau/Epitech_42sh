@@ -5,8 +5,6 @@
 ** Main shell functions
 */
 
-#include <sys/types.h>
-#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -37,19 +35,6 @@ ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE) || init_vars(shell) \
 	if (isatty(STDIN_FILENO) && load42(shell) == ERROR_RETURN)
 		return (NULL);
 	return (shell);
-}
-
-void free_jobs(void)
-{
-	jobs_t *node;
-
-	node = list_jobs->next;
-	for (int i = 0; list_jobs->pid_job[i] != 0; i++)
-		if (kill(list_jobs->pid_job[i], SIGKILL))
-			perror("kill");
-	free(list_jobs->pid_job);
-	free(list_jobs);
-	list_jobs = node;
 }
 
 void delete_shell(shell_t *shell)

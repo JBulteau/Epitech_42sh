@@ -61,7 +61,8 @@ comm_t **convert_node(comm_t **comm, node_t *node);
 comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index);
 comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index);
 char **parse_argv(char **argv, node_t *node, int *comm_index, int index);
-comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, separator_type_t separator);
+comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
+separator_type_t separator);
 
 /* struct.c */
 
