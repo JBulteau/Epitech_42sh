@@ -13,19 +13,6 @@
 #include "minishell.h"
 #include "tokens.h"
 
-char *handle_s_left(char *input, comm_t *comm)
-{
-	int len;
-
-	input += strlen(tokens[S_LEFT].tk);
-	input = go_next_w(input, separators);
-	len = get_wlen(input, separators);
-	if ((comm->red[S_LEFT]->target = strndup(input, len)) == NULL)
-		return (NULL);
-	input += len;
-	return (input);
-}
-
 int exec_s_left(comm_t *comm)
 {
 	comm->red[S_LEFT]->fd[0] = open(comm->red[S_LEFT]->target, O_RDONLY);

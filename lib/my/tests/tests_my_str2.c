@@ -8,14 +8,14 @@
 #include "my.h"
 #include <criterion/criterion.h>
 
-Test (str, findstr)
+Test(str, findstr)
 {
 }
 
-Test (str, concat)
+Test(str, concat)
 {
 }
 
-Test (str, showstr)
+Test(str, showstr)
 {
 }

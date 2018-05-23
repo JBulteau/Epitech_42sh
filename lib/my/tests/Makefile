@@ -13,7 +13,6 @@ SRC_FILES	=	check_str.c\
 			my_str.c\
 			my_str2.c\
 			parsing.c\
-			adv_parsing.c\
 			my_array.c\
 			my_get.c\
 			gnl.c\

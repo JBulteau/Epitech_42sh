@@ -32,6 +32,7 @@ int ask_y_n(char *s, char *yes, char *no)
 	return (res);
 }
 
+/*	In else statement load 42rc	*/
 int load42(shell_t *shell)
 {
 	char *path42rc = concat(get_env_var(shell->env, "HOME="), \
@@ -47,7 +48,6 @@ concat("/", ".42rc", 0, 0), 1, 1);
 			puts("Ok :'(");
 		}
 	} else {
-		puts("We need you Julo !");
 	}
 	free(path42rc);
 	return (0);

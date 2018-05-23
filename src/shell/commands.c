@@ -64,27 +64,3 @@ int get_commidx(shell_t *shell, comm_t *comm)
 			return (i);
 	return (ERROR_RETURN);
 }
-
-int run_that(shell_t *shell)
-{
-	int return_code = 0;
-
-	if ((shell->comm = parsing(shell->input)) == NULL)
-		return (ERROR_CODE);
-	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
-		return (ERROR_CODE);
-
-	/*DEBUG
-	shell->comm[0]->next = shell->comm[1];
-	shell->comm[1]->next = shell->comm[2];
-	shell->comm[2]->next = shell->comm[3];
-	shell->comm[3]->next = NULL;
-	shell->comm[1] = NULL;
-	shell->comm[2] = NULL;
-	shell->comm[3] = NULL;
-	/*END OF DEBUG*/
-	return_code = exec_loop(shell);
-	if (shell->comm != NULL)
-		free_comms(shell->comm);
-	return (return_code);
-}
