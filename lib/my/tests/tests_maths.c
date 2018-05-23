@@ -8,13 +8,13 @@
 #include "my.h"
 #include <criterion/criterion.h>
 
-Test (maths, abs)
+Test(maths, abs)
 {
 	cr_expect(my_abs(-42) == 42);
 	cr_expect(my_abs(42) == 42);
 }
 
-Test (maths, pow)
+Test(maths, pow)
 {
 	cr_expect(my_pow(2, 2) == 4);
 	cr_expect(my_pow(2, 0) == 1);

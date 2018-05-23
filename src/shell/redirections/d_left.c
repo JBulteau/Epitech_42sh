@@ -14,19 +14,6 @@
 #include "tokens.h"
 #include "my.h"
 
-char *handle_d_left(char *input, comm_t *comm)
-{
-	int len;
-
-	input += my_strlen(tokens[D_LEFT].tk);
-	input = go_next_w(input, separators);
-	len = get_wlen(input, separators);
-	if ((comm->red[D_LEFT]->target = my_strndup(input, len)) == NULL)
-		return (NULL);
-	input += len;
-	return (input);
-}
-
 void loop_d_left(comm_t *comm)
 {
 	char *input;

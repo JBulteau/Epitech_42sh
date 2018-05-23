@@ -73,8 +73,6 @@ int run_that(shell_t *shell)
 		shell->return_value = 1;
 		return (ERROR_CODE);
 	}
-	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
-		return (ERROR_CODE);
 	return_code = exec_loop(shell);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);

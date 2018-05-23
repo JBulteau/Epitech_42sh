@@ -26,8 +26,8 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)search.c\
 			$(SHELL_DIR)exec.c\
 			$(SHELL_DIR)debug.c\
-			$(SHELL_DIR)parsing.c\
 			$(SHELL_DIR)infos.c\
+			$(SHELL_DIR)init.c\
 			$(SHELL_DIR)commands.c\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
@@ -51,7 +51,6 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(RED_DIR)s_left.c\
 			$(RED_DIR)d_right.c\
 			$(RED_DIR)s_right.c\
-			$(RED_DIR)pipe.c\
 \
 			$(42RC_DIR)load42.c\
 \

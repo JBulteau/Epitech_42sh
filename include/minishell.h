@@ -121,7 +121,7 @@ int ask_y_n(char *s, char *yes, char *no);
 int load42(shell_t *shell);
 
 /*	shell/alias/alias_comm.c	*/
-int rm_alias(shell_t *shell, char *alias, comm_t *comm);
+int rm_alias(shell_t *shell, char *alias);
 int update_aliases(shell_t *shell, comm_t *comm, int remove, int skip_curr);
 
 /*	shell/alias/alias_struc.c	*/
@@ -185,6 +185,12 @@ int run_that(shell_t *shell);
 void disp_wrong_arch(char *str, int num);
 void display_signal(int status);
 int disp_prompt(shell_t *shell);
+
+/*	shell/init.c	*/
+int set_basic_env(shell_t *shell, char ***env);
+int setup_default_env(char ***env, shell_t *shell);
+int set_shlvl(char ***env);
+int init_vars(shell_t *shell);
 
 /*	shell/exec_pipe.c		*/
 int run_not_last(shell_t *shell, comm_t *curr);

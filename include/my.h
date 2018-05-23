@@ -47,12 +47,6 @@ int	my_showstr(char const *str);
 char **strwordarr(const char *str, const char *sep);
 int get_wlen(const char *str, const char *sep);
 
-/*	adv_parsing.c	*/
-char 	**adv_parse(const char *str, const char *delim, \
-const char *ignore_start, const char *ignore_end);
-int adv_get_wlen(const char *str, const char *sep, const char \
-*ign_start, const char *ign_end);
-
 /*	my_array.c	*/
 void	free_array(void **array);
 int	array_len(void **array);

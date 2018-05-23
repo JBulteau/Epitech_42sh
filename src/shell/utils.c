@@ -4,8 +4,11 @@
 ** File description:
 ** Utils fnc
 */
+
+#include <errno.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include "my.h"
@@ -54,4 +57,12 @@ void clean_exit(shell_t *shell, int exit_code)
 	free_comms(shell->comm);
 	delete_shell(shell);
 	exit(exit_code);
+}
+
+int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
+{
+	if (execve(path, comm->argv, env) == -1)
+		disp_wrong_arch(comm->argv[0], errno);
+	clean_exit(shell, 1);
+	return (ERROR_RETURN);
 }

@@ -8,13 +8,13 @@
 #include "my.h"
 #include <criterion/criterion.h>
 
-Test (str, strlen)
+Test(str, strlen)
 {
         cr_expect(my_strlen(NULL) == -1);
         cr_expect(my_strlen("ABC") == 3);
 }
 
-Test (str, strncpy)
+Test(str, strncpy)
 {
         char *buff = strdup("AAAAAAAAAAAAAAAAAAA");
 

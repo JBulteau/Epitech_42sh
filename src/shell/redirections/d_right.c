@@ -13,19 +13,6 @@
 #include "tokens.h"
 #include "my.h"
 
-char *handle_d_right(char *input, comm_t *comm)
-{
-	int len;
-
-	input += strlen(tokens[D_RIGHT].tk);
-	input = go_next_w(input, separators);
-	len = get_wlen(input, separators);
-	if ((comm->red[D_RIGHT]->target = strndup(input, len)) == NULL)
-		return (NULL);
-	input += len;
-	return (input);
-}
-
 int exec_d_right(comm_t *comm)
 {
 	comm->red[D_RIGHT]->fd[0] = open(comm->red[D_RIGHT]->target, O_RDWR | O\
