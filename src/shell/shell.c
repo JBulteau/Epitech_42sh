@@ -14,31 +14,6 @@
 #include "prompt.h"
 #include "my.h"
 
-char **clone_arr(char **arr)
-{
-	int len = array_len((void *) arr);
-	char **new_arr = NULL;
-
-	if (len == -1) {
-		new_arr = malloc(sizeof(char *) * 1);
-		if (new_arr == NULL)
-			return (NULL);
-		new_arr[0] = NULL;
-	} else {
-		new_arr = malloc(sizeof(char *) * len);
-		if (new_arr == NULL)
-			return (NULL);
-		for (int i = 0; arr[i]; i++)
-			new_arr[i] = strdup(arr[i]);
-		new_arr[len - 1] = NULL;
-	}
-	return (new_arr);
-}
-
-/*
-** TODO: Add this to bonus folder
-** 
-*/
 shell_t *init_shell(char **env)
 {
 	int create_default_env = (env == NULL || env[0] == NULL) ? 1 : 0;

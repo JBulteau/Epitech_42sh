@@ -11,14 +11,15 @@ TESTS_DIR	=	$(realpath ./tests)
 
 SRC_DIR		=	$(realpath ./src)
 
+PARSING_DIR	=	parsing/
 SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
 42RC_DIR	=	$(SHELL_DIR)42rc/
 VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
-PARSING_DIR	=	parsing/
 PROMPT_DIR	=	$(SHELL_DIR)prompt/
+EXEC_DIR	=	$(SHELL_DIR)exec/
 
 SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
@@ -83,6 +84,10 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PARSING_DIR)free_node.c\
 			$(PARSING_DIR)init_comm_array.c\
 			$(PARSING_DIR)convert_node.c\
+\
+			$(EXEC_DIR)exec_pipe.c\
+			$(EXEC_DIR)exec.c\
+			$(EXEC_DIR)run_bin.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

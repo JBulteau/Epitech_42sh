@@ -59,10 +59,23 @@ void clean_exit(shell_t *shell, int exit_code)
 	exit(exit_code);
 }
 
-int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
+char **clone_arr(char **arr)
 {
-	if (execve(path, comm->argv, env) == -1)
-		disp_wrong_arch(comm->argv[0], errno);
-	clean_exit(shell, 1);
-	return (ERROR_RETURN);
+	int len = array_len((void *) arr);
+	char **new_arr = NULL;
+
+	if (len == -1) {
+		new_arr = malloc(sizeof(char *) * 1);
+		if (new_arr == NULL)
+			return (NULL);
+		new_arr[0] = NULL;
+	} else {
+		new_arr = malloc(sizeof(char *) * len);
+		if (new_arr == NULL)
+			return (NULL);
+		for (int i = 0; arr[i]; i++)
+			new_arr[i] = strdup(arr[i]);
+		new_arr[len - 1] = NULL;
+	}
+	return (new_arr);
 }
