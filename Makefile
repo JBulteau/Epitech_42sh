@@ -35,6 +35,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 \
 			$(BI_DIR)basic_bi.c\
 			$(BI_DIR)env.c\
+			$(BI_DIR)repeat.c\
 			$(BI_DIR)cd.c\
 			$(BI_DIR)history.c\
 			$(BI_DIR)history_exec.c\
