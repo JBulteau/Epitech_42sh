@@ -143,7 +143,7 @@ void delete_shell(shell_t *shell)
 	free(shell->vars);
 	free(shell);
 	if (list_jobs)
-		for (jobs_t *node; list_jobs != NULL;)
+		for (; list_jobs != NULL;)
 			free_jobs();
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);

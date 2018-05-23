@@ -70,21 +70,11 @@ int run_that(shell_t *shell)
 	int return_code = 0;
 
 	if ((shell->comm = full_parse(shell->input)) == NULL) {
-		shell->return_code = 1;
+		shell->return_value = 1;
 		return (ERROR_CODE);
 	}
 	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
 		return (ERROR_CODE);
-
-	/*DEBUG
-	shell->comm[0]->next = shell->comm[1];
-	shell->comm[1]->next = shell->comm[2];
-	shell->comm[2]->next = shell->comm[3];
-	shell->comm[3]->next = NULL;
-	shell->comm[1] = NULL;
-	shell->comm[2] = NULL;
-	shell->comm[3] = NULL;
-	/*END OF DEBUG*/
 	return_code = exec_loop(shell);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);

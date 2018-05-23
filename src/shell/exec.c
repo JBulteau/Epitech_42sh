@@ -30,7 +30,25 @@ int exec_end(comm_t *comm)
 	return (SUCCESS_RETURN);
 }
 
-int exec_pl_separators(shell_t *shell, comm_t *comm)
+int exec_pl_separators(shell_t *shell)
+{
+	int pipeline = 0;
+
+
+	for (int i =0; shell->comm[i] != NULL; i++) {
+		if ((pipeline = run_pipeline(shell, shell->comm[i])) == ERROR_RETURN)
+			return (ERROR_RETURN);
+		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
+alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
+)))) {
+			while (shell->comm[i]->separator != NOTHING)
+				i++;
+		}
+	}
+	return (SUCCESS_RETURN);
+}
+
+int exec_loop(shell_t *shell)
 {
 	int pipeline = 0;
 
@@ -40,10 +58,11 @@ int exec_pl_separators(shell_t *shell, comm_t *comm)
 		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
 alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
 )))) {
-			while (shell->comm[i]->separator != NONE)
-				i++;
+			while (shell->comm[i]->separator != NOTHING)
+			i++;
 		}
 	}
+	return (pipeline);
 }
 
 int exec_bin(comm_t *comm, char **env, shell_t *shell)

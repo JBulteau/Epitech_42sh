@@ -20,22 +20,25 @@ separator_type_t check_arrow(char *buffer, int *i, separator_type_t arrow)
 separator_type_t check_cmd_separator(char *buffer, int *i, node_t *node)
 {
 	if (node->quote != NONE)
-		return (0);
+		return (SUCCESS_RETURN);
 	switch (buffer[*i]) {
 	case '|' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (S_PIPE);
+		break;
 	case '>' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (check_arrow(buffer, i, S_ARROW_RIGHT));
+		break;
 	case '<' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (check_arrow(buffer, i, S_ARROW_LEFT));
+		break;
 	case '&' :
 		if (*i < 1 || !is_cmd_separator(buffer[(*i) - 1]))
 			return (S_AMPERSAND);
 	}
-	return (0);
+	return (SUCCESS_RETURN);
 }
 
 node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)

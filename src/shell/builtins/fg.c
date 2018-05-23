@@ -42,6 +42,8 @@ int ptr_fg(comm_t *comm, shell_t *shell)
 	int i;
 	jobs_t *node;
 
+	UNUSED(comm);
+	UNUSED(shell);
 	node = find_node_job();
 	if (0 == get_nb_job() || node->pid_job[0] == 0) {
 		printf("No jobs running\n");

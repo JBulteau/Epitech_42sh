@@ -75,7 +75,6 @@ comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
 		if (comm->argv == NULL)
 			return (NULL);
 	} else {
-		puts("NTM");
 		comm->argv[(*comm_index)] = strdup(node->buffer);
 		//TODO verifier
 		(*comm_index)++;
