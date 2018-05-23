@@ -8,6 +8,7 @@
 NAME = my
 
 SRCS =	check_str.c\
+	clean_str.c\
 	maths.c\
 	my_put.c\
 	my_str.c\
@@ -24,21 +25,23 @@ INC = -I ../../include
 
 CC = gcc
 
-CFLAGS = $(INC) -Wall -Wextra
+CFLAGS = $(INC) -Wall -Wextra -Wshadow
 
-all: $(NAME)
+all:	$(NAME)
 
-$(NAME): $(OBJS)
-	ar rc lib$(NAME).a $(OBJS)
-	cp lib$(NAME).a ..
+$(NAME):	$(OBJS)
+		ar rc lib$(NAME).a $(OBJS)
+		cp lib$(NAME).a ..
 clean:
-	rm -f $(OBJS)
+		rm -f $(OBJS)
 
-fclean:	clean
-	rm -f lib$(NAME).a
-	rm -f ../lib$(NAME).a
+fclean:		clean
+		rm -f lib$(NAME).a
+		rm -f ../lib$(NAME).a
 
-re: fclean all
+re: 		fclean all
 
-debug: CFLAGS += -g
-debug: re
+debug:		CFLAGS += -g
+debug:		$(OBJS)
+		ar rc lib$(NAME).a $(OBJS)
+		cp lib$(NAME).a ..

@@ -12,6 +12,8 @@ int my_strlen(const char *str)
 {
 	int len;
 
+	if (str == NULL)
+		return (-1);
 	for (len = 0; str[len]; len++);
 	return (len);
 }
@@ -30,7 +32,7 @@ char *my_strcpy(char *dest, char const *src, int n)
 int my_strcmp(const char *str1, const char *str2, int n)
 {
 	if (str1 == NULL || str2 == NULL)
-		return (0);
+		return (1);
 	if (n == 0 && my_strlen(str1) != my_strlen(str2))
 		return (1);
 	for (int i = 0; n == 0 && str1[i] && str2[i]; i++)
@@ -62,7 +64,7 @@ char *my_revstr(const char *str)
 	char *res = my_strndup(str, 0);
 	int len = my_strlen(str);
 
-	if (str == NULL)
+	if (str == NULL || res == NULL)
 		return (NULL);
 	for (int i = 0; i < len; i++)
 		res[i] = str[len - i - 1];

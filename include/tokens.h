@@ -41,10 +41,10 @@ static const struct {
 	int (*fnc_exec)(comm_t *comm);
 	int (*end_exec)(comm_t *comm);
 } tokens[] = {
-	{">>", &handle_d_right, &exec_d_right, &end_d_right},
-	{">", &handle_s_right, &exec_s_right, &end_s_right},
-	{"<<", &handle_d_left, &exec_d_left, &end_d_left},
 	{"<", &handle_s_left, &exec_s_left, &end_s_left},
+	{"<<", &handle_d_left, &exec_d_left, &end_d_left},
+	{">", &handle_s_right, &exec_s_right, &end_s_right},
+	{">>", &handle_d_right, &exec_d_right, &end_d_right},
 	{"|", &handle_pipe, NULL, NULL},
 	{NULL, NULL, NULL, NULL}
 };

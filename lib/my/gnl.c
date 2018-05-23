@@ -1,60 +1,103 @@
 /*
 ** EPITECH PROJECT, 2017
-** get_next_line.c
+** GNL
 ** File description:
-** get_next_line.c
+** GNL
 */
 
 #include "my.h"
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-static void save_fnc(char *save, char *src)
+static char *fill_buffer(char *buf, char *ptr)
 {
-	int index;
+	int i;
+	int j;
+	char *new_buf;
 
-	for (index = 0; src[index] && src[index] != '\n'; index++);
-	if (!src[index])
-		return;
-	src[index++] = 0;
-	for (int i = 0; src[index + i] && src[index + i] != '\n'; i++) {
-		save[i] = src[index + i];
-		src[index + i] = 0;
-	}
-
-}
-
-static char *last_step(char *res, char *save, int index)
-{
-	save_fnc(save, res);
-	if (res[0] == 0 && save[0] == 0 && index == 0) {
-		free(res);
+	for (i = 0; ptr[i] != '\0'; i++);
+	for (j = 0; buf[j] != '\0'; j++);
+	new_buf = malloc(sizeof(char) * (i + j));
+	if (new_buf == NULL) {
+		free(buf);
 		return (NULL);
 	}
-	return (res);
+	for (int k = 0; k < i + j; k++) {
+		if (k < i)
+			new_buf[k] = ptr[k];
+		else
+			new_buf[k] = buf[k - i];
+	}
+	free(buf);
+	return (new_buf);
 }
 
-char *gnl(int fd)
+static char *my_realloc(char *buf, int n, int j)
 {
-	static char save[READ_SIZE + 1];
-	char buff[READ_SIZE];
-	char *res = malloc(1);
-	int index = 1;
+	char *new_buf = malloc(sizeof(char) * n * (j + 1));
 
-	if (res == NULL)
+	if (new_buf == NULL) {
+		free(buf);
 		return (NULL);
-	res[0] = 0;
-	if ((res = concat(save, res, 0, 1)) == NULL)
+	}
+	for (int i = 0; i < n * j; i++)
+		new_buf[i] = buf[i];
+	for (int i = n * j; i < n * (j + 1); i++)
+		new_buf[i] = '\0';
+	free(buf);
+	return (new_buf);
+}
+
+static int find_line_break(char *buf, int index)
+{
+	for (int i = 0; i < index; i++) {
+		if (buf[i] == '\n' || buf[i] == '\0')
+			return (0);
+	}
+	return (1);
+}
+
+static char *read_file(int fd, char *ptr)
+{
+	char *buf = malloc(sizeof(char) * (READ_SIZE + 1));
+	int result = 0;
+	int j = 0;
+	static int index = 0;
+
+	if (buf == NULL || fd < 0)
 		return (NULL);
-	for (int i = 0; i < READ_SIZE; i++)
-		save[i] = 0;
-	while (index_of(res, '\n') == -1 && \
-(index = read(fd, buff, READ_SIZE))) {
-		buff[index] = 0;
-		if ((res = concat(res, buff, 1, 0)) == NULL)
+	for (int k = 0; k <= READ_SIZE; k++)
+		buf[k] = '\0';
+	if (index != 0 && !(find_line_break(ptr, index)))
+		return (buf);
+	do {
+		buf = my_realloc(buf, READ_SIZE, j);
+		if (buf == NULL)
 			return (NULL);
-		if (index_of(buff, '\n') != -1)
-			break;
+		result = read(fd, &buf[READ_SIZE * j], READ_SIZE);
+		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0') {
+			free(buf);
+			return (NULL);
+		}
+	} while (find_line_break(buf, READ_SIZE * ++j));
+	return (buf);
+}
+
+char *gnl (int fd)
+{
+	int i;
+	static char ptr[READ_SIZE];
+	char *buf = read_file(fd, ptr);
+
+	if (buf != NULL) {
+		if (ptr[0] != '\0')
+			buf = fill_buffer(buf, ptr);
+		if (buf == NULL)
+			return (NULL);
+		for (i = 0; buf[i] != '\0' && buf[i] != '\n'; i++);
+		buf[i] = '\0';
+		for (int k = 0; ptr[k] != '\0'; k++)
+			ptr[k] = '\0';
 	}
-	return (last_step(res, save, index));
+	return (buf);
 }

@@ -15,6 +15,11 @@ int	is_alphanum(const char *str);
 int	check_chars(const char *str, const char *valid);
 int	index_of(const char *str, const char c);
 
+/*	clean_str.c	*/
+char *clear_str(char *buffer);
+void spaces_handle(int *a, char *result, int *i, char *buffer);
+void init_clear_str(char *buffer, char **result);
+
 /*	maths.c		*/
 int	my_abs(const int x);
 int	my_pow(const int x, const int pow);
@@ -64,6 +69,9 @@ int	my_getnbr_base(char const *str, char const *base);
 #define	ERROR_CODE	84
 #define	ERROR_RETURN	-1
 #define SUCCESS_RETURN	0
+
+#define UNUSED(x) (void)(x)
+
 static const char	HEX_UP[]	=	"0123456789ABCDEF";
 static const char	HEX_LOW[]	=	"0123456789abcdef";
 static const char	NUM[]		=	"0123456789";
