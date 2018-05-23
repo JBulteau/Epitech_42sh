@@ -36,59 +36,6 @@ char *get_proc_name(pid_t pid)
 	return (name);
 }
 
-void loop_ctrl_z(jobs_t *node)
-{
-	char *name;
-
-	for (int i = 0; node->pid_job[i] != 0; i++) {
-		if (kill(node->pid_job[i], SIGSTOP) == -1) {
-			perror("kill");
-			return;
-		}
-		name = get_proc_name(node->pid_job[i]);
-		printf("\t%d - %s -> suspended\n", node->pid_job[i], name);
-		free(name);
-	}
-	fflush(stdout);
-}
-
-void catch_ctrl_z(int sig)
-{
-	jobs_t *node = find_node_job();
-
-	UNUSED(sig);
-	printf("\033[2D  \033[2D");
-	fflush(stdout);
-	if (node->running == false)
-		return;
-	printf("\n[%d]", get_nb_job());
-	loop_ctrl_z(node);
-	if (raise(SIGCONT) == -1) {
-		perror("raise");
-		exit(84);
-	}
-	node->running = false;
-}
-
-int init_signal(void)
-{
-	struct sigaction act_z;
-
-	list_jobs = malloc(sizeof(jobs_t));
-	if (memset(&act_z, '\0', sizeof(act_z) + 1) == NULL || \
-list_jobs == NULL)
-		return (-1);
-	list_jobs->pid_job = malloc(sizeof(int) * 2);
-	if (list_jobs->pid_job == NULL)
-		return (perror("Malloc"), -1);
-	list_jobs->pid_job[0] = 0;
-	list_jobs->running = false;
-	list_jobs->next = NULL;
-	act_z.sa_sigaction = (void *)catch_ctrl_z;
-	sigaction(SIGTSTP, &act_z, NULL);
-	return (0);
-}
-
 int wait_for_it(pid_t pid)
 {
 	pid_t last_pid;

@@ -14,11 +14,9 @@
 
 int exec_start(comm_t *comm)
 {
-	for (int i = 0; i < 4; i++) {
-		if (comm->red[i] && tokens[i].fnc_exec(comm) == -1) {
+	for (int i = 0; i < 4; i++)
+		if (comm->red[i] && tokens[i].fnc_exec(comm) == -1)
 			return (ERROR_RETURN);
-		}
-	}
 	return (SUCCESS_RETURN);
 }
 
@@ -30,22 +28,11 @@ int exec_end(comm_t *comm)
 	return (SUCCESS_RETURN);
 }
 
-int exec_pl_separators(shell_t *shell)
+static int go_next_sep(comm_t **comms, int i)
 {
-	int pipeline = 0;
-
-
-	for (int i =0; shell->comm[i] != NULL; i++) {
-		if ((pipeline = run_pipeline(shell, shell->comm[i])) == ERROR_RETURN)
-			return (ERROR_RETURN);
-		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
-alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
-)))) {
-			while (shell->comm[i]->separator != NOTHING)
-				i++;
-		}
-	}
-	return (SUCCESS_RETURN);
+	while (comms[i]->separator != NOTHING)
+		i++;
+	return (i);
 }
 
 int exec_loop(shell_t *shell)
@@ -53,13 +40,13 @@ int exec_loop(shell_t *shell)
 	int pipeline = 0;
 
 	for (int i =0; shell->comm[i] != NULL; i++) {
-		if ((pipeline = run_pipeline(shell, shell->comm[i])) == ERROR_RETURN)
+		if ((pipeline = run_pipeline(shell, shell->comm[i])) == \
+ERROR_RETURN)
 			return (ERROR_RETURN);
 		if (!(((shell->comm[i]->separator == THEN) && (shell->return_v\
 alue == 0)) || ((shell->comm[i]->separator == OR) && (shell->return_value != 0\
 )))) {
-			while (shell->comm[i]->separator != NOTHING)
-			i++;
+			i = go_next_sep(shell->comm, i);
 		}
 	}
 	return (pipeline);
@@ -85,14 +72,6 @@ int exec_bin(comm_t *comm, char **env, shell_t *shell)
 			clean_exit(shell, 1);
 		return (run_bin(comm, filepath, env, shell));
 	}
-	clean_exit(shell, 1);
-	return (ERROR_RETURN);
-}
-
-int run_bin(comm_t *comm, char *path, char **env, shell_t *shell)
-{
-	if (execve(path, comm->argv, env) == -1)
-		disp_wrong_arch(comm->argv[0], errno);
 	clean_exit(shell, 1);
 	return (ERROR_RETURN);
 }

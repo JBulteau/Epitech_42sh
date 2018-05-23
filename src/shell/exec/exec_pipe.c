@@ -33,10 +33,26 @@ int run_not_last(shell_t *shell, comm_t *curr)
 	return (SUCCESS_RETURN);
 }
 
+int run_and_fork(shell_t *shell, comm_t *curr)
+{
+	pid_t child_pid;
+
+	if ((child_pid = fork()) == -1)
+		return (ERROR_RETURN);
+	else if (child_pid == 0) {
+		exec_start(curr);
+		init_redir_pipe(curr);
+		exec_bin(curr, shell->env, shell);
+	}
+	if (add_pid_jobs(child_pid) == -1)
+		return (ERROR_RETURN);
+	shell->return_value = wait_for_it(child_pid);
+	return (SUCCESS_RETURN);
+}
+
 int run_last_pipeline(shell_t *shell, comm_t *curr)
 {
 	int bi_return = 0;
-	pid_t child_pid;
 
 	if (is_builtin(curr->argv[0]) != -1) {
 		exec_start(curr);
@@ -47,18 +63,8 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 			return (-ERROR_CODE);
 		} else
 			shell->return_value = bi_return;
-	} else {
-		if ((child_pid = fork()) == -1)
-			return (ERROR_RETURN);
-		else if (child_pid == 0) {
-			exec_start(curr);
-			init_redir_pipe(curr);
-			exec_bin(curr, shell->env, shell);
-		}
-		if (add_pid_jobs(child_pid) == -1)
-			return (ERROR_RETURN);
-		shell->return_value = wait_for_it(child_pid);
-	}
+	} else if (run_and_fork(shell, curr) == ERROR_RETURN)
+		return (ERROR_RETURN);
 	exec_end(curr);
 	close_in(curr);
 	return (SUCCESS_RETURN);

@@ -22,7 +22,6 @@ char *get_proc_name_line(jobs_t *node)
 		free(name);
 		name = get_proc_name(node->pid_job[i]);
 		rslt = realloc(rslt, strlen(rslt) + strlen(name) + 2);
-		//rslt = strcat(rslt, " ");
 		rslt = strcat(rslt, name);
 	}
 	free(name);

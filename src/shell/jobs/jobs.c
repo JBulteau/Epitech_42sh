@@ -5,6 +5,7 @@
 ** jobs functions
 */
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -67,7 +68,7 @@ int add_pid_jobs(pid_t child)
 	int i = 0;
 	jobs_t *node = find_node_job();
 
-	for(; node->pid_job[i] != 0; i++);
+	for (; node->pid_job[i] != 0; i++);
 	node->pid_job = realloc(node->pid_job, sizeof(int) * (i + 2));
 	if (node->pid_job == NULL) {
 		perror("Realloc");

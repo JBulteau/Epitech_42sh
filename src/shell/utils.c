@@ -4,8 +4,11 @@
 ** File description:
 ** Utils fnc
 */
+
+#include <errno.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include "my.h"
@@ -54,4 +57,25 @@ void clean_exit(shell_t *shell, int exit_code)
 	free_comms(shell->comm);
 	delete_shell(shell);
 	exit(exit_code);
+}
+
+char **clone_arr(char **arr)
+{
+	int len = array_len((void *) arr);
+	char **new_arr = NULL;
+
+	if (len == -1) {
+		new_arr = malloc(sizeof(char *) * 1);
+		if (new_arr == NULL)
+			return (NULL);
+		new_arr[0] = NULL;
+	} else {
+		new_arr = malloc(sizeof(char *) * len);
+		if (new_arr == NULL)
+			return (NULL);
+		for (int i = 0; arr[i]; i++)
+			new_arr[i] = strdup(arr[i]);
+		new_arr[len - 1] = NULL;
+	}
+	return (new_arr);
 }

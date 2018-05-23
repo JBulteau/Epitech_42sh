@@ -71,8 +71,7 @@ static char *read_file(int fd, char *ptr)
 	if (index != 0 && !(find_line_break(ptr, index)))
 		return (buf);
 	do {
-		buf = my_realloc(buf, READ_SIZE, j);
-		if (buf == NULL)
+		for (buf = my_realloc(buf, READ_SIZE, j); buf == NULL;)
 			return (NULL);
 		result = read(fd, &buf[READ_SIZE * j], READ_SIZE);
 		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0') {
@@ -83,7 +82,7 @@ static char *read_file(int fd, char *ptr)
 	return (buf);
 }
 
-char *gnl (int fd)
+char *gnl(int fd)
 {
 	int i;
 	static char ptr[READ_SIZE];
