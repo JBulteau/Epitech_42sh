@@ -17,7 +17,7 @@ void disp_rights(char *name, int exists, int exec)
 	if (exists == -1) {
 		fprintf(stderr, "%s: Command not found.\n", name);
 	} else if (exec == -1) {
-		fprintf(strderr, "%s: Permission denied.\n", name);
+		fprintf(stderr, "%s: Permission denied.\n", name);
 	}
 }
 

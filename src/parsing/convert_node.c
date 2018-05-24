@@ -97,6 +97,8 @@ comm_t **convert_node(comm_t **comm, node_t *node)
 {
 	int node_index = 0;
 
+	if (comm == NULL)
+		return (NULL);
 	for (int i = 0; comm[i] != NULL; i++) {
 		comm[i] = fill_comm(comm[i], node, &node_index);
 		if (comm[i] == NULL) {
