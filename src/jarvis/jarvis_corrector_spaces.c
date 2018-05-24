@@ -30,10 +30,9 @@ int wrong_spaces_handle(comm_t *comm, jarg_t *corr)
 	int which_inc = 0;
 	int check = 1;
 
-	for (int i = 0; corr->infos[i + 1].pos != -1; i++) {
+	for (int i = 0; corr->infos[i].pos != -1 && corr->infos[i + 1].pos != -1; i++) {
 		if (corr->infos[i].correct == 0 && \
-corr->infos[i + 1].correct == 0 && (try_concat(comm, corr, &which_inc, &i)) && \
-corr->infos[i + 1].pos != -1)
+corr->infos[i + 1].correct == 0 && (try_concat(comm, corr, &which_inc, &i)))
 			continue;
 		else if (corr->infos[i].correct == 0 && \
 corr->infos[i + 1].correct == 0)

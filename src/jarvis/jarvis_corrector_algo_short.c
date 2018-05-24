@@ -20,7 +20,7 @@ int test_if_exist(char *result, glob_t *pglob, char *curr_path)
 	return (-1);
 }
 
-void switch_letters(char **result, int *index, glob_t *pglob, char *curr_path) 
+void switch_letters(char **result, int *index, glob_t *pglob, char *curr_path)
 {
 	char save = 0;
 
@@ -38,6 +38,7 @@ char *switch_two_adj_letter(char **result, glob_t *pglob, char *curr_path)
 {
 	char save = 0;
 	int index = -1;
+	char *cpy = strdup(*result);
 
 	for (int i = 0; (*result)[i] != '\0'; i++) {
 		if (i != 0) {
@@ -52,10 +53,44 @@ char *switch_two_adj_letter(char **result, glob_t *pglob, char *curr_path)
 		if (index != -1)
 			return (pglob->gl_pathv[index]);
 	}
+	free(*result);
+	*result = cpy;
 	return (NULL);
+}
+
+void prepare_try(int pos, char *result, char *try)
+{
+	int inc = 0;
+	int len = strlen(result) + 1;
+
+	for (int i = 0; i < len; i++) {
+		if (i == pos)
+			continue;
+		try[i] = result[inc++];
+	}
 }
 
 char *add_letter(char **result, glob_t *pglob, char *curr_path)
 {
-	
+	char *try = malloc(strlen(*result) + 2);
+	int pos = 0;
+	int index = 0;
+
+	try[strlen(*result) + 1] = '\0';
+	for (int i = strlen(*result) + 1; i > 0; i--) {
+		prepare_try(pos++, *result, try);
+		for (char letter = 'a'; letter <= 'z'; letter++) {
+			try[pos - 1] = letter;
+			if ((index = test_if_exist(try, pglob, curr_path)) >= 0)
+				return (pglob->gl_pathv[index]);
+		}
+		for (char nb = '0'; nb <= '9'; nb++) {
+			try[pos - 1] = nb;
+			if ((index = test_if_exist(try, pglob, curr_path)) >= 0)
+				return (pglob->gl_pathv[index]);
+		}
+	}
+	return (NULL);
+
+
 }

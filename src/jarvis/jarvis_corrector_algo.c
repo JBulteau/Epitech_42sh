@@ -50,7 +50,9 @@ int correct_short(char **result, glob_t *pglob, char *curr_path)
 	char *c = NULL;
 
 	if ((c = switch_two_adj_letter(result, pglob, curr_path)) || \
-(c = add_letter(result, pglob, curr_path)) /*|| other way */) {
+(c = add_letter(result, pglob, curr_path)) || \
+(c = remove_letter(result, pglob, curr_path)) || \
+(c = substitute_letter(result, pglob, curr_path))) {
 		free(*result);
 		(*result) = strdup(c);
 		return (0);

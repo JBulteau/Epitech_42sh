@@ -33,6 +33,10 @@ enum inc {
 };
 
 /* jarvis corrector */
+char *substitute_letter(char **result, glob_t *pglob, char *curr_path);
+int test_if_exist(char *result, glob_t *pglob, char *curr_path);
+char *remove_letter(char **result, glob_t *pglob, char *curr_path);
+char *add_letter(char **result, glob_t *pglob, char *curr_path);
 char *switch_two_adj_letter(char **result, glob_t *pglob, char *curr_path);
 char *free_return_pointer(char **to_free, char *to_return);
 int free_ret_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb);
