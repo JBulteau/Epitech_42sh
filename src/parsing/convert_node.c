@@ -40,7 +40,8 @@ comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
 		if (comm->argv == NULL)
 			return (NULL);
 	} else {
-		comm->argv = realloc(comm->argv, sizeof(char*) * ((*comm_index) + 2));
+		comm->argv = \
+		realloc(comm->argv, sizeof(char*) * ((*comm_index) + 2));
 		if (comm->argv == NULL)
 			return (NULL);
 		comm->argv[(*comm_index)] = strdup(node->buffer);
