@@ -35,7 +35,7 @@ void debug_comm(comm_t *comm)
 target);
 	for (int j = 0; comm->argv[j]; j++)
 		puts(comm->argv[j]);
-	if (comm->fg == true)
+	if (comm->bg == true)
 		puts("BACKGROUND");
 	if (comm->pipe[OUT]) {
 		putchar('\n');
