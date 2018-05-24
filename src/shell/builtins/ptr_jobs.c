@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "minishell.h"
 #include "builtins.h"
+#include "my.h"
 
 char *get_proc_name_line(jobs_t *node)
 {
@@ -21,7 +22,6 @@ char *get_proc_name_line(jobs_t *node)
 		free(name);
 		name = get_proc_name(node->pid_job[i]);
 		rslt = realloc(rslt, strlen(rslt) + strlen(name) + 2);
-		//rslt = strcat(rslt, " ");
 		rslt = strcat(rslt, name);
 	}
 	free(name);
@@ -33,6 +33,8 @@ int ptr_jobs(comm_t *comm, shell_t *shell)
 	char *name = NULL;
 	jobs_t *node = list_jobs;
 
+	UNUSED(comm);
+	UNUSED(shell);
 	node = node->next;
 	for (int i = 1; node != NULL; i++) {
 		name = get_proc_name_line(node);

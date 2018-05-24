@@ -11,6 +11,7 @@ TESTS_DIR	=	$(realpath ./tests)
 
 SRC_DIR		=	$(realpath ./src)
 
+PARSING_DIR	=	parsing/
 SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
@@ -18,26 +19,23 @@ RED_DIR		=	$(SHELL_DIR)redirections/
 VAR_DIR		=	$(SHELL_DIR)shell_var/
 ALIAS_DIR	=	$(SHELL_DIR)alias/
 PROMPT_DIR	=	$(SHELL_DIR)prompt/
+EXEC_DIR	=	$(SHELL_DIR)exec/
+JOBS_DIR	=	$(SHELL_DIR)jobs/
 
 SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(SHELL_DIR)shell.c\
 			$(SHELL_DIR)utils.c\
 			$(SHELL_DIR)search.c\
-			$(SHELL_DIR)exec.c\
 			$(SHELL_DIR)debug.c\
-			$(SHELL_DIR)parsing.c\
-			$(SHELL_DIR)infos.c\
+			$(SHELL_DIR)init.c\
 			$(SHELL_DIR)commands.c\
 			$(SHELL_DIR)display.c\
 			$(SHELL_DIR)redir.c\
 			$(SHELL_DIR)pipe.c\
-			$(SHELL_DIR)exec_pipe.c\
-			$(SHELL_DIR)redir_pipe.c\
-			$(SHELL_DIR)init_signal.c\
-			$(SHELL_DIR)jobs.c\
 \
 			$(BI_DIR)basic_bi.c\
 			$(BI_DIR)env.c\
+			$(BI_DIR)repeat.c\
 			$(BI_DIR)cd.c\
 			$(BI_DIR)history.c\
 			$(BI_DIR)history_exec.c\
@@ -50,7 +48,6 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(RED_DIR)s_left.c\
 			$(RED_DIR)d_right.c\
 			$(RED_DIR)s_right.c\
-			$(RED_DIR)pipe.c\
 \
 			$(42RC_DIR)load42.c\
 \
@@ -69,10 +66,37 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PROMPT_DIR)handler_vars.c\
 			$(PROMPT_DIR)handler_date.c\
 			$(PROMPT_DIR)handler_get_from_shell.c\
+\
+			$(PARSING_DIR)parsing.c\
+			$(PARSING_DIR)struct.c\
+			$(PARSING_DIR)quote.c\
+			$(PARSING_DIR)is_quote.c\
+			$(PARSING_DIR)split.c\
+			$(PARSING_DIR)parentheses.c\
+			$(PARSING_DIR)globbing.c\
+			$(PARSING_DIR)cmd_separators.c\
+			$(PARSING_DIR)browse_node.c\
+			$(PARSING_DIR)is_cmd_separator.c\
+			$(PARSING_DIR)free_node.c\
+			$(PARSING_DIR)init_comm_array.c\
+			$(PARSING_DIR)convert_node.c\
+			$(PARSING_DIR)handle_separators.c\
+\
+			$(EXEC_DIR)exec_pipe.c\
+			$(EXEC_DIR)redir_pipe.c\
+			$(EXEC_DIR)exec.c\
+			$(EXEC_DIR)run_bin.c\
+\
+			$(JOBS_DIR)init_signal.c\
+			$(JOBS_DIR)jobs.c\
+			$(JOBS_DIR)signals.c\
+			$(JOBS_DIR)sig_handlers.c\
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
-CFLAGS		=	-W -Wextra  -I include -Wall -Wshadow
+TEST_FOLDER	=	tests
+
+CFLAGS		=	-W -Wextra -Wall -Wshadow -I include
 
 OBJ		=	$(SRC:%.c=%.o)
 
@@ -108,3 +132,9 @@ debug:		$(OBJ)
 units:
 		$(MAKE) -C $(TESTS_DIR)
 		$(TESTS_DIR)/test
+tests_run:
+		$(MAKE) -C $(TEST_FOLDER)
+		./$(TEST_FOLDER)/test > /dev/null
+
+tests_fclean:
+		$(MAKE) fclean -C $(TEST_FOLDER)

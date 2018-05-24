@@ -8,7 +8,7 @@
 #include "minishell.h"
 #include <criterion/criterion.h>
 
-Test (basic_shell, init_null_env)
+Test(basic_shell, init_null_env)
 {
 	shell_t *shell = init_shell(NULL);
 
@@ -18,7 +18,7 @@ Test (basic_shell, init_null_env)
 	cr_expect(shell->return_value == 0);
 }
 
-Test (basic_shell, init_no_null_env)
+Test(basic_shell, init_no_null_env)
 {
 	char *env[] = {
 		"ABC",

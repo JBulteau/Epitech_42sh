@@ -11,8 +11,8 @@
 
 int ptr_modulo(shell_t *shell, char *input)
 {
-        UNUSED(input);
-        UNUSED(shell);
-        putchar('%');
-        return (0);
+	UNUSED(input);
+	UNUSED(shell);
+	putchar('%');
+	return (0);
 }

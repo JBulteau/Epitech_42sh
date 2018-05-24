@@ -27,7 +27,7 @@ int ptr_handle_host(shell_t *shell, char *input)
 
 int ptr_handle_user(shell_t *shell, char *input)
 {
-       	struct passwd *p = getpwuid(getuid());
+	struct passwd *p = getpwuid(getuid());
 
 	UNUSED(shell);
 	UNUSED(input);

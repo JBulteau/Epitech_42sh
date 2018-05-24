@@ -8,33 +8,43 @@
 #include <stdio.h>
 #include "minishell.h"
 #include "tokens.h"
+#include "parsing.h"
 
-void debug_comm(comm_t *comm)
+void display_sep(sep_t separator)
 {
-	for (int i = 0; i < 4; i++)
-		if (comm->red[i]) {
-			printf("[%s] [%s]\n", tokens[i].tk, comm->red[i]->\
-target);
-		}
-	for (int j = 0; comm->argv[j]; j++) {
-		printf("%s ", comm->argv[j]);
-	}
-	putchar('\n');
-	if (comm->pipe[OUT]) {
-		puts("PIPED INTO");
-		debug_comm(comm->pipe[OUT]->output);
-	}
-	switch (comm->separator) {
+	switch (separator) {
 	case THEN:
 		puts("&&");
 		break;
 	case OR:
 		puts("||");
 		break;
-	case NONE:
+	case NOTHING:
 		puts(";");
 		break;
-	default:
-		break;
 	}
+}
+
+void debug_comm(comm_t *comm)
+{
+	if (comm == NULL)
+		return;
+	for (int i = 0; i < 4; i++)
+		if (comm->red != NULL && comm->red[i] != NULL)
+			printf("[%s] [%s]\n", tokens[i].tk, comm->red[i]->\
+target);
+	for (int j = 0; comm->argv[j]; j++)
+		puts(comm->argv[j]);
+	if (comm->fg == true)
+		puts("BACKGROUND");
+	if (comm->pipe[OUT]) {
+		putchar('\n');
+		puts("PIPED INTO");
+		debug_comm(comm->pipe[OUT]->output);
+	}
+	putchar('\n');
+	display_sep(comm->separator);
+	putchar('\n');
+	if (comm->next)
+		debug_comm(comm->next);
 }

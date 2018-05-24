@@ -52,7 +52,7 @@ void disp_vars(var_t **arr)
 	for (int i = 0; arr[i]; i++) {
 		printf("{\n\t\tNAME: %s\n\t\tTYPE: ", arr[i]->name);
 		switch (arr[i]->type) {
-		case NONE:
+		case NOTHING:
 			puts("NONE");
 			break;
 		case STR:

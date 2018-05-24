@@ -42,12 +42,11 @@ int ptr_alias(comm_t *comm, shell_t *shell)
 	if (!strcmp(comm->argv[1], "--help") || !strcmp(comm->argv[1], "-h"))
 		return (disp_help());
 	if (!strcmp(comm->argv[1], "rm") || !strcmp(comm->argv[1], "delete")) {
-		if (rm_alias(shell, comm->argv[2], comm) == ERROR_RETURN)
+		if (rm_alias(shell, comm->argv[2]) == ERROR_RETURN)
 			return (EXIT_FAILURE);
 		return (EXIT_SUCCESS);
 	}
-	if ((add_alias(comm->argv, shell) == ERROR_RETURN) || \
-(update_aliases(shell, comm, 0, 1) == ERROR_RETURN))
+	if (add_alias(comm->argv, shell) == ERROR_RETURN)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -56,7 +55,8 @@ int ptr_unalias(comm_t *comm, shell_t *shell)
 {
 	if (!strcmp(comm->argv[1], "--help") || !strcmp(comm->argv[1], "-h"))
 		return (disp_help_unset());
-	if (rm_alias(shell, comm->argv[1], comm) == ERROR_RETURN)
-		return (EXIT_FAILURE);
+	for (int i = 1; comm->argv[i] != NULL; i++)
+		if (rm_alias(shell, comm->argv[i]) == ERROR_RETURN)
+			return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

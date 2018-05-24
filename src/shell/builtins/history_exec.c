@@ -30,6 +30,13 @@ hist->next);
 	return (return_c);
 }
 
+int event_not_found(shell_t *shell, int n)
+{
+	fprintf(stderr, "%i: Event not found.\n", n);
+	shell->return_value = 1;
+	return (ERROR_RETURN);
+}
+
 int run_n(shell_t *shell, int n)
 {
 	int return_c = 0;
@@ -41,11 +48,8 @@ int run_n(shell_t *shell, int n)
 		return (ERROR_RETURN);
 	for (i = 1; i < n && hist->next != NULL; i++)
 		hist = hist->next;
-	if (i != n) {
-		fprintf(stderr, "%i: Event not found.\n", n);
-		shell->return_value = 1;
-		return (ERROR_RETURN);
-	}
+	if (i != n)
+		return (event_not_found(shell, n));
 	save = shell->comm;
 	free(shell->input);
 	shell->input = strdup(hist->data);

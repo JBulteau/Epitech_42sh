@@ -12,16 +12,18 @@
 #include <linux/limits.h>
 #include <stdbool.h>
 
+#define DEFAULT_PATH	"/usr/bin:/bin"
+
 enum {
-	D_RIGHT,
-	S_RIGHT,
-	D_LEFT,
 	S_LEFT,
+	D_LEFT,
+	S_RIGHT,
+	D_RIGHT,
 	PIPE
 };
 
 typedef enum {
-	NONE,
+	NOTHING,
 	THEN,
 	OR
 } sep_t;
@@ -37,8 +39,8 @@ enum {
 };
 
 enum {
-        PREV,
-        NEXT
+	PREV,
+	NEXT
 };
 
 typedef struct redir_s redir_t;
@@ -46,17 +48,17 @@ typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 typedef struct alias_s alias_t;
 typedef struct jobs_s jobs_t; 
- 
-struct jobs_s { 
-  bool running; 
-  pid_t *pid_job; 
-  jobs_t *next; 
+
+struct jobs_s {
+	bool running; 
+	pid_t *pid_job; 
+	jobs_t *next; 
 };
 
 struct alias_s {
 	char *name;
-        char *alias;
-        struct alias_s *nav[2];
+	char *alias;
+	struct alias_s *nav[2];
 };
 
 typedef enum {
@@ -88,6 +90,8 @@ struct redir_s {
 
 struct comm_s {
 	char **argv;
+	comm_t *next;
+	bool fg;
 	sep_t separator;
 	redir_t *red[4];
 	pipe_t *pipe[2];
@@ -119,7 +123,7 @@ int ask_y_n(char *s, char *yes, char *no);
 int load42(shell_t *shell);
 
 /*	shell/alias/alias_comm.c	*/
-int rm_alias(shell_t *shell, char *alias, comm_t *comm);
+int rm_alias(shell_t *shell, char *alias);
 int update_aliases(shell_t *shell, comm_t *comm, int remove, int skip_curr);
 
 /*	shell/alias/alias_struc.c	*/
@@ -184,6 +188,12 @@ void disp_wrong_arch(char *str, int num);
 void display_signal(int status);
 int disp_prompt(shell_t *shell);
 
+/*	shell/init.c	*/
+int set_basic_env(shell_t *shell, char ***env);
+int setup_default_env(char ***env, shell_t *shell);
+int set_shlvl(char ***env);
+int init_vars(shell_t *shell);
+
 /*	shell/exec_pipe.c		*/
 int run_not_last(shell_t *shell, comm_t *curr);
 int run_last_pipeline(shell_t *shell, comm_t *curr);
@@ -193,7 +203,7 @@ int run_pipeline(shell_t *shell, comm_t *comm);
 int exec_start(comm_t *comm);
 int exec_end(comm_t *comm);
 int exec_loop(shell_t *shell);
-int exec_bin(comm_t *comm, char **env,shell_t *shell);
+int exec_bin(comm_t *comm, char **env, shell_t *shell);
 int run_bin(comm_t *comm, char *path, char **env, shell_t *shell);
 /*	shell/init_signal.c		*/
 char* get_proc_name(pid_t pid);
@@ -209,7 +219,7 @@ jobs_t *new_node(void);
 void remove_node(void);
 int add_pid_jobs(pid_t child);
 void set_node_running_false(void);
-
+void free_jobs(void);
 
 /*	shell/main.c			*/
 int main(int ac, char **av, char **env);
@@ -238,6 +248,7 @@ int search_local(char *name);
 char *search_path(char **path, char *name);
 char *get_env_var(char **env, char *var);
 char **get_path(char **env);
+char **get_path(char **env, var_t **vars);
 
 /*	shell/shell.c			*/
 char **clone_arr(char **arr);
@@ -248,6 +259,7 @@ void delete_shell(shell_t *shell);
 int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 char **add_arr(char **arr, char *str, int free_arr);
+comm_t **parsing(char *buffer);
 
 /*	shell/infos.c			*/
 int set_infos(char ***env);
