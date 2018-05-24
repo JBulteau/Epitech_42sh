@@ -40,9 +40,13 @@ comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
 		if (comm->argv == NULL)
 			return (NULL);
 	} else {
+		comm->argv = realloc(comm->argv, sizeof(char*) * ((*comm_index) + 2));
+		if (comm->argv == NULL)
+			return (NULL);
 		comm->argv[(*comm_index)] = strdup(node->buffer);
 		if (comm->argv[(*comm_index)] == NULL)
 			return (NULL);
+		comm->argv[(*comm_index) + 1] = NULL;
 		(*comm_index)++;
 	}
 	return (comm);
@@ -79,9 +83,10 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
 	&& (index[2] == 0 || node->next[index[0]]->next[index[1]]->\
 	next[index[2] - 1]->separator == 0); (*node_index)++) {
 		if (node->next[index[0]]->next[index[1]] \
-		&& node->next[index[0]]->next[index[1]]->next[index[2]])
+		&& node->next[index[0]]->next[index[1]]->next[index[2]]) {
 			comm = convert_param(comm, node->next[index[0]]->\
 			next[index[1]]->next[index[2]++], &comm_index);
+		}
 		check_node(node, index);
 	}
 	return (handle_separators(comm, node, index, &comm_index));

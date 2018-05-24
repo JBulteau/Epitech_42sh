@@ -16,6 +16,10 @@ separator_type_t separator, int *new_index)
 
 	if (separator <= D_PIPE) {
 		comm->separator = separator - 1;
+		if (separator > SEMICOLON) {
+			comm->next = init_comm();
+			comm->next = fill_comm(comm->next, node[1], new_index);
+		}
 	} else if (separator == S_PIPE) {
 		new_comm = init_comm();
 		comm->pipe[OUT] = init_pipe(comm, new_comm);
@@ -28,8 +32,7 @@ separator_type_t separator, int *new_index)
 			strdup(node[0]->buffer);
 		} else
 			comm->fg = true;
-	if ((separator >= S_ARROW_LEFT && separator <= D_ARROW_RIGHT) \
-	&& comm->red[separator - 6] && comm->red[separator - 6]->target == NULL)
+	if (REDIR(separator) && comm->red[separator - 6] && comm->red[separator - 6]->target == NULL)
 		return (NULL);
 	return (comm);
 }

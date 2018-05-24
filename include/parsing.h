@@ -47,7 +47,7 @@ struct node {
 	node_t **next;
 };
 
-#define REDIR(value) (value >= S_PIPE && value <= D_ARROW_RIGHT)
+#define REDIR(value) (value >= S_ARROW_LEFT && value <= D_ARROW_RIGHT)
 
 /* parsing.c */
 
