@@ -15,19 +15,19 @@
 
 void disp_wrong_arch(char *str, int num)
 {
-	printf("%s: %s. Wrong Architecture\n", str, strerror(num));
+	fprintf(stderr, "%s: %s. Wrong Architecture\n", str, strerror(num));
 }
 
 void display_signal(int status)
 {
 	if (WIFSIGNALED(status)) {
 		if (WTERMSIG(status) == 8)
-			printf("Floating exception");
+			fprintf(stderr, "Floating exception");
 		else
-			printf(strsignal(WTERMSIG(status)));
+			fprintf(stderr, strsignal(WTERMSIG(status)));
 		if (WCOREDUMP(status))
-			printf(" (core dumped)");
-		putchar('\n');
+			fprintf(stderr, " (core dumped)");
+		fprintf(stderr, "\n");
 	}
 }
 
