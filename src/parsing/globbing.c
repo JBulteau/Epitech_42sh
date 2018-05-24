@@ -36,13 +36,16 @@ node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
 	for (size_t i = 0; i < pglob.gl_pathc; i++)
 		total_len += strlen(pglob.gl_pathv[i]) + 1;
 	if ((node->buffer = realloc(node->buffer, \
-	sizeof(char) * (buf_len + total_len - len + 3))) == NULL)
+	sizeof(char) * (buf_len + total_len - len + 1))) == NULL)
 		return (NULL);
-	for (size_t i = 0; j + i + len <= buf_len && i <= len + 1; i++)
-		node->buffer[j + i - 1] = node->buffer[j + len + i];
+	for (size_t i = 0; j + i + len - 1 == 0 || node->buffer[j + i + len - 1] != '\0'; i++) {
+		node->buffer[j + i] = node->buffer[j + len + i];
+		if (node->buffer[j + i] == '\0')
+			break;
+	}
+	node->buffer[buf_len + total_len - len] = '\0';
 	for (; node->buffer[j] != '\0'; j++)
-		node->buffer[j + total_len - 4] = node->buffer[j];
-	node->buffer[j + total_len - 4] = '\0';
+		node->buffer[j + total_len + 1] = node->buffer[j];
 	j = tmp;
 	total_len += tmp;
 	node = fill_glob(node, pglob, j, total_len);

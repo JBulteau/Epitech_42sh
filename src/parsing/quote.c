@@ -75,16 +75,6 @@ node_t *delete_quote(node_t *node, char *buffer, int i)
 	return ((node->next == NULL) ? NULL : node);
 }
 
-node_t *fill_buffer(node_t *node, char *buffer, int *i)
-{
-	if (buffer[*i] == '\\') {
-		(*i)++;
-		node->backslash = true;
-	}
-	delete_quote(node, buffer, *i);
-	return (node);
-}
-
 node_t *parse_quote(node_t *node, char *buffer)
 {
 	node->next = realloc_node(node->next, 1, node->quote);

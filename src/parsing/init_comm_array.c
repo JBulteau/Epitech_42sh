@@ -13,21 +13,15 @@ int get_nb_comm(node_t *node)
 {
 	int i = 0;
 	int j = 0;
-	int k = 0;
 	int nb_comm = 1;
 
-	for (;node->next[i] != NULL; k++) {
-		if (node->next[i]->next[j]->next[k] == NULL) {
-			k = 0;
-			j++;
-		}
+	for (;node->next[i] != NULL; j++) {
 		if (node->next[i]->next[j] == NULL) {
 			j = 0;
 			i++;
 		}
 		if (node->next[i] \
-		&& node->next[i]->next[j]->next[k]->separator != 0 \
-		&& !REDIR(node->next[i]->next[j]->next[k]->separator))
+		&& node->next[i]->next[j]->separator == SEMICOLON)
 			nb_comm++;
 	}
 	return (nb_comm);

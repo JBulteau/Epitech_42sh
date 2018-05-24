@@ -75,24 +75,6 @@ node_t *fill_cmd_separators(node_t *node, char *buffer, int *i)
 	return ((node->next == NULL) ? NULL : node);
 }
 
-node_t *search_cmd_separators(node_t *node)
-{
-	node->next = realloc_node(node->next, 1, node->quote);
-	if (node->next == NULL)
-		return (NULL);
-	if (node->quote == NONE)
-		node->buffer = clear_str(node->buffer);
-	for (int i = 0; node->buffer && node->buffer[i] != '\0'; i++) {
-		node = fill_cmd_separators(node, node->buffer, &i);
-		if (node == NULL)
-			return (NULL);
-	}
-	for (int i = 0; node->next[i] != NULL; i++)
-		if (node->next[i + 1] == NULL)
-			node->next[i]->separator = node->separator;
-	return (node);
-}
-
 node_t *parse_cmd_separators(node_t *node)
 {
 	for (int i = 0; node->next[i] != NULL; i++) {
