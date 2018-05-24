@@ -80,5 +80,8 @@ int init_vars(shell_t *shell)
 		for (shell->vars = set_var(shell->vars, "PS1", DEFAULT_PS1); \
 !shell->vars;)
 			return (ERROR_RETURN);
+	for (shell->vars = set_var(shell->vars, "path", DEFAULT_PATH); \
+!shell->vars;)
+		return (ERROR_RETURN);
 	return (SUCCESS_RETURN);
 }

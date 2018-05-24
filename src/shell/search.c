@@ -17,7 +17,7 @@ void disp_rights(char *name, int exists, int exec)
 	if (exists == -1) {
 		fprintf(stderr, "%s: Command not found.\n", name);
 	} else if (exec == -1) {
-		fprintf(strderr, "%s: Permission denied.\n", name);
+		fprintf(stderr, "%s: Permission denied.\n", name);
 	}
 }
 
@@ -73,7 +73,7 @@ char *get_env_var(char **env, char *var)
 	return (res);
 }
 
-char **get_path(char **env)
+char **get_path(char **env, var_t **vars)
 {
 	char **path = NULL;
 
@@ -82,6 +82,9 @@ char **get_path(char **env)
 	for (int key = 0; env[key] != NULL; key++)
 		if (strncmp(env[key], "PATH=", 5) == 0)
 			path = strwordarr(env[key] + 5, ":");
+	for (int key = 0; !path && vars[key] != NULL; key++)
+		if (!strcmp(vars[key]->name, "path"))
+			path = strwordarr(vars[key]->data.content, ":");
 	if (path == NULL)
 		return (NULL);
 	return (path);

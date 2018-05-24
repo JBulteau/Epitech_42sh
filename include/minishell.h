@@ -12,6 +12,8 @@
 #include <linux/limits.h>
 #include <stdbool.h>
 
+#define DEFAULT_PATH	"/usr/bin:/bin"
+
 enum {
 	S_LEFT,
 	D_LEFT,
@@ -246,6 +248,7 @@ int search_local(char *name);
 char *search_path(char **path, char *name);
 char *get_env_var(char **env, char *var);
 char **get_path(char **env);
+char **get_path(char **env, var_t **vars);
 
 /*	shell/shell.c			*/
 char **clone_arr(char **arr);
