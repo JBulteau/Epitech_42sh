@@ -24,6 +24,8 @@ void switch_letters(char **result, int *index, glob_t *pglob, char *curr_path)
 {
 	char save = 0;
 
+	if (*index != -1)
+		return;
 	for (int a = 1; (*result)[a] && (*result)[a + 1]; a++) {
 		save = (*result)[a];
 		(*result)[a] = (*result)[a + 1];
@@ -47,11 +49,11 @@ char *switch_two_adj_letter(char **result, glob_t *pglob, char *curr_path)
 			(*result)[0] = save;
 			index = test_if_exist(*result, pglob, curr_path);
 		}
-		if (index != -1)
-			return (pglob->gl_pathv[index]);
 		switch_letters(result, &index, pglob, curr_path);
-		if (index != -1)
-			return (pglob->gl_pathv[index]);
+		if (index != -1) {
+			free(cpy);
+			return (pglob->gl_pathv[index] + strlen(curr_path));
+		}
 	}
 	free(*result);
 	*result = cpy;
@@ -70,26 +72,20 @@ void prepare_try(int pos, char *result, char *try)
 	}
 }
 
-char *add_letter(char **result, glob_t *pglob, char *curr_path)
+char *add_letter(char **result, glob_t *glob, char *curr_path)
 {
 	char *try = malloc(strlen(*result) + 2);
-	int pos = 0;
-	int index = 0;
+	int pos_ind[2] = {0, 0};
 
 	try[strlen(*result) + 1] = '\0';
 	for (int i = strlen(*result) + 1; i > 0; i--) {
-		prepare_try(pos++, *result, try);
-		for (char letter = 'a'; letter <= 'z'; letter++) {
-			try[pos - 1] = letter;
-			if ((index = test_if_exist(try, pglob, curr_path)) >= 0)
-				return (pglob->gl_pathv[index]);
-		}
-		for (char nb = '0'; nb <= '9'; nb++) {
-			try[pos - 1] = nb;
-			if ((index = test_if_exist(try, pglob, curr_path)) >= 0)
-				return (pglob->gl_pathv[index]);
-		}
+		prepare_try((pos_ind[0])++, *result, try);
+		if (loop_letter(&try, pos_ind, glob, curr_path) >= 0)
+			return (glob->gl_pathv[pos_ind[1]] + strlen(curr_path));
+		if (loop_number(&try, pos_ind, glob, curr_path) >= 0)
+			return (glob->gl_pathv[pos_ind[1]] + strlen(curr_path));
 	}
+	free(try);
 	return (NULL);
 
 

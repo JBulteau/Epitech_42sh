@@ -25,7 +25,7 @@ int check_slash(char **arg, int i)
 
 char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr)
 {
-	int usefull = 1;
+	int use = 1;
 	int to_know = 0;
 
 	if (path == NULL)
@@ -34,9 +34,9 @@ char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr)
 		if ((*arg)[i] == '/')
 			check_slash(arg, i);
 	to_know = is_slash_ending(arg);
-	if ((usefull = misspell_process(arg, &usefull, path, 1)) > 0)
-		return ((usefull !=42) ? NULL : path);
-	corr->change = (usefull == 0) ? 1 : corr->change;
+	if ((use = misspell_process(arg, &use, path, 1)) > 0)
+		return ((use != 42) ? free_return_pointer(&path, NULL) : path);
+	corr->change = (use == 0) ? 1 : corr->change;
 	if (to_know == 1)
 		put_back_last_slash(arg);
 	return (path);

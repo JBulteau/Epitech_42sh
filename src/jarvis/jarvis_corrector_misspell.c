@@ -50,18 +50,18 @@ int misspell_process(char **arg, int *pos, char *current_path, int check)
 
 	if ((check = before_correct(cp_path[0], arg, &pg, path_star)))
 		return (free_ret_nb(&path_star, &(cp_path[0]), NULL, check));
-	if (((size_check[0] = strlen(cp_path[0])) || 1) && size_check[0] >= 4) {
-		if ((check = correct_long(&(cp_path[0]), &pg, cp_path[1])))
+	if (((size_check[0] = strlen(cp_path[0])) || 1) && size_check[0] >= 4)
+		if ((check = correct_long(&(cp_path[0]), &pg, cp_path[1]))) {
 			return ((check != 42) ? free_ret_nb(&path_star, \
 &(cp_path[0]), &pg, 2) : free_ret_nb(&path_star, &(cp_path[0]), &pg, 42));
-		else
+		} else
 			check = success_case(pos, cp_path, size_check, arg);
-	} else {
-		if (correct_short(&(cp_path[0]), &pg, cp_path[1]))
-			return (free_ret_nb(&path_star, &(cp_path[0]), &pg, 2));
-		else
+	else
+		if ((check = correct_short(&(cp_path[0]), &pg, cp_path[1]))) {
+			return ((check != 42) ? free_ret_nb(&path_star, \
+&(cp_path[0]), &pg, 2) : free_ret_nb(&path_star, &(cp_path[0]), &pg, 42));
+		} else
 			check = success_case(pos, cp_path, size_check, arg);
-	}
 	return (free_ret_nb(&path_star, &(cp_path[0]), \
 &pg, ((check == 0) ? 0 : 1)));
 }
@@ -98,7 +98,7 @@ int misspell_handle(jarg_t *corr, comm_t *comm)
 	int check = 0;
 
 	for (int i = 0; corr->infos[i].pos != -1; i++) {
-		if (check == 1 && path != NULL)
+		if (check == 1)
 			free(path);
 		check = 0;
 		if (corr->infos[i].correct == 0) {
@@ -111,6 +111,7 @@ final_check_path(path, nb_to_path, &(comm->argv[i + 1]), corr);
 		if (check == 1 && path == NULL)
 			return (free_ret_nb(&path, NULL, NULL, -1));
 	}
-	free(path);
+	if (check == 1)
+		free(path);
 	return (0);
 }

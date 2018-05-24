@@ -33,31 +33,49 @@ char *remove_letter(char **result, glob_t *pglob, char *curr_path)
 	try[strlen(*result) - 1] = '\0';
 	for (int i = strlen(*result); i > 0; i--) {
 		prepare_try_rm(pos++, *result, try);
-		if ((index = test_if_exist(try, pglob, curr_path)) >= 0)
-			return (pglob->gl_pathv[index]);
+		if ((index = test_if_exist(try, pglob, curr_path)) >= 0) {
+			free(try);
+			return (pglob->gl_pathv[index] + strlen(curr_path));
+		}
 	}
+	free(try);
 	return (NULL);
 }
 
-char *substitute_letter(char **result, glob_t *pglob, char *curr_path)
+int loop_letter_sub(char **result, int *pos_ind, glob_t *glob, char *curr_path)
 {
-	int pos = 0;
-	int index = 0;
+	for (char letter = 'a'; letter <= 'z'; letter++) {
+		(*result)[pos_ind[0]] = letter;
+		if ((pos_ind[1] = test_if_exist(*result, glob, curr_path)) >= 0)
+			return (pos_ind[1]);
+	}
+	return (-1);
+}
+
+int loop_nb_sub(char **result, int *pos_ind, glob_t *glob, char *curr_path)
+{
+	for (char nb = '0'; nb <= '9'; nb++) {
+		(*result)[pos_ind[0]] = nb;
+		if ((pos_ind[1] = test_if_exist(*result, glob, curr_path)) >= 0)
+			return (pos_ind[1]);
+	}
+	return (-1);
+}
+
+char *substitute_letter(char **result, glob_t *glob, char *curr_path)
+{
+	int pos_ind[2] = {0, 0};
 	char save = 0;
 
 	for (int i = strlen(*result); i > 0; i--) {
-		save = (*result)[pos];
-		for (char letter = 'a'; letter <= 'z'; letter++) {
-			(*result)[pos] = letter;
-			if ((index = test_if_exist(*result, pglob, curr_path)) >= 0)
-				return (pglob->gl_pathv[index]);
-		}
-		for (char nb = '0'; nb <= '9'; nb++) {
-			(*result)[pos] = nb;
-			if ((index = test_if_exist(*result, pglob, curr_path)) >= 0)
-				return (pglob->gl_pathv[index]);
-		}
-		(*result)[pos++] = save;
+		save = (*result)[pos_ind[0]];
+		if ((pos_ind[1] = \
+loop_letter_sub(result, pos_ind, glob, curr_path)) >= 0)
+			return (glob->gl_pathv[pos_ind[1]] + strlen(curr_path));
+		if ((pos_ind[1] = \
+loop_nb_sub(result, pos_ind, glob, curr_path)) >= 0)
+			return (glob->gl_pathv[pos_ind[1]] + strlen(curr_path));
+		(*result)[(pos_ind[0])++] = save;
 	}
 	return (NULL);
 }

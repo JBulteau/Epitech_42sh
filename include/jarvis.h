@@ -33,6 +33,8 @@ enum inc {
 };
 
 /* jarvis corrector */
+int loop_number(char **try, int *pos_ind, glob_t *glob, char *curr_path);
+int loop_letter(char **try, int *pos_ind, glob_t *pglob, char *curr_path);
 char *substitute_letter(char **result, glob_t *pglob, char *curr_path);
 int test_if_exist(char *result, glob_t *pglob, char *curr_path);
 char *remove_letter(char **result, glob_t *pglob, char *curr_path);

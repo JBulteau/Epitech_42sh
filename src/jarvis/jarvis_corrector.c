@@ -48,8 +48,10 @@ int jarvis_corrector_arg(comm_t *comm, char *filepath, char ***env)
 		return (-1);
 	else if (returned_value == 1)
 		returned_value = misspell_handle(corr, comm);
-	if (returned_value == -1)
+	if (returned_value == -1) {
+		free_jarvis_corrector(&corr, 0);
 		return (-1);
+	}
 	printf("\nJarvis OP\n");
 	if (corr->change == 1)
 		exec(comm, filepath, *env, 1);

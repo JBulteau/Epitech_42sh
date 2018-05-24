@@ -57,7 +57,7 @@ int correct_short(char **result, glob_t *pglob, char *curr_path)
 		(*result) = strdup(c);
 		return (0);
 	}
-	return (1);
+	return (42);
 }
 
 int correct_long(char **result, glob_t *glob, char *curr_path)
