@@ -39,7 +39,8 @@ comm_t *init_comm(void)
 	comm->argv[0] = NULL;
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
-	comm->fg = false;
+	comm->bg = false;
+	comm->parenthesis = false;
 	comm->separator = NOTHING;
 	comm->next = NULL;
 	return (comm);
