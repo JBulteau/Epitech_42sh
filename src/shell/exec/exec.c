@@ -62,7 +62,7 @@ int exec_bin(comm_t *comm, char **env, shell_t *shell)
 	if (is_local == 1 && !search_local(comm->argv[0])) {
 		return (run_bin(comm, strdup(comm->argv[0]), env, shell));
 	} else if (is_local == 0) {
-		if ((path = get_path(env)) == NULL) {
+		if ((path = get_path(env, shell->vars)) == NULL) {
 			disp_rights(comm->argv[0], -1, 0);
 			clean_exit(shell, 1);
 		}
