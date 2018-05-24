@@ -22,6 +22,9 @@ void free_comm(comm_t *comm)
 	free_red(comm->red[D_RIGHT]);
 	if (comm->next)
 		free_comm(comm->next);
+	//Uncomment that julo
+	//if (comm->parenthesis)
+	//	free_comms(comm->parenthesis);
 	free(comm);
 	return;
 }
@@ -40,7 +43,7 @@ comm_t *init_comm(void)
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
 	comm->bg = false;
-	comm->parenthesis = false;
+	comm->parenthesis = NULL;
 	comm->separator = NOTHING;
 	comm->next = NULL;
 	return (comm);
