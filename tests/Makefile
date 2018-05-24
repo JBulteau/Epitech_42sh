@@ -75,6 +75,7 @@ SRC_FILES	=	$(SHELL_DIR)shell.c\
 			$(PARSING_DIR)free_node.c\
 			$(PARSING_DIR)init_comm_array.c\
 			$(PARSING_DIR)convert_node.c\
+			$(PARSING_DIR)handle_separators.c\
 \
 			$(EXEC_DIR)exec_pipe.c\
 			$(EXEC_DIR)redir_pipe.c\
@@ -86,14 +87,13 @@ SRC_FILES	=	$(SHELL_DIR)shell.c\
 			$(JOBS_DIR)signals.c\
 			$(JOBS_DIR)sig_handlers.c\
 
-
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 TESTS_DIR	=	$(realpath ./UT)
 
-TESTS_FILES	=	shell.c\
+TESTS_FILES	=	shell_functions_test.c\
 			is_quote_functions_test.c\
-#			struct_functions_test.c\
+			struct_functions_test.c\
 
 SRC_TESTS	=	$(addprefix $(TESTS_DIR)/, $(TESTS_FILES))
 

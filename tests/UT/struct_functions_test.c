@@ -12,6 +12,21 @@
 
 Test(struct, init_node)
 {
-	cr_expect_eq(memcmp(init_node(NULL, 0), &((node_t){NULL, 0, NULL}), \
-sizeof(node_t)), 0);
+	node_t *node = init_node(NULL, NONE);
+
+	cr_expect(node->buffer == NULL);
+	cr_expect_eq(node->quote, NONE);
+	cr_expect_eq(node->separator, 0);
+	cr_expect_eq(node->fg, false);
+	cr_expect_eq(node->backslash, false);
+	cr_expect(node->next == NULL);
+	node = init_node("Hello World", SIMPLE);
+	cr_expect_str_eq(node->buffer, "Hello World");
+	cr_expect_eq(node->quote, SIMPLE);
+	cr_expect_eq(node->separator, 0);
+	cr_expect_eq(node->fg, false);
+	cr_expect_eq(node->backslash, false);
+	cr_expect(node->next == NULL);
+	free(node->buffer);
+	free(node);
 }
