@@ -28,7 +28,7 @@ separator_type_t separator, int *new_index)
 			comm->red[separator - 6]->target = \
 			strdup(node[0]->buffer);
 		} else
-			comm->fg = true;
+			comm->bg = true;
 	if (REDIR(separator) && comm->red[separator - 6] \
 	&& comm->red[separator - 6]->target == NULL)
 		return (NULL);
