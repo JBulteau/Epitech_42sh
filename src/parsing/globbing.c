@@ -38,7 +38,8 @@ node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
 	if ((node->buffer = realloc(node->buffer, \
 	sizeof(char) * (buf_len + total_len - len + 1))) == NULL)
 		return (NULL);
-	for (size_t i = 0; j + i + len - 1 == 0 || node->buffer[j + i + len - 1] != '\0'; i++) {
+	for (size_t i = 0; j + i + len - 1 == 0 \
+	|| node->buffer[j + i + len - 1] != '\0'; i++) {
 		node->buffer[j + i] = node->buffer[j + len + i];
 		if (node->buffer[j + i] == '\0')
 			break;
@@ -48,8 +49,7 @@ node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len)
 		node->buffer[j + total_len + 1] = node->buffer[j];
 	j = tmp;
 	total_len += tmp;
-	node = fill_glob(node, pglob, j, total_len);
-	return (node);
+	return (fill_glob(node, pglob, j, total_len));
 }
 
 node_t *isolate_glob(node_t *node, int i)

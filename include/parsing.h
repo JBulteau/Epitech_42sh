@@ -123,7 +123,7 @@ node_t *replace_glob(node_t *node, glob_t pglob, int j, size_t len);
 
 node_t *parse_cmd_separators(node_t *node);
 node_t *fill_cmd_separators(node_t *node, char *buffer, int *i);
-node_t *attribute_cmd_separator(node_t *node, int index[], int *i, char *buffer);
+node_t *attribute_cmd_separator(node_t *node, int index[], int *i, char *);
 separator_type_t check_cmd_separator(char *buffer, int *i, node_t *node);
 separator_type_t check_arrow(char *buffer, int *i, \
 separator_type_t arrow);
