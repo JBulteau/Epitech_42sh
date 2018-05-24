@@ -39,7 +39,6 @@ int ptr_handle_jobs(shell_t *shell, char *input)
 {
         UNUSED(shell);
         UNUSED(input);
-        //for (; pid_job[i] != NULL; i++);
-        printf("Mike je te laisse faire");
+        printf("%d", get_nb_job());
         return (SUCCESS_RETURN);
 }
