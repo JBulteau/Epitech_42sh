@@ -10,19 +10,18 @@
 
 #include <stdlib.h>
 #include <linux/limits.h>
-
-extern pid_t *pid_job;
+#include <stdbool.h>
 
 enum {
-	D_RIGHT,
-	S_RIGHT,
-	D_LEFT,
 	S_LEFT,
+	D_LEFT,
+	S_RIGHT,
+	D_RIGHT,
 	PIPE
 };
 
 typedef enum {
-	NONE,
+	NOTHING,
 	THEN,
 	OR
 } sep_t;
@@ -38,19 +37,26 @@ enum {
 };
 
 enum {
-        PREV,
-        NEXT
+	PREV,
+	NEXT
 };
 
 typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 typedef struct alias_s alias_t;
+typedef struct jobs_s jobs_t; 
+
+struct jobs_s {
+	bool running; 
+	pid_t *pid_job; 
+	jobs_t *next; 
+};
 
 struct alias_s {
 	char *name;
-        char *alias;
-        struct alias_s *nav[2];
+	char *alias;
+	struct alias_s *nav[2];
 };
 
 typedef enum {
@@ -82,6 +88,8 @@ struct redir_s {
 
 struct comm_s {
 	char **argv;
+	comm_t *next;
+	bool fg;
 	sep_t separator;
 	redir_t *red[4];
 	pipe_t *pipe[2];
@@ -101,10 +109,10 @@ typedef struct {
 	var_t **vars;
 	alias_t *aliases;
 	history_t *history;
+	int history_exec;
 	int return_value;
 } shell_t;
 
-static const char	prompt[]	=	"> ";
 static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
 
@@ -113,7 +121,7 @@ int ask_y_n(char *s, char *yes, char *no);
 int load42(shell_t *shell);
 
 /*	shell/alias/alias_comm.c	*/
-int rm_alias(shell_t *shell, char *alias, comm_t *comm);
+int rm_alias(shell_t *shell, char *alias);
 int update_aliases(shell_t *shell, comm_t *comm, int remove, int skip_curr);
 
 /*	shell/alias/alias_struc.c	*/
@@ -126,13 +134,15 @@ void free_aliases(alias_t *alias, int free_next);
 /*	shell/builtins/alias.c		*/
 /*	shell/builtins/basic_bi.c	*/
 int error_msg_exit(shell_t *shell, comm_t *comm);
-int ptr_exit(comm_t *comm, shell_t *shell);
 int is_builtin(char *name);
 int exec_bi(comm_t *comm, shell_t *shell);
 
 /*	shell/builtins/cd.c		*/
 /*	shell/builtins/echo.c		*/
 /*	shell/builtins/env.c		*/
+int add_env_value(char ***env, char *value, char *var_pre);
+int set_env_value(char ***env, char *var, char *value);
+
 /*	shell/builtins/fg.c		*/
 /*	shell/builtins/history_exec.c	*/
 /*	shell/builtins/history.c	*/
@@ -140,7 +150,6 @@ history_t *create_new_case(char *s);
 history_t *get_last(history_t *node);
 int save_history(shell_t *shell, char *input);
 void free_history(history_t *hist);
-int ptr_history(comm_t *comm, shell_t *shell);
 
 /*	shell/redirections/d_left.c	*/
 /*	shell/redirections/s_left.c	*/
@@ -157,6 +166,8 @@ var_t **try_vars(void);
 /*	shell/shell_var/var_utils.c	*/
 int find_var(var_t **arr, char *name);
 type_t get_type(char *content);
+void clean_exit(shell_t *shell, int exit_code);
+char *get_var_str(var_t *var);
 
 /*	shell/shell_var/var_edition.c	*/
 int edit_var(var_t *var, char *content, char *name);
@@ -173,7 +184,13 @@ int run_that(shell_t *shell);
 /*	shell/display.c			*/
 void disp_wrong_arch(char *str, int num);
 void display_signal(int status);
-void disp_prompt(void);
+int disp_prompt(shell_t *shell);
+
+/*	shell/init.c	*/
+int set_basic_env(shell_t *shell, char ***env);
+int setup_default_env(char ***env, shell_t *shell);
+int set_shlvl(char ***env);
+int init_vars(shell_t *shell);
 
 /*	shell/exec_pipe.c		*/
 int run_not_last(shell_t *shell, comm_t *curr);
@@ -184,8 +201,8 @@ int run_pipeline(shell_t *shell, comm_t *comm);
 int exec_start(comm_t *comm);
 int exec_end(comm_t *comm);
 int exec_loop(shell_t *shell);
-int exec_bin(comm_t *comm, char **env);
-int run_bin(comm_t *comm, char *path, char **env);
+int exec_bin(comm_t *comm, char **env, shell_t *shell);
+int run_bin(comm_t *comm, char *path, char **env, shell_t *shell);
 /*	shell/init_signal.c		*/
 char* get_proc_name(pid_t pid);
 void catch_ctrl_z(int sig);
@@ -194,9 +211,13 @@ int init_signal(void);
 int wait_for_it(pid_t pid);
 
 /*	shell/jobs.c			*/
-int find_last_pid(void);
-int remove_last_pid(void);
-int add_to_pid(pid_t child);
+jobs_t *find_node_job(void);
+int get_nb_job(void);
+jobs_t *new_node(void);
+void remove_node(void);
+int add_pid_jobs(pid_t child);
+void set_node_running_false(void);
+void free_jobs(void);
 
 /*	shell/main.c			*/
 int main(int ac, char **av, char **env);
@@ -235,5 +256,23 @@ void delete_shell(shell_t *shell);
 int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 char **add_arr(char **arr, char *str, int free_arr);
+comm_t **parsing(char *buffer);
+
+/*	shell/infos.c			*/
+int set_infos(char ***env);
+
+/*	prompt/display.c	*/
+int printf_prompt(shell_t *shell);
+
+/* Uncomment that when we will be able to do that
+** #define __OSTYPE__ "Unknown"
+** #define __MACHTYPE__ "Unknown"
+** #define __VENDOR__ "Unknown"
+** #ifdef __MACHTYPE__ && __OSTYPE__
+**	#define __HOSTTYPE__ "Unknown"
+** #endif
+*/
+
+extern jobs_t *list_jobs; 
 
 #endif

@@ -20,6 +20,8 @@ void free_comm(comm_t *comm)
 	free_red(comm->red[S_LEFT]);
 	free_red(comm->red[D_LEFT]);
 	free_red(comm->red[D_RIGHT]);
+	if (comm->next)
+		free_comm(comm->next);
 	free(comm);
 	return;
 }
@@ -30,14 +32,16 @@ comm_t *init_comm(void)
 
 	if (comm == NULL)
 		return (NULL);
-	for (int j = 0; j <= S_LEFT; j++)
+	for (int j = 0; j <= 3; j++)
 		comm->red[j] = NULL;
 	if ((comm->argv = malloc(sizeof(char **) * 1)) == NULL)
 		return (NULL);
 	comm->argv[0] = NULL;
-	comm->separator = NONE;
 	comm->pipe[OUT] = NULL;
 	comm->pipe[IN] = NULL;
+	comm->fg = false;
+	comm->separator = NOTHING;
+	comm->next = NULL;
 	return (comm);
 }
 
@@ -59,18 +63,4 @@ int get_commidx(shell_t *shell, comm_t *comm)
 		if (shell->comm[i] == comm)
 			return (i);
 	return (ERROR_RETURN);
-}
-
-int run_that(shell_t *shell)
-{
-	int return_code = 0;
-
-	if ((shell->comm = full_parse(shell->input)) == NULL)
-		return (ERROR_CODE);
-	if (update_aliases(shell, shell->comm[0], 0, 0) == ERROR_RETURN)
-		return (ERROR_CODE);
-	return_code = exec_loop(shell);
-	if (shell->comm != NULL)
-		free_comms(shell->comm);
-	return (return_code);
 }

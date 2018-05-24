@@ -15,6 +15,11 @@ int	is_alphanum(const char *str);
 int	check_chars(const char *str, const char *valid);
 int	index_of(const char *str, const char c);
 
+/*	clean_str.c	*/
+char *clear_str(char *buffer);
+void spaces_handle(int *a, char *result, int *i, char *buffer);
+void init_clear_str(char *buffer, char **result);
+
 /*	maths.c		*/
 int	my_abs(const int x);
 int	my_pow(const int x, const int pow);
@@ -41,12 +46,6 @@ int	my_showstr(char const *str);
 /*	parsing.c	*/
 char **strwordarr(const char *str, const char *sep);
 int get_wlen(const char *str, const char *sep);
-
-/*	adv_parsing.c	*/
-char 	**adv_parse(const char *str, const char *delim, \
-const char *ignore_start, const char *ignore_end);
-int adv_get_wlen(const char *str, const char *sep, const char \
-*ign_start, const char *ign_end);
 
 /*	my_array.c	*/
 void	free_array(void **array);

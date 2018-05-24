@@ -4,8 +4,8 @@ make
 
 if [ "$1" = "env" ]
 then
-        env="env -i"
-        shift
+	env="env -i"
+	shift
 fi
 
 echo "--------------"

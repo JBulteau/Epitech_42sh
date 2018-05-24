@@ -8,12 +8,12 @@
 NAME = my
 
 SRCS =	check_str.c\
+	clean_str.c\
 	maths.c\
 	my_put.c\
 	my_str.c\
 	my_str2.c\
 	parsing.c\
-	adv_parsing.c\
 	my_array.c\
 	my_get.c\
 	gnl.c\

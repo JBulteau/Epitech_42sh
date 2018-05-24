@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-char *fill_buffer(char *buf, char *ptr)
+static char *fill_buffer(char *buf, char *ptr)
 {
 	int i;
 	int j;
@@ -32,7 +32,7 @@ char *fill_buffer(char *buf, char *ptr)
 	return (new_buf);
 }
 
-char *my_realloc(char *buf, int n, int j)
+static char *my_realloc(char *buf, int n, int j)
 {
 	char *new_buf = malloc(sizeof(char) * n * (j + 1));
 
@@ -48,7 +48,7 @@ char *my_realloc(char *buf, int n, int j)
 	return (new_buf);
 }
 
-int find_line_break(char *buf, int index)
+static int find_line_break(char *buf, int index)
 {
 	for (int i = 0; i < index; i++) {
 		if (buf[i] == '\n' || buf[i] == '\0')
@@ -57,7 +57,7 @@ int find_line_break(char *buf, int index)
 	return (1);
 }
 
-char *read_file(int fd, char *ptr)
+static char *read_file(int fd, char *ptr)
 {
 	char *buf = malloc(sizeof(char) * (READ_SIZE + 1));
 	int result = 0;
@@ -71,8 +71,7 @@ char *read_file(int fd, char *ptr)
 	if (index != 0 && !(find_line_break(ptr, index)))
 		return (buf);
 	do {
-		buf = my_realloc(buf, READ_SIZE, j);
-		if (buf == NULL)
+		for (buf = my_realloc(buf, READ_SIZE, j); buf == NULL;)
 			return (NULL);
 		result = read(fd, &buf[READ_SIZE * j], READ_SIZE);
 		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0') {
@@ -83,7 +82,7 @@ char *read_file(int fd, char *ptr)
 	return (buf);
 }
 
-char *gnl (int fd)
+char *gnl(int fd)
 {
 	int i;
 	static char ptr[READ_SIZE];

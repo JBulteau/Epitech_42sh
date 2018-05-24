@@ -23,6 +23,6 @@ redir_t *init_redir(void)
 		return (NULL);
 	red->fd[0] = -2;
 	red->fd[1] = -2;
-	red->target= NULL;
+	red->target = NULL;
 	return (red);
 }

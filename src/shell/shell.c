@@ -5,54 +5,34 @@
 ** Main shell functions
 */
 
-#include <sys/types.h>
-#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include "minishell.h"
+#include "prompt.h"
 #include "my.h"
 
-char **clone_arr(char **arr)
-{
-	int len = array_len((void *) arr);
-	char **new_arr = NULL;
-
-	if (len == -1) {
-		new_arr = malloc(sizeof(char *) * 1);
-		if (new_arr == NULL)
-			return (NULL);
-		new_arr[0] = NULL;
-	} else {
-		new_arr = malloc(sizeof(char *) * len);
-		if (new_arr == NULL)
-			return (NULL);
-		for (int i = 0; arr[i]; i++)
-			new_arr[i] = strdup(arr[i]);
-		new_arr[len - 1] = NULL;
-	}
-	return (new_arr);
-}
-
-/*
-** TODO: Add this to bonus folder
-** if (load42(shell) == ERROR_RETURN)
-** return (NULL);
-*/
 shell_t *init_shell(char **env)
 {
+	int create_default_env = (env == NULL || env[0] == NULL) ? 1 : 0;
 	shell_t *shell = malloc(sizeof(shell_t));
 
 	if (shell == NULL || (shell->env = clone_arr(env)) == NULL)
 		return (NULL);
 	shell->return_value = 0;
+	shell->history_exec = 0;
 	shell->history = NULL;
 	shell->aliases = NULL;
 	shell->input = NULL;
-	getcwd(shell->pwd[0], PATH_MAX);
+	for (getcwd(shell->pwd[0], PATH_MAX); !shell->pwd[0];)
+		return (NULL);
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';
-	if ((shell->vars = init_var_arr()) == NULL)
+	if ((create_default_env && (setup_default_env(&(shell->env), shell) == \
+ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE) || init_vars(shell) \
+== ERROR_RETURN)
+		return (NULL);
+	if (isatty(STDIN_FILENO) && load42(shell) == ERROR_RETURN)
 		return (NULL);
 	return (shell);
 }
@@ -65,15 +45,13 @@ void delete_shell(shell_t *shell)
 	free_history(shell->history);
 	free(shell->input);
 	free_aliases(shell->aliases, 1);
-	for (int i = 0; shell->vars[i]; i++)
+	for (int i = 0; shell->vars && shell->vars[i]; i++)
 		free_var(shell->vars[i]);
 	free(shell->vars);
 	free(shell);
-	for (int i = 0; pid_job[i] != -1 && pid_job[i] != -2; i++) {
-		if (kill(pid_job[i], SIGKILL) == -1)
-			perror("kill");
-	}
-	free(pid_job);
+	if (list_jobs)
+		for (; list_jobs != NULL;)
+			free_jobs();
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
