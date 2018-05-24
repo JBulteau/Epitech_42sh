@@ -12,8 +12,6 @@
 comm_t *set_separator(comm_t *comm, node_t *node[2], \
 separator_type_t separator, int *new_index)
 {
-	comm_t *new_comm = NULL;
-
 	if (separator <= D_PIPE) {
 		comm->separator = separator - 1;
 		if (separator > SEMICOLON)
