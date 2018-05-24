@@ -90,8 +90,8 @@ struct redir_s {
 
 struct comm_s {
 	char **argv;
-	void *next;
-	bool parenthesis;
+	comm_t *next;
+	comm_t **parenthesis;
 	bool bg;
 	sep_t separator;
 	redir_t *red[4];
@@ -203,7 +203,7 @@ int run_pipeline(shell_t *shell, comm_t *comm);
 /*	shell/exec.c			*/
 int exec_start(comm_t *comm);
 int exec_end(comm_t *comm);
-int exec_loop(shell_t *shell);
+int exec_loop(shell_t *shell, comm_t **arr);
 int exec_bin(comm_t *comm, char **env, shell_t *shell);
 int run_bin(comm_t *comm, char *path, char **env, shell_t *shell);
 /*	shell/init_signal.c		*/
