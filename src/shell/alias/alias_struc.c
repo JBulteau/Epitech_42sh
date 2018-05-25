@@ -6,6 +6,7 @@
 */
 
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 #include "my.h"
 #include "minishell.h"
@@ -23,27 +24,47 @@ alias_t *create_alias(char *name, char *alias, alias_t *prev)
 	return (new);
 }
 
+char *concat_args(char **args)
+{
+	char *res = NULL;
+	int add_space = 2;
+	int res_len = 0;
+
+	for (int i = 0; args[i] != NULL; i++) {
+		if (args[i + 1] == NULL)
+			add_space = 1;
+		if (res == NULL)
+			res = malloc(strlen(args[i]) + add_space);
+		else
+			res = realloc(res, res_len + strlen(args[i]) + add_space);
+		if (res == NULL)
+			return (NULL);
+		strcpy(res + res_len, args[i]);
+		res_len = strlen(res);
+		if (add_space == 2)
+			res[res_len++] = ' ';
+	}
+	return (res);
+}
+
 int add_alias(char **args, shell_t *shell)
 {
 	alias_t *last = NULL;
-	char **split = NULL;
-	int i = 1;
+	char *alias = NULL;
 
+	if (args == NULL || args[0] == NULL || args[1] == NULL || args[2] == NULL)
+		return (ERROR_RETURN);
+	alias = concat_args(args + 2);
+	if (alias == NULL)
+		return (ERROR_RETURN);
 	if (shell->aliases == NULL) {
-		split = strwordarr(args[i++], "=");
-		if (split[1] == NULL) {
-			free_array((void **)split);
+		shell->aliases = create_alias(args[1], alias, NULL);
+		if (shell->aliases == NULL)
 			return (ERROR_RETURN);
-		}
-		shell->aliases = create_alias(split[0], split[1], NULL);
+		return (SUCCESS_RETURN);
 	}
-	last = shell->aliases;
-	for (; last->nav[NEXT] != NULL; last = last->nav[NEXT]);
-	for (; args[i] != NULL; last = last->nav[NEXT]) {
-		split = strwordarr(args[i++], "=");
-		last->nav[NEXT] = create_alias(split[0], split[1], last);
-	}
-	free_array((void *)split);
+	for (last = shell->aliases; last->nav[NEXT] != NULL; last = last->nav[NEXT]);
+	last->nav[NEXT] = create_alias(args[1], alias, last);
 	return (SUCCESS_RETURN);
 }
 
