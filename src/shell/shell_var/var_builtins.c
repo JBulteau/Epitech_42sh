@@ -8,12 +8,3 @@
 #include "my.h"
 #include "minishell.h"
 
-int op_equals()
-{
-	return (SUCCESS_RETURN);
-}
-
-int plus_plus()
-{
-	return (SUCCESS_RETURN);
-}
