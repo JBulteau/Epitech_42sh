@@ -43,7 +43,7 @@ var_t **init_var_arr(void)
 	return (arr);
 }
 
-void disp_vars(var_t **arr)
+void debug_vars(var_t **arr)
 {
 	if (arr == NULL)
 		return ((void)puts("ARRAY IS NULL"));
@@ -64,16 +64,4 @@ void disp_vars(var_t **arr)
 		}
 		puts("}");
 	}
-}
-
-var_t **try_vars(void)
-{
-	var_t **arr = init_var_arr();
-	if (arr == NULL)
-		return (NULL);
-	disp_vars(arr);
-	arr = set_var(arr, "var_name1", "content");
-	arr = set_var(arr, "var_name2", "+42");
-	disp_vars(arr);
-	return (arr);
 }

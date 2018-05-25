@@ -163,7 +163,7 @@ void free_history(history_t *hist);
 var_t *init_var(void);
 void free_var(var_t *var);
 var_t **init_var_arr(void);
-void disp_vars(var_t **arr);
+void debug_vars(var_t **arr);
 var_t **try_vars(void);
 
 /*	shell/shell_var/var_utils.c	*/
