@@ -49,10 +49,6 @@ struct node {
 
 #define REDIR(value) (value >= S_ARROW_LEFT && value <= D_ARROW_RIGHT)
 
-/* parsing.c */
-
-comm_t **parsing(char *buffer);
-
 /* init_comm_array.c */
 
 comm_t **init_comm_array(comm_t **comm, node_t *node);
@@ -65,6 +61,15 @@ comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index);
 void check_node(node_t *node, int index[3]);
 comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index);
 char **parse_argv(char **argv, node_t *node, int *comm_index, int index);
+
+/* handle_aliases.c */
+
+node_t *handle_aliases(node_t *node, shell_t *shell);
+char *search_aliases(char *buffer, alias_t *alias);
+char *isolate_word(char *buffer, alias_t *alias);
+char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2]);
+char *replace_alias(char *buffer, char *alias, int index[2], size_t alias_len);
+char *fill_alias(char *buffer, char *alias, int index[2], size_t total_len);
 
 /* handle_separators.c */
 

@@ -10,7 +10,7 @@
 #include "my.h"
 #include "minishell.h"
 
-alias_t *create_alias(char *name, char*alias, alias_t *prev)
+alias_t *create_alias(char *name, char *alias, alias_t *prev)
 {
 	alias_t *new = malloc(sizeof(alias_t) * 1);
 

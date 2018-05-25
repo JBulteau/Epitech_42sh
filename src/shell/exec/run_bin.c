@@ -14,7 +14,7 @@ int run_that(shell_t *shell)
 {
 	int return_code = 0;
 
-	if ((shell->comm = parsing(shell->input)) == NULL) {
+	if ((shell->comm = parsing(shell)) == NULL) {
 		shell->return_value = 1;
 		return (ERROR_CODE);
 	}

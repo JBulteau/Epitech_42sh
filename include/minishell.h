@@ -259,13 +259,15 @@ void delete_shell(shell_t *shell);
 int search_strtab(char **arr, char *to_find);
 int check_is_dir(char *fn);
 char **add_arr(char **arr, char *str, int free_arr);
-comm_t **parsing(char *buffer);
 
 /*	shell/infos.c			*/
 int set_infos(char ***env);
 
 /*	prompt/display.c	*/
 int printf_prompt(shell_t *shell);
+
+/*	parsing/parsing.c	*/
+comm_t **parsing(shell_t *shell);
 
 /* Uncomment that when we will be able to do that
 ** #define __OSTYPE__ "Unknown"
