@@ -36,7 +36,14 @@ int ptr_unset(comm_t *comm, shell_t *shell)
 
 int ptr_at(comm_t *comm, shell_t *shell)
 {
+	char *var_value = NULL;
+	char *tmp = NULL;
+
 	puts("Not yet implemented");
+	if (comm->argv[1] != NULL) {
+		var_value = get_var(shell->env, shell->vars, comm->argv[1]);
+		free(var_value);
+	}
 	return (SUCCESS_RETURN);
 }
 
@@ -49,6 +56,7 @@ int ptr_set(comm_t *comm, shell_t *shell)
 	token = strwordarr(comm->argv[1], "=");
 	if (token == NULL)
 		puts(ERROR_RETURN);
+	if (token[1] == NULL)
 	shell->vars = set_var(shell->vars, token[0], token[1]);
 	if (shell->vars == NULL)
 		return (ERROR_RETURN);

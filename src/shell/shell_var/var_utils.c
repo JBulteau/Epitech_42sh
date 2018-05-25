@@ -34,11 +34,29 @@ char *get_var_str(var_t *var)
 	return (NULL);
 }
 
+char *get_var(char **env, var_t **vars, char *name)
+{
+	int id = find_var(vars, name);
+	int len;
+	char *res = NULL;
+
+	if (id != -1) {
+		printf("Shell var found at id %i\n", id);
+		res = get_var_str(vars[id]);
+		return (res);
+	}
+	len = strlen(name);
+	for (id = 0; env[id] != NULL; id++)
+		if (strncmp(env[id], name, len) == 0)
+			res = strdup(env[id] + len + 1);
+	return (res);
+}
+
 type_t get_type(char *content)
 {
 	if (content == NULL)
 		return (NO_TYPE);
-	if (is_num(content) == 0)
+	if (content[0] && is_num(content) == 0)
 		return (NBR);
 	return (STR);
 }
