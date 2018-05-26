@@ -159,7 +159,10 @@ void free_history(history_t *hist);
 /*	shell/redirections/d_right.c	*/
 /*	shell/redirections/s_right.c	*/
 /*	shell/redirections/magic_quotes.c*/
-char *get_magic(shell_t *shell, char *comm)
+char *get_magic(shell_t *shell, char *comm);
+history_t *dup_history(history_t *node);;
+alias_t *dup_aliases(alias_t *alias);
+var_t **dup_vars(var_t **arr);
 
 /*	shell/shell_var/var.c		*/
 var_t *init_var(void);
@@ -256,6 +259,7 @@ char **get_path(char **env, var_t **vars);
 char **clone_arr(char **arr);
 shell_t *init_shell(char **env);
 void delete_shell(shell_t *shell);
+shell_t *dup_shell(shell_t *shell);
 
 /*	shell/utils.c			*/
 int search_strtab(char **arr, char *to_find);

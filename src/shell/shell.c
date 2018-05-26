@@ -57,7 +57,7 @@ void delete_shell(shell_t *shell)
 	close(STDERR_FILENO);
 }
 
-shell_t *dup_shel(shell_t *shell)
+shell_t *dup_shell(shell_t *shell)
 {
 	shell_t *new_shell = malloc(sizeof(shell_t));
 
@@ -69,8 +69,8 @@ shell_t *dup_shel(shell_t *shell)
 	new_shell->history_exec = shell->history_exec;
 	strcpy(new_shell->pwd[0], shell->pwd[0]);
 	strcpy(new_shell->pwd[1], shell->pwd[1]);
-	new_shell->history = NULL;
-	new_shell->aliases = NULL;
-	new_shell->vars = NULL;
-	return (shell);
+	new_shell->history = dup_history(shell->history);
+	new_shell->aliases = dup_aliases(shell->aliases);
+	new_shell->vars = dup_vars(shell->vars);
+	return (new_shell);
 }

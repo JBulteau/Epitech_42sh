@@ -43,8 +43,8 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(BI_DIR)ptr_jobs.c\
 			$(BI_DIR)alias.c\
 			$(BI_DIR)echo.c\
-			$(BI_DIR)vars.c\
 			$(BI_DIR)dirs.c\
+			$(BI_DIR)vars.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\

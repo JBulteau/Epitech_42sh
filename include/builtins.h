@@ -28,6 +28,7 @@ int ptr_set(comm_t *comm, shell_t *shell);
 int ptr_unset(comm_t *comm, shell_t *shell);
 int ptr_builtins(comm_t *comm, shell_t *shell);
 int ptr_dirs(comm_t *comm, shell_t *shell);
+int ptr_at(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
@@ -52,6 +53,7 @@ static const struct {
 	{"unset", &ptr_unset},
 	{"chdir", &ptr_cd},
 	{"dirs", &ptr_dirs},
+	{"@", &ptr_at},
 	{NULL, NULL}
 };
 
