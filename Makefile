@@ -89,6 +89,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(EXEC_DIR)exec_pipe.c\
 			$(EXEC_DIR)redir_pipe.c\
 			$(EXEC_DIR)exec.c\
+			$(EXEC_DIR)exec_jarvis.c\
 			$(EXEC_DIR)run_bin.c\
 \
 			$(JOBS_DIR)init_signal.c\

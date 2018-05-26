@@ -18,12 +18,9 @@ int run_that(shell_t *shell)
 		shell->return_value = 1;
 		return (ERROR_CODE);
 	}
-	//Julo voilà comment je run ça si tu te demandes
-	//comm_t *arr[] = {shell->comm[1], NULL};
-	//shell->comm[0]->parenthesis = arr;
-	//shell->comm[1] = NULL;
 	return_code = exec_loop(shell, shell->comm);
-	if (shell->return_value && (jarvis_corrector(shell->comm[0], &(shell->env)) == ERROR_RETURN))
+	if (shell->return_value && isatty(STDIN_FILENO) && (call_jarvis_rerun\
+(shell) == ERROR_RETURN))
 		return (ERROR_RETURN);
 	debug_comm(shell->comm[0]);
 	if (shell->comm != NULL)
