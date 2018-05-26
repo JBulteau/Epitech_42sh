@@ -121,7 +121,12 @@ static const char	separators[]	=	" \t";
 static const char	ign_delim[]	=	"";
 
 /*	JARVIS		*/
-int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath);
+int jarvis_corrector(comm_t *comm, char ***env);
+
+/*	shel/exec/exec_jarvis.c	*/
+int call_jarvis_rerun(shell_t *shell);
+int exec_on_comm(comm_t *curr, shell_t *shell);
+int exec_on_comm_arr(shell_t *shell);
 
 /*	42rc/load42.c	*/
 int ask_y_n(char *s, char *yes, char *no);
