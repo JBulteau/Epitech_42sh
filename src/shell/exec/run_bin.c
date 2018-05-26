@@ -23,10 +23,9 @@ int run_that(shell_t *shell)
 	//shell->comm[0]->parenthesis = arr;
 	//shell->comm[1] = NULL;
 	return_code = exec_loop(shell, shell->comm);
-	if (return_code && (jarvis_corrector(shell->comm[0], *(shell->env), 0, strdup("NOPE")) == ERROR_RETURN)) {
-		shell->return_value = 1;
+	if (shell->return_value && (jarvis_corrector(shell->comm[0], &(shell->env)) == ERROR_RETURN))
 		return (ERROR_RETURN);
-	}
+	debug_comm(shell->comm[0]);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);
 	return (return_code);

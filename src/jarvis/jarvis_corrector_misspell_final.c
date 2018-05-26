@@ -23,12 +23,11 @@ int check_slash(char **arg, int i)
 	return (1);
 }
 
-char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr)
+char *final_check_path(char *path, char **arg, jarg_t *corr)
 {
 	int use = 1;
 	int to_know = 0;
 
-	UNUSED(nb_to_path);
 	if (path == NULL)
 		return (NULL);
 	for (int i = 0; (*arg)[i] != '\0'; i++)

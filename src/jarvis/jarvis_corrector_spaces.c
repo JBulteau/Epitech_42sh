@@ -10,9 +10,8 @@
 #include <dirent.h>
 #include <unistd.h>
 
-int try_concat(comm_t *comm, jarg_t *corr, int *which_inc, int *i)
+int try_concat(jarg_t *corr, int *which_inc, int *i)
 {
-	UNUSED(comm);
 	char *both = concat(corr->infos[*i].name, \
 corr->infos[*i + 1].name, 0, 0);
 
@@ -34,7 +33,7 @@ int wrong_spaces_handle(comm_t *comm, jarg_t *corr)
 	for (int i = 0; corr->infos[i].pos != -1 \
 && corr->infos[i + 1].pos != -1; i++) {
 		if (corr->infos[i].correct == 0 && \
-corr->infos[i + 1].correct == 0 && (try_concat(comm, corr, &which_inc, &i)))
+corr->infos[i + 1].correct == 0 && (try_concat(corr, &which_inc, &i)))
 			continue;
 		else if (corr->infos[i].correct == 0 && \
 corr->infos[i + 1].correct == 0)

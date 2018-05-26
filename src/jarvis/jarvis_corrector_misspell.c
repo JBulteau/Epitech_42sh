@@ -66,11 +66,12 @@ int misspell_process(char **arg, int *pos, char *current_path, int check)
 &pg, ((check == 0) ? 0 : 1)));
 }
 
-char *check_path_argv(int *nb_to_path, char **arg, jarg_t *corr)
+char *check_path_argv(char **arg, jarg_t *corr)
 {
 	char *current_path = strdup("./");
 	int to_know = is_slash_ending(arg);
 	int let = remove_mutliple_ending_slash(arg);
+	int test = 1;
 
 	for (int pos = 0; (*arg)[pos] != '\0'; pos++) {
 		if (put_back_ending_slash(pos, arg, to_know))
@@ -80,11 +81,10 @@ char *check_path_argv(int *nb_to_path, char **arg, jarg_t *corr)
 		if (let == 0 && access(*arg, F_OK) == -1 && ((*arg)[pos] = '/'))
 			return (free_return_pointer(&current_path, NULL));
 		else if (let != 0 && \
-(let = misspell_process(arg, &pos, current_path, 0)) > 0)
+(test = misspell_process(arg, &pos, current_path, 0)) > 0)
 			return ((let != 42) ? \
 free_return_pointer(&current_path, NULL) : current_path);
-		*nb_to_path = pos + 1;
-		corr->change = (let == 0) ? 1 : corr->change;
+		corr->change = (test == 0) ? 1 : corr->change;
 		if (post_misspell_process(&let, arg, &current_path, pos))
 			return (free_return_pointer(&current_path, NULL));
 	}
@@ -94,7 +94,6 @@ free_return_pointer(&current_path, NULL) : current_path);
 int misspell_handle(jarg_t *corr, comm_t *comm)
 {
 	char *path = NULL;
-	int nb_to_path = 0;
 	int check = 0;
 
 	for (int i = 0; corr->infos[i].pos != -1; i++) {
@@ -103,9 +102,9 @@ int misspell_handle(jarg_t *corr, comm_t *comm)
 		check = 0;
 		if (corr->infos[i].correct == 0) {
 			path = \
-check_path_argv(&nb_to_path, &(comm->argv[i + 1]), corr);
+check_path_argv(&(comm->argv[i + 1]), corr);
 			path = \
-final_check_path(path, nb_to_path, &(comm->argv[i + 1]), corr);
+final_check_path(path, &(comm->argv[i + 1]), corr);
 			check = 1;
 		}
 		if (check == 1 && path == NULL)

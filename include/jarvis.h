@@ -33,12 +33,13 @@ enum inc {
 };
 
 /* jarvis corrector */
-int jarvis_corrector_local_command(comm_t *comm, char *filepath, char ***env);
+char *check_path_argv(char **arg, jarg_t *corr);
+int jarvis_corrector_local_command(comm_t *comm);
 int loop_number(char **try, int *pos_ind, glob_t *glob, char *curr_path);
 int loop_letter(char **try, int *pos_ind, glob_t *pglob, char *curr_path);
 char *substitute_letter(char **result, glob_t *pglob, char *curr_path);
 int test_if_exist(char *result, glob_t *pglob, char *curr_path);
-char *remove_letter(char **result, glob_t *pglob, char *curr_path);
+char *remove_letter(char **rsesult, glob_t *pglob, char *curr_path);
 char *add_letter(char **result, glob_t *pglob, char *curr_path);
 char *switch_two_adj_letter(char **result, glob_t *pglob, char *curr_path);
 char *free_return_pointer(char **to_free, char *to_return);
@@ -54,7 +55,7 @@ int is_slash_ending(char **arg);
 int check_slash(char **arg, int i);
 int refill_last(char **arg, char *cpy, char *current_path);
 int misspell_process(char **arg, int *pos, char *current_path, int check);
-char *final_check_path(char *path, int nb_to_path, char **arg, jarg_t *corr);
+char *final_check_path(char *path, char **arg, jarg_t *corr);
 int refill_arg(char **arg, char *cpy, char *current_path, int size_after);
 int check_same(char **distance_allowed, int letter_in_a_row, int i, int b);
 int count_correct_letter(int dist_allow, char **both);
@@ -67,9 +68,9 @@ void fill_infos(comm_t *comm, jarg_t *corr, int i, int *nb_argv);
 void free_jarvis_corrector(jarg_t **corr, int i);
 int misspell_handle(jarg_t *corr, comm_t *comm);
 int refill_comm_struct(comm_t *comm, jarg_t *corr);
-int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath);
+int jarvis_corrector(comm_t *comm, char ***env);
 jarg_t *init_struct_jarg(comm_t *comm);
 int wrong_spaces_handle(comm_t *comm, jarg_t *corr);
-int try_concat(comm_t *comm, jarg_t *corr, int *which_inc, int *i);
+int try_concat(jarg_t *corr, int *which_inc, int *i);
 
 #endif

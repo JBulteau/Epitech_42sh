@@ -36,13 +36,11 @@ void put_back_last_slash(char **arg)
 		}
 }
 
-int jarvis_corrector_arg(comm_t *comm, char *filepath, char ***env)
+int jarvis_corrector_arg(comm_t *comm)
 {
 	jarg_t *corr;
 	int returned_value = 1;
 
-	UNUSED(filepath);
-	UNUSED(env);
 	if ((corr = init_struct_jarg(comm)) == NULL)
 		return (-1);
 	if (comm->argv[2] != NULL)
@@ -55,20 +53,22 @@ int jarvis_corrector_arg(comm_t *comm, char *filepath, char ***env)
 		free_jarvis_corrector(&corr, 0);
 		return (-1);
 	}
-	printf("\nJarvis OP\n");
+	returned_value = (corr->change == 1) ? 2 : 0;
 	free_jarvis_corrector(&corr, 0);
-	return (0);
+	return (returned_value);
 }
 
-/* 1 = pb_command ; 2 = pb_local ; 3 = pb arg ; */
-
-int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath)
+int jarvis_corrector(comm_t *comm, char ***env)
 {
-	UNUSED(which);
-	printf("hello\n");
-	if (jarvis_corrector_local_command(comm, filepath, env))
+	int ret_value = 0;
+	int ret_value_arg = 0;
+
+	if ((ret_value = jarvis_corrector_local_command(comm)) == 1)
 		return (-1);
-	if (jarvis_corrector_arg(comm, filepath, env))
+	if (comm->argv[1] != NULL && \
+(ret_value_arg = jarvis_corrector_arg(comm)) < 0)
 		return (-1);
+	if (ret_value == 2 || ret_value_arg == 2)
+		return (2);
 	return (0);
 }

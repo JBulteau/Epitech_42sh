@@ -9,9 +9,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-static int last_part_init(jarg_t *corr, comm_t *comm, int *nb_argv, int *i)
+static int last_part_init(jarg_t *corr, int *nb_argv, int *i)
 {
-	UNUSED(comm);
 	if (corr->infos[*i].correct == 0 && \
 corr->infos[*i + 1].correct == 0) {
 		(*nb_argv)++;
@@ -74,7 +73,7 @@ jarg_t *init_struct_jarg(comm_t *comm)
 		fill_infos(comm, corr, i, &nb_argv);
 	corr->which = NULL;
 	for (int i = 0; corr->infos[i + 1].pos != -1; i++)
-		if ((check = last_part_init(corr, comm, &nb_argv, &i)) == 1)
+		if ((check = last_part_init(corr, &nb_argv, &i)) == 1)
 			continue;
 		else if (check == 2)
 			break;
