@@ -6,10 +6,10 @@
 */
 
 #include <signal.h>
-#include "minishell.h"
-#include "my.h"
 #include <stdio.h>
+#include "minishell.h"
 #include <unistd.h>
+#include "my.h"
 
 void set_node_running_false(void)
 {

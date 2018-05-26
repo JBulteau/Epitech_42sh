@@ -8,20 +8,21 @@
 #include "my.h"
 #include "parsing.h"
 
-comm_t **parsing(char *buffer)
+comm_t **parsing(shell_t *shell)
 {
-	node_t *node = init_node(buffer, NONE);
+	node_t *node = init_node(shell->input, NONE);
 	comm_t **comm = NULL;
 
 	if (node == NULL)
 		return (NULL);
-	if (buffer == NULL || buffer[0] == '\0') {
+	if (shell->input == NULL || shell->input[0] == '\0') {
 		free_node(node);
 		return (NULL);
 	}
-	node = parse_quote(node, buffer);
+	node = parse_quote(node, shell->input);
 	if (node == NULL)
 		return (NULL);
+	node = handle_aliases(node, shell);
 	comm = init_comm_array(comm, node);
 	comm = convert_node(comm, node);
 	if ((comm && !comm[0]) || (comm && comm[0] && !comm[0]->argv) \
