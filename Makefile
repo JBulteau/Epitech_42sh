@@ -81,6 +81,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PARSING_DIR)init_comm_array.c\
 			$(PARSING_DIR)convert_node.c\
 			$(PARSING_DIR)handle_separators.c\
+			$(PARSING_DIR)handle_aliases.c\
 \
 			$(EXEC_DIR)exec_pipe.c\
 			$(EXEC_DIR)redir_pipe.c\

@@ -13,7 +13,7 @@
 
 int disp_help(void)
 {
-	puts("Usage: alias [rm] [name[=alias]]");
+	puts("Usage:\n\t\talias <name> <alias...>\n\t\talias rm <name>");
 	return (EXIT_SUCCESS);
 }
 
@@ -31,7 +31,7 @@ current->nav[NEXT])
 
 static int disp_help_unset(void)
 {
-	puts("Usage: alias <name>");
+	puts("Usage: unalias <name>");
 	return (EXIT_SUCCESS);
 }
 
