@@ -62,7 +62,7 @@ shell_t *dup_shell(shell_t *shell)
 
 	if (new_shell == NULL)
 		return (NULL);
-	new_shell->env = clone_arr(shell->env)
+	new_shell->env = clone_arr(shell->env);
 	if (new_shell->env == NULL)
 		return (NULL);
 	new_shell->input = NULL;

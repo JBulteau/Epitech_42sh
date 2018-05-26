@@ -14,6 +14,8 @@ int run_not_last(shell_t *shell, comm_t *curr)
 {
 	pid_t child_pid;
 
+	// if (pipe(curr->pipe[OUT]->fd) == -1)
+	// 	return (ERROR_RETURN);
 	if ((child_pid = fork()) == -1)
 		return (ERROR_RETURN);
 	if (child_pid == 0) {
@@ -26,8 +28,7 @@ int run_not_last(shell_t *shell, comm_t *curr)
 	}
 	if (add_pid_jobs(child_pid) == -1)
 		return (ERROR_RETURN);
-	if (curr->pipe[OUT])
-		close(curr->pipe[OUT]->fd[WRITE]);
+	close(curr->pipe[OUT]->fd[WRITE]);
 	close_in(curr);
 	exec_end(curr);
 	return (SUCCESS_RETURN);
@@ -81,8 +82,14 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 		if (curr->pipe[OUT] == NULL) {
 			return_c = run_last_pipeline(shell, curr);
 		} else {
+			//if (pipe(curr->pipe[OUT]->fd) == -1)
+			//	return (ERROR_RETURN);
+			printf("[%i, %i]\n", curr->pipe[OUT]->fd[0], curr->pipe[OUT]->fd[1]);
 			return_c = run_not_last(shell, curr);
 		}
+		if ((curr->separator == OR && shell->return_value != 0) || \
+(curr->separator == THEN && shell->return_value == 0))
+		return_c = run_that_comm(shell, curr->next);
 	}
 	return (return_c);
 }

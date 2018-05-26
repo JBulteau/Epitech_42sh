@@ -18,8 +18,10 @@ pipe_t *init_pipe(comm_t *in, comm_t *out)
 	in->pipe[OUT] = pipe_;
 	pipe_->output = out;
 	out->pipe[IN] = pipe_;
-	if (pipe(pipe_->fd) == -1)
+	if (pipe(pipe_->fd) == -1) {
+		free(pipe_);
 		return (NULL);
+	}
 	return (pipe_);
 }
 
