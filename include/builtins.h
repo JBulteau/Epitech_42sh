@@ -41,6 +41,7 @@ static const struct {
 	{"unalias", &ptr_unalias},
 	{"echo", &ptr_echo},
 	{"repeat", &ptr_repeat},
+	{"chdir", &ptr_cd},
 	{NULL, NULL}
 };
 
