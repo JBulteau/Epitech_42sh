@@ -33,22 +33,28 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index)
 	return (argv);
 }
 
-comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index)
+comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index, \
+shell_t *shell)
 {
+	char *buffer = NULL;
+	
 	if (node->quote == NONE) {
-		comm->argv = parse_argv(comm->argv, node, comm_index, 0);
-		if (comm->argv == NULL)
+		if (!(comm->argv = parse_argv(comm->argv, node, comm_index, 0)))
 			return (NULL);
+	} else if (node->quote == MAGIC) {
+		buffer = get_magic(shell, strdup(node->buffer));
+		free_array((void*)comm->argv);
+		if ((comm->argv = strwordarr(buffer, " \t\n")) == NULL)
+			return (NULL);
+		free(buffer);
 	} else {
-		comm->argv = \
-		realloc(comm->argv, sizeof(char*) * ((*comm_index) + 2));
-		if (comm->argv == NULL)
+		if ((comm->argv = realloc\
+		(comm->argv, sizeof(char*) * ((*comm_index) + 2))) == NULL)
 			return (NULL);
 		comm->argv[(*comm_index)] = strdup(node->buffer);
 		if (comm->argv[(*comm_index)] == NULL)
 			return (NULL);
-		comm->argv[(*comm_index) + 1] = NULL;
-		(*comm_index)++;
+		comm->argv[(*comm_index)++ + 1] = NULL;
 	}
 	return (comm);
 }
@@ -71,36 +77,39 @@ void check_node(node_t *node, int index[3])
 	}
 }
 
-comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index)
+comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index, shell_t *shell)
 {
-	static int index[3] = {0, 0, 0};
+	static int index [3] = {0, 0, 0};
+	static int recursive_lvl = 0;
 	int comm_index = 0;
 
-	index[0] = (*node_index == 0) ? 0 : index[0];
-	index[1] = (*node_index == 0) ? 0 : index[1];
-	index[2] = (*node_index == 0) ? 0 : index[2];
-	for (; comm && node->next[index[0]] && (index[1] == 0 || \
-	node->next[index[0]]->next[index[1] - 1]->separator == 0) \
-	&& (index[2] == 0 || node->next[index[0]]->next[index[1]]->\
-	next[index[2] - 1]->separator == 0); (*node_index)++) {
+	for (int i = 0; i < 3; i++)
+		index[i] = (*node_index == 0) ? 0 : index[i];
+	recursive_lvl++;
+	for (; is_valid_node(comm, node, index); (*node_index)++) {
+		if (index_save(index, SAVE) == ERROR_RETURN)
+			return (NULL);
 		if (node->next[index[0]]->next[index[1]] \
-		&& node->next[index[0]]->next[index[1]]->next[index[2]]) {
+		&& node->next[index[0]]->next[index[1]]->next[index[2]])
 			comm = convert_param(comm, node->next[index[0]]->\
-			next[index[1]]->next[index[2]++], &comm_index);
-		}
+			next[index[1]]->next[index[2]++], &comm_index, shell);
+		if (index_save(index, LOAD) == ERROR_RETURN)
+			return (NULL);
 		check_node(node, index);
 	}
-	return (handle_separators(comm, node, index, &comm_index));
+	recursive_lvl--;
+	return (handle_separators(comm, node, (int[4])\
+	{index[0], index[1], index[2], comm_index}, shell));
 }
 
-comm_t **convert_node(comm_t **comm, node_t *node)
+comm_t **convert_node(comm_t **comm, node_t *node, shell_t *shell)
 {
 	int node_index = 0;
 
 	if (comm == NULL)
 		return (NULL);
 	for (int i = 0; comm[i] != NULL; i++) {
-		comm[i] = fill_comm(comm[i], node, &node_index);
+		comm[i] = fill_comm(comm[i], node, &node_index, shell);
 		if (comm[i] == NULL) {
 			free_comms(comm);
 			return (NULL);
