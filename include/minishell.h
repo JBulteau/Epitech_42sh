@@ -158,6 +158,8 @@ void free_history(history_t *hist);
 /*	shell/redirections/s_left.c	*/
 /*	shell/redirections/d_right.c	*/
 /*	shell/redirections/s_right.c	*/
+/*	shell/redirections/magic_quotes.c*/
+char *get_magic(shell_t *shell, char *comm)
 
 /*	shell/shell_var/var.c		*/
 var_t *init_var(void);

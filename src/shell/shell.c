@@ -56,3 +56,21 @@ void delete_shell(shell_t *shell)
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
 }
+
+shell_t *dup_shel(shell_t *shell)
+{
+	shell_t *new_shell = malloc(sizeof(shell_t));
+
+	if (new_shell == NULL || (new_shell->env = clone_arr(shell->env)) == NULL)
+		return (NULL);
+	new_shell->input = NULL;
+	new_shell->comm = NULL;
+	new_shell->return_value = shell->return_value;
+	new_shell->history_exec = shell->history_exec;
+	strcpy(new_shell->pwd[0], shell->pwd[0]);
+	strcpy(new_shell->pwd[1], shell->pwd[1]);
+	new_shell->history = NULL;
+	new_shell->aliases = NULL;
+	new_shell->vars = NULL;
+	return (shell);
+}

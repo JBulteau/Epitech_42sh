@@ -49,6 +49,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(RED_DIR)s_left.c\
 			$(RED_DIR)d_right.c\
 			$(RED_DIR)s_right.c\
+			$(RED_DIR)magic_quotes.c\
 \
 			$(42RC_DIR)load42.c\
 \
