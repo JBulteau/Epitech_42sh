@@ -23,6 +23,7 @@ int ptr_alias(comm_t *comm, shell_t *shell);
 int ptr_unalias(comm_t *comm, shell_t *shell);
 int ptr_echo(comm_t *comm, shell_t *shell);
 int ptr_repeat(comm_t *comm, shell_t *shell);
+int ptr_dirs(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
@@ -42,6 +43,7 @@ static const struct {
 	{"echo", &ptr_echo},
 	{"repeat", &ptr_repeat},
 	{"chdir", &ptr_cd},
+	{"dirs", &ptr_dirs},
 	{NULL, NULL}
 };
 
