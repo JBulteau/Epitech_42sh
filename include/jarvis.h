@@ -33,6 +33,7 @@ enum inc {
 };
 
 /* jarvis corrector */
+int jarvis_corrector_local_command(comm_t *comm, char *filepath, char ***env);
 int loop_number(char **try, int *pos_ind, glob_t *glob, char *curr_path);
 int loop_letter(char **try, int *pos_ind, glob_t *pglob, char *curr_path);
 char *substitute_letter(char **result, glob_t *pglob, char *curr_path);

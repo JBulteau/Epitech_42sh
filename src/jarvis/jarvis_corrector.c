@@ -63,13 +63,10 @@ int jarvis_corrector_arg(comm_t *comm, char *filepath, char ***env)
 
 int jarvis_corrector(comm_t *comm, char ***env, int which, char *filepath)
 {
-	if (which == 1) {
-		4;
-	} else if (which == 2) {
-		4;
-	} else {
-		if (jarvis_corrector_arg(comm, filepath, env))
-			return (-1);
-	}
+	printf("hello\n");
+	if (jarvis_corrector_local_command(comm, filepath, env))
+		return (-1);
+	if (jarvis_corrector_arg(comm, filepath, env))
+		return (-1);
 	return (0);
 }
