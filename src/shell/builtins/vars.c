@@ -55,7 +55,7 @@ int ptr_set(comm_t *comm, shell_t *shell)
 		return (disp_vars(shell->vars));
 	token = strwordarr(comm->argv[1], "=");
 	if (token == NULL)
-		puts(ERROR_RETURN);
+		return (ERROR_RETURN);
 	if (token[1] == NULL)
 	shell->vars = set_var(shell->vars, token[0], token[1]);
 	if (shell->vars == NULL)
