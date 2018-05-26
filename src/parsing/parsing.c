@@ -23,7 +23,7 @@ comm_t **parsing(shell_t *shell)
 	if (node == NULL)
 		return (NULL);
 	comm = init_comm_array(comm, node);
-	comm = convert_node(comm, node);
+	comm = convert_node(comm, node, shell);
 	if ((comm && !comm[0]) || (comm && comm[0] && !comm[0]->argv) \
 	|| (comm && comm[0] && comm[0]->argv && !comm[0]->argv[0])) {
 		free_comms(comm);

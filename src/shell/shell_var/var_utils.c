@@ -34,11 +34,53 @@ char *get_var_str(var_t *var)
 	return (NULL);
 }
 
+char *get_var(char **env, var_t **vars, char *name)
+{
+	int id = find_var(vars, name);
+	int len;
+	char *res = NULL;
+
+	if (id != -1) {
+		printf("Shell var found at id %i\n", id);
+		res = get_var_str(vars[id]);
+		return (res);
+	}
+	len = strlen(name);
+	for (id = 0; env[id] != NULL; id++)
+		if (strncmp(env[id], name, len) == 0)
+			res = strdup(env[id] + len + 1);
+	return (res);
+}
+
 type_t get_type(char *content)
 {
 	if (content == NULL)
 		return (NO_TYPE);
-	if (is_num(content) == 0)
+	if (content[0] && is_num(content) == 0)
 		return (NBR);
 	return (STR);
+}
+
+var_t **dup_vars(var_t **arr)
+{
+	int len = array_len((void **)arr);
+	var_t **new = malloc(sizeof(var_t *) * len);
+
+	if (new == NULL)
+		return (NULL);
+	new[len - 1] = NULL;
+	for (int i = 0; arr[i]; i++) {
+		new[i] = malloc(sizeof(var_t) * 1);
+		if (new[i] == NULL)
+			return (NULL);
+		new[i]->name = strdup(arr[i]->name);
+		new[i]->type = arr[i]->type;
+		if (new[i]->type == STR)
+			new[i]->data.content = strdup(arr[i]->data.content);
+		else if (new[i]->type == NBR)
+			new[i]->data.value = arr[i]->data.value;
+		else
+			new[i]->data.content = NULL;
+	}
+	return (new);
 }

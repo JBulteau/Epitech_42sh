@@ -18,10 +18,6 @@ int run_that(shell_t *shell)
 		shell->return_value = 1;
 		return (ERROR_CODE);
 	}
-	//Julo voilà comment je run ça si tu te demandes
-	//comm_t *arr[] = {shell->comm[1], NULL};
-	//shell->comm[0]->parenthesis = arr;
-	//shell->comm[1] = NULL;
 	return_code = exec_loop(shell, shell->comm);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);

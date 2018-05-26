@@ -83,7 +83,7 @@ node_t *check_globbing(node_t *node)
 		if (node->buffer[i] == '*') {
 			node = isolate_glob(node, i);
 		}
-		if (node->buffer == NULL)
+		if (node == NULL)
 			return (NULL);
 	}
 	return (node);

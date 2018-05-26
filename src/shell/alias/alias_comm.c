@@ -34,3 +34,23 @@ t)) {
 	}
 	return (EXIT_SUCCESS);
 }
+
+alias_t *dup_aliases(alias_t *alias)
+{
+	alias_t *new = NULL;
+
+	if (alias == NULL)
+		return (NULL);
+	new = malloc(sizeof(alias_t) * 1);
+	if (new == NULL)
+		return (NULL);
+	new->name = strdup(alias->name);
+	if (new->name == NULL)
+		return (NULL);
+	new->alias = strdup(alias->alias);
+	if (new->alias == NULL)
+		return (NULL);
+	new->nav[PREV] = alias->nav[PREV];
+	new->nav[NEXT] = dup_aliases(alias->nav[NEXT]);
+	return (new);
+}

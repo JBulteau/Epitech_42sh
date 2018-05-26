@@ -13,6 +13,11 @@
 #include <glob.h>
 
 enum {
+	SAVE,
+	LOAD
+};
+
+enum {
 	RESET,
 	CHECK
 };
@@ -61,10 +66,11 @@ int get_nb_comm(node_t *node);
 
 /* convert_node.c */
 
-comm_t **convert_node(comm_t **comm, node_t *node);
-comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index);
+comm_t **convert_node(comm_t **comm, node_t *node, shell_t *shell);
+comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index, shell_t *shell);
 void check_node(node_t *node, int index[3]);
-comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index);
+comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index, \
+shell_t *shell);
 char **parse_argv(char **argv, node_t *node, int *comm_index, int index);
 
 /* handle_aliases.c */
@@ -86,16 +92,30 @@ char *fill_alias(char *buffer[2], char *alias, int index[2], size_t total_len);
 
 /* handle_separators.c */
 
-comm_t *handle_separators(comm_t *comm, node_t *node, int idx[3], \
-int *comm_index);
-comm_t *handle_advanced_separators(comm_t *comm, node_t *node, int idx[3], \
-int *comm_index);
-comm_t *handle_basic_separators(comm_t *comm, node_t *node, int idx[3], \
-int *comm_index);
-comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
-separator_type_t separator);
-comm_t *set_separator(comm_t *comm, node_t *node[2], \
-separator_type_t separator, int *new_index);
+comm_t *handle_separators(comm_t *comm, node_t *node, int idx[4], \
+shell_t *shell);
+comm_t *handle_advanced_separators(comm_t *comm, node_t *node, int idx[4], \
+shell_t *shell);
+comm_t *handle_basic_separators(comm_t *comm, node_t *node, int idx[4], \
+shell_t *shell);
+comm_t *apply_separator(comm_t *comm, node_t *node[2], int comm_index[2], \
+shell_t *shell);
+comm_t *set_separator(comm_t *comm, node_t *node[2], int new_index[2], \
+shell_t *shell);
+
+/* seaprators.c */
+
+comm_t *simple_separators(comm_t *comm, node_t *node[2], int new_index[2], \
+shell_t *shell);
+comm_t *simple_pipe(comm_t *comm, node_t *node[2], int new_index[2], \
+shell_t *shell);
+comm_t *redir(comm_t *comm, node_t *node[2], int new_index[2]);
+comm_t *ampersand(comm_t *comm, node_t *node[2], int new_index[2]);
+
+/* convert_utils.c */
+
+int index_save(int index[5], int status);
+int is_valid_node(comm_t *comm, node_t *node, int index[3]);
 
 /* struct.c */
 
