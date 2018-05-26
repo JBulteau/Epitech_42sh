@@ -22,9 +22,8 @@ void free_comm(comm_t *comm)
 	free_red(comm->red[D_RIGHT]);
 	if (comm->next)
 		free_comm(comm->next);
-	//Uncomment that julo
-	//if (comm->parenthesis)
-	//	free_comms(comm->parenthesis);
+	if (comm->parenthesis)
+		free_comms(comm->parenthesis);
 	free(comm);
 	return;
 }

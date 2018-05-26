@@ -38,7 +38,8 @@ int run_that_comm(shell_t *shell, comm_t *comm)
 		pipeline = run_pipeline(shell, comm);
 	if (pipeline == ERROR_RETURN)
 			return (ERROR_RETURN);
-	if ((comm->separator == OR && shell->return_value != 0) || (comm->separator == THEN && shell->return_value == 0))
+	if ((comm->separator == OR && shell->return_value != 0) || \
+(comm->separator == THEN && shell->return_value == 0))
 		pipeline = run_that_comm(shell, comm->next);
 	return (pipeline);
 }

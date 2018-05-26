@@ -37,8 +37,8 @@ int ptr_handle_history(shell_t *shell, char *input)
 
 int ptr_handle_jobs(shell_t *shell, char *input)
 {
-        UNUSED(shell);
-        UNUSED(input);
-        printf("%d", get_nb_job());
-        return (SUCCESS_RETURN);
+	UNUSED(shell);
+	UNUSED(input);
+	printf("%d", get_nb_job());
+	return (SUCCESS_RETURN);
 }

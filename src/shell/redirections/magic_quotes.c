@@ -73,7 +73,7 @@ char *get_magic(shell_t *shell, char *comm)
 	free(dup);
 	magic = get_str(fd[0]);
 	if (redir_end(fd, template) == ERROR_RETURN)
-		return (NULL);	
+		return (NULL);
 	return (magic);
 }
 

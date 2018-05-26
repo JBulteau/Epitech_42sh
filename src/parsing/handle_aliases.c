@@ -12,7 +12,7 @@
 char *fill_alias(char *buffer, char *alias, int index[2], size_t total_len)
 {
 	int i = 0;
-	
+
 	for (; (size_t)index[0] < total_len && alias[i]; index[0]++) {
 		buffer[index[0]] = alias[i];
 		i++;
