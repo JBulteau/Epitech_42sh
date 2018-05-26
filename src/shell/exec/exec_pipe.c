@@ -83,6 +83,9 @@ int run_pipeline(shell_t *shell, comm_t *comm)
 		} else {
 			return_c = run_not_last(shell, curr);
 		}
+		if ((curr->separator == OR && shell->return_value != 0) || \
+(curr->separator == THEN && shell->return_value == 0))
+		return_c = run_that_comm(shell, curr->next);
 	}
 	return (return_c);
 }
