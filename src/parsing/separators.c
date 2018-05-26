@@ -50,7 +50,7 @@ comm_t *redir(comm_t *comm, node_t *node[2], int new_index[2])
 	return (comm);
 }
 
-comm_t *ampersand(comm_t *comm, node_t *node[2], int new_index[2])
+comm_t *ampersand(comm_t *comm, int new_index[2])
 {
 	comm->bg = true;
 	if (REDIR(new_index[0]) && comm->red[new_index[0] - 6] \

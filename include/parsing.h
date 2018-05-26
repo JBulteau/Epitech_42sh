@@ -110,7 +110,7 @@ shell_t *shell);
 comm_t *simple_pipe(comm_t *comm, node_t *node[2], int new_index[2], \
 shell_t *shell);
 comm_t *redir(comm_t *comm, node_t *node[2], int new_index[2]);
-comm_t *ampersand(comm_t *comm, node_t *node[2], int new_index[2]);
+comm_t *ampersand(comm_t *comm, int new_index[2]);
 
 /* convert_utils.c */
 

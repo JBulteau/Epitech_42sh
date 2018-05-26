@@ -18,9 +18,9 @@ shell_t *shell)
 		comm = simple_pipe(comm, node, new_index, shell);
 	} else {
 		if (new_index[0] != S_AMPERSAND) {
-			comm = redir(comm, node, new_index, shell);
+			comm = redir(comm, node, new_index);
 		} else {
-			comm = ampersand(comm, node, new_index, shell);
+			comm = ampersand(comm, new_index);
 		}
 	}
 	return (comm);
