@@ -7,16 +7,62 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include "minishell.h"
 #include "my.h"
 
+
+static int redir_start(int fd[2], char *template)
+{
+	fd[0] = mkstemp(template);
+	fd[1] = dup(STDOUT_FILENO);
+	if (fd[0] == -1 || fd[1] == -1 || dup2(fd[0], STDOUT_FILENO) == -1)
+		return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
+}
+
+static int redir_end(int fd[2], char *template)
+{
+	close(fd[0]);
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
+		return (ERROR_RETURN);
+	close(fd[1]);
+	if (0 && unlink(template) == ERROR_RETURN)
+		return (ERROR_RETURN);
+	return (SUCCESS_RETURN);
+}
+
+char *get_str(int fd)
+{
+	char *buffer;
+	int size;
+
+	size = lseek(fd, (size_t)0, SEEK_END);
+	if (size == ERROR_RETURN)
+		return (NULL);
+	if (lseek(fd, (size_t)0, SEEK_SET) == ERROR_RETURN)
+		return (NULL);
+	buffer = malloc(sizeof(char) * (size + 1));
+	buffer[size] = '\0';
+	if (buffer == NULL)
+		return (NULL);
+	if (read(fd, buffer, size) < 0)
+		return (NULL);
+	return (buffer);
+}
+
 char *get_magic(shell_t *shell, char *comm)
 {
-//	char *magic = NULL;
+	char template[] = "/tmp/42shXXXXXX";
+	char *magic = NULL;
 	shell_t *dup = dup_shell(shell);
+	int fd[2];
 
 	dup->input = comm;
-	run_that(dup);
+	if (redir_start(fd, template) == ERROR_RETURN)
+		return (NULL);
+	if (run_that(dup) == ERROR_RETURN)
 	free_aliases(dup->aliases, 1);
 	free_history(dup->history);
 	for (int i = 0; dup->vars[i]; i++)
@@ -25,7 +71,10 @@ char *get_magic(shell_t *shell, char *comm)
 	free_array((void **)dup->env);
 	free(comm);
 	free(dup);
-	return (strdup("Ceci arrive julo"));
+	magic = get_str(fd[0]);
+	if (redir_end(fd, template) == ERROR_RETURN)
+		return (NULL);	
+	return (magic);
 }
 
 history_t *dup_history(history_t *node)
@@ -39,49 +88,5 @@ history_t *dup_history(history_t *node)
 		return (NULL);
 	new->data = strdup(node->data);
 	new->next = dup_history(node->next);
-	return (new);
-}
-
-alias_t *dup_aliases(alias_t *alias)
-{
-	alias_t *new = NULL;
-
-	if (alias == NULL)
-		return (NULL);
-	new = malloc(sizeof(alias_t) * 1);
-	if (new == NULL)
-		return (NULL);
-	new->name = strdup(alias->name);
-	if (new->name == NULL)
-		return (NULL);
-	new->alias = strdup(alias->alias);
-	if (new->alias == NULL)
-		return (NULL);
-	new->nav[PREV] = alias->nav[PREV];
-	new->nav[NEXT] = dup_aliases(alias->nav[NEXT]);
-	return (new);
-}
-
-var_t **dup_vars(var_t **arr)
-{
-	int len = array_len((void **)arr);
-	var_t **new = malloc(sizeof(var_t *) * len);
-
-	if (new == NULL)
-		return (NULL);
-	new[len - 1] = NULL;
-	for (int i = 0; arr[i]; i++) {
-		new[i] = malloc(sizeof(var_t) * 1);
-		if (new[i] == NULL)
-			return (NULL);
-		new[i]->name = strdup(arr[i]->name);
-		new[i]->type = arr[i]->type;
-		if (new[i]->type == STR)
-			new[i]->data.content = strdup(arr[i]->data.content);
-		else if (new[i]->type == NBR)
-			new[i]->data.value = arr[i]->data.value;
-		else
-			new[i]->data.content = NULL;
-	}
 	return (new);
 }

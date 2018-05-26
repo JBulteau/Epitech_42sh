@@ -11,7 +11,7 @@
 #include "minishell.h"
 #include "my.h"
 
-int disp_help(void)
+static int disp_help(void)
 {
 	puts("Usage:\n\t\talias <name> <alias...>\n\t\talias rm <name>");
 	return (EXIT_SUCCESS);

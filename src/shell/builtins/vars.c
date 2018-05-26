@@ -36,13 +36,7 @@ int ptr_unset(comm_t *comm, shell_t *shell)
 
 int ptr_at(comm_t *comm, shell_t *shell)
 {
-	char *res = get_magic(shell, strdup("set"));
-
-	if (res == NULL)
-		puts("No magic ouput");
-	else
-		printf("Output magic -->\n|%s|\n*********************\n", res);
-	free(res);
+	puts("Not implemented yet");
 	return (SUCCESS_RETURN);
 }
 
