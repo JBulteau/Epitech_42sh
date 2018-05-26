@@ -12,6 +12,7 @@ TESTS_DIR	=	$(realpath ./tests)
 SRC_DIR		=	$(realpath ./src)
 
 PARSING_DIR	=	parsing/
+JARVIS_DIR	=	jarvis/
 SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
@@ -94,6 +95,21 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(JOBS_DIR)jobs.c\
 			$(JOBS_DIR)signals.c\
 			$(JOBS_DIR)sig_handlers.c\
+\
+			$(JARVIS_DIR)jarvis_corrector.c\
+			$(JARVIS_DIR)jarvis_corrector_spaces.c\
+			$(JARVIS_DIR)jarvis_corrector_misspell.c\
+			$(JARVIS_DIR)jarvis_corrector_tools.c\
+			$(JARVIS_DIR)jarvis_corrector_algo.c\
+			$(JARVIS_DIR)jarvis_corrector_refill.c\
+			$(JARVIS_DIR)jarvis_corrector_misspell_final.c\
+			$(JARVIS_DIR)jarvis_corrector_init_jarg.c\
+			$(JARVIS_DIR)jarvis_corrector_utils.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_short.c\
+			$(JARVIS_DIR)jarvis_corrector_short_rm_sub.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_loop.c\
+			$(JARVIS_DIR)jarvis_corrector_local_command.c\
+
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
