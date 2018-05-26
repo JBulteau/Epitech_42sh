@@ -19,6 +19,7 @@ alias_t *create_alias(char *name, char *alias, alias_t *prev)
 		return (NULL);
 	new->alias = strdup(alias);
 	new->name = strdup(name);
+	new->loop = false;
 	new->nav[PREV] = prev;
 	new->nav[NEXT] = NULL;
 	return (new);

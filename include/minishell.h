@@ -58,6 +58,7 @@ struct jobs_s {
 struct alias_s {
 	char *name;
 	char *alias;
+	bool loop;
 	struct alias_s *nav[2];
 };
 

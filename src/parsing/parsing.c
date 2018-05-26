@@ -19,10 +19,9 @@ comm_t **parsing(shell_t *shell)
 		free_node(node);
 		return (NULL);
 	}
-	node = parse_quote(node, shell->input);
+	node = parse_quote(node, shell);
 	if (node == NULL)
 		return (NULL);
-	node = handle_aliases(node, shell);
 	comm = init_comm_array(comm, node);
 	comm = convert_node(comm, node);
 	if ((comm && !comm[0]) || (comm && comm[0] && !comm[0]->argv) \
