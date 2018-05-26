@@ -28,7 +28,7 @@ static int redir_end(int fd[2], char *template)
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 		return (ERROR_RETURN);
 	close(fd[1]);
-	if (0 && unlink(template) == ERROR_RETURN)
+	if (unlink(template) == ERROR_RETURN)
 		return (ERROR_RETURN);
 	return (SUCCESS_RETURN);
 }
