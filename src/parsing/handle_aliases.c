@@ -8,104 +8,91 @@
 #include "my.h"
 #include "parsing.h"
 #include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 
-char *fill_alias(char *buffer, char *alias, int index[2], size_t total_len)
+char *replace_alias(char *buffer[2], char *alias, int index[2], \
+size_t alias_len)
 {
-	int i = 0;
-	
-	for (; (size_t)index[0] < total_len && alias[i]; index[0]++) {
-		buffer[index[0]] = alias[i];
-		i++;
-	}
-	index[0]++;
-	index[1] = index[0];
-	return (buffer);
-}
-
-char *replace_alias(char *buffer, char *alias, int index[2], size_t alias_len)
-{
-	size_t buf_len = strlen(buffer);
+	size_t buf_len = strlen(buffer[0]);
 	size_t total_len = strlen(alias);
 	int tmp = index[0];
 
-	if (!(buffer = \
-	realloc(buffer, sizeof(char) * (buf_len + total_len - alias_len + 1))))
+	if (!(buffer[0] = realloc\
+	(buffer[0], sizeof(char) * (buf_len + total_len - alias_len + 1))))
 		return (NULL);
 	for (size_t i = 0; !(index[0] + 1 + alias_len - 1) \
-	|| buffer[index[0] + i + alias_len - 1]; i++) {
-		buffer[index[0] + i] = buffer[index[0] + alias_len + 1];
-		if (!buffer[index[0] + i])
+	|| buffer[0][index[0] + i + alias_len - 1]; i++) {
+		buffer[0][index[0] + i] = buffer[0][index[0] + alias_len + 1];
+		if (!buffer[0][index[0] + i])
 			break;
 	}
-	buffer[buf_len + total_len - alias_len] = '\0';
-	for (; buffer[index[0]]; index[0]++)
-		buffer[index[0] + total_len + 1] = buffer[index[0]];
+	buffer[0][buf_len + total_len - alias_len] = '\0';
+	for (; buffer[0][index[0]]; index[0]++)
+		buffer[0][index[0] + total_len + 1] = buffer[0][index[0]];
 	index[0] = tmp;
 	total_len += tmp;
 	return (fill_alias(buffer, alias, index, total_len));
 }
 
-char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2])
+char *check_alias_loop(alias_t *alias, char *buffer)
 {
-	if (!strcmp(word, alias->name)) {
-		buffer = replace_alias(buffer, alias->alias, index, strlen(alias->name));
+	int loop = 0;
+	alias_t *first = alias;
+
+	while (alias) {
+		if (alias->loop == true)
+			loop++;
+		alias = alias->nav[NEXT];
+	}
+	alias = first;
+	if (loop > 1) {
+		dprintf(STDERR_FILENO, "Alias loop.\n");
+		free(buffer);
+		return (NULL);
 	}
 	return (buffer);
 }
 
-char *isolate_word(char *buffer, alias_t *alias)
+char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2])
 {
-	char *word = malloc(sizeof(char) * strlen(buffer));
-	int index[2] = {0, 0};
+	alias_t *first = alias;
 
-	if (!word)
+	if (!word || word[0] == '\0')
 		return (buffer);
-	buffer = clear_str(buffer);
-	word = memset(word, '\0', strlen(buffer));
-	for (; !index[1] || buffer[index[1] - 1]; index[1]++) {
-		if (buffer[index[1]] != ' ' && buffer[index[1]] != '\t' \
-		&& buffer[index[1]] != '\0') {
-			word[index[1]] = buffer[index[1]];
+	while (alias) {
+		if (!strcmp(word, alias->name) && alias->loop == false) {
+			buffer = replace_alias((char*[2]){buffer, word}, \
+			alias->alias, index, strlen(alias->name));
+			alias->loop = true;
+			alias = first;
+		} else if (strcmp(word, alias->name)) {
+			alias = alias->nav[NEXT];
 		} else {
-			buffer = compare_aliases(buffer, word, alias, index);
-			word = memset(word, '\0', strlen(buffer));
+			return (check_alias_loop(first, buffer));
 		}
 	}
 	return (buffer);
 }
 
-char *search_aliases(char *buffer, alias_t *alias)
+alias_t *reset_alias_loop(alias_t *alias)
 {
 	alias_t *first = alias;
 
-	if (!buffer)
-		return (NULL);
 	while (alias) {
-		buffer = isolate_word(buffer, alias);
+		alias->loop = false;
 		alias = alias->nav[NEXT];
 	}
 	alias = first;
-	return (buffer);
+	return (alias);
 }
 
 node_t *handle_aliases(node_t *node, shell_t *shell)
 {
-	int index [3] = {0, 0, 0};
-
-	for (; node && node->next[index[0]] \
-	&& node->next[index[0]]->next[index[1]] \
-	&& node->next[index[0]]->next[index[1]]->next[index[2]]; index[2]++) {
-		if (!node->next[index[0]]->next[index[1]]->next[index[2]]) {
-			index[2] = 0;
-			index[1]++;
-		}
-		if (!node->next[index[0]]->next[index[1]]) {
-			index[1] = 0;
-			index[0]++;
-		}
-		node->next[index[0]]->next[index[1]]->next[index[2]]->buffer = \
-		search_aliases(node->next[index[0]]->next[index[1]]->\
-		next[index[2]]->buffer, shell->aliases);
+	for (int i = 0; node && node->next[i]; i++) {
+		if (node->next[i]->quote == NONE && node->next[i]->buffer)
+			node->next[i]->buffer = \
+			search_aliases(node->next[i]->buffer, shell->aliases);
 	}
 	return (node);
 }

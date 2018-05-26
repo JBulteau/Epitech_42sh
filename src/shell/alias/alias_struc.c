@@ -19,9 +19,27 @@ alias_t *create_alias(char *name, char *alias, alias_t *prev)
 		return (NULL);
 	new->alias = strdup(alias);
 	new->name = strdup(name);
+	new->loop = false;
 	new->nav[PREV] = prev;
 	new->nav[NEXT] = NULL;
 	return (new);
+}
+
+int check_existing_alias(shell_t *shell, char **args, char *alias)
+{
+	alias_t *first = shell->aliases;
+
+	while (shell->aliases) {
+		if (!strcmp(shell->aliases->name, args[0])) {
+			free(shell->aliases->alias);
+			shell->aliases->alias = strdup(alias);
+			shell->aliases = first;
+			return (1);
+		}
+		shell->aliases = shell->aliases->nav[NEXT];
+	}
+	shell->aliases = first;
+	return (0);
 }
 
 char *concat_args(char **args)
@@ -36,7 +54,8 @@ char *concat_args(char **args)
 		if (res == NULL)
 			res = malloc(strlen(args[i]) + add_space);
 		else
-			res = realloc(res, res_len + strlen(args[i]) + add_space);
+			res = \
+			realloc(res, res_len + strlen(args[i]) + add_space);
 		if (res == NULL)
 			return (NULL);
 		strcpy(res + res_len, args[i]);
@@ -52,18 +71,20 @@ int add_alias(char **args, shell_t *shell)
 	alias_t *last = NULL;
 	char *alias = NULL;
 
-	if (args == NULL || args[0] == NULL || args[1] == NULL || args[2] == NULL)
+	if (!args || !args[0] || !args[1] || !args[2])
 		return (ERROR_RETURN);
 	alias = concat_args(args + 2);
 	if (alias == NULL)
 		return (ERROR_RETURN);
+	if (check_existing_alias(shell, args, alias))
+		return (SUCCESS_RETURN);
 	if (shell->aliases == NULL) {
 		shell->aliases = create_alias(args[1], alias, NULL);
 		if (shell->aliases == NULL)
 			return (ERROR_RETURN);
 		return (SUCCESS_RETURN);
 	}
-	for (last = shell->aliases; last->nav[NEXT] != NULL; last = last->nav[NEXT]);
+	for (last = shell->aliases; last->nav[NEXT]; last = last->nav[NEXT]);
 	last->nav[NEXT] = create_alias(args[1], alias, last);
 	return (SUCCESS_RETURN);
 }
