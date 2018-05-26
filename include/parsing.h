@@ -70,14 +70,18 @@ char **parse_argv(char **argv, node_t *node, int *comm_index, int index);
 /* handle_aliases.c */
 
 node_t *handle_aliases(node_t *node, shell_t *shell);
-int is_first_arg(char c);
+alias_t *reset_alias_loop(alias_t *alias);
+char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2]);
+char *check_alias_loop(alias_t *alias, char *buffer);
+char *replace_alias(char *buffer[2], char *alias, int index[2], \
+size_t alias_len);
 
 /* search_aliases.c */
 
 char *search_aliases(char *buffer, alias_t *alias);
+int is_first_arg(char c);
 char *isolate_word(char *buffer, alias_t *alias);
-char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2]);
-char *replace_alias(char *buffer[2], char *alias, int index[2], size_t alias_len);
+char *fill_word(char *buffer, char *word, int index);
 char *fill_alias(char *buffer[2], char *alias, int index[2], size_t total_len);
 
 /* handle_separators.c */
