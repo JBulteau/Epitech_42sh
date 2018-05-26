@@ -23,13 +23,6 @@ static int disp_vars(var_t **vars)
 	return (SUCCESS_RETURN);
 }
 
-int ptr_set(comm_t *comm, shell_t *shell)
-{
-	if (comm->argv[1] == NULL)
-		return (disp_vars(shell->vars));
-	return (SUCCESS_RETURN);
-}
-
 int ptr_unset(comm_t *comm, shell_t *shell)
 {
 	if (comm->argv[1] == NULL) {
@@ -43,5 +36,30 @@ int ptr_unset(comm_t *comm, shell_t *shell)
 
 int ptr_at(comm_t *comm, shell_t *shell)
 {
+	char *var_value = NULL;
+	char *tmp = NULL;
+
+	puts("Not yet implemented");
+	if (comm->argv[1] != NULL) {
+		var_value = get_var(shell->env, shell->vars, comm->argv[1]);
+		free(var_value);
+	}
+	return (SUCCESS_RETURN);
+}
+
+int ptr_set(comm_t *comm, shell_t *shell)
+{
+	char **token = NULL;
+
+	if (comm->argv[1] == NULL)
+		return (disp_vars(shell->vars));
+	token = strwordarr(comm->argv[1], "=");
+	if (token == NULL)
+		return (ERROR_RETURN);
+	if (token[1] == NULL)
+	shell->vars = set_var(shell->vars, token[0], token[1]);
+	if (shell->vars == NULL)
+		return (ERROR_RETURN);
+	free_array((void **)token);
 	return (SUCCESS_RETURN);
 }

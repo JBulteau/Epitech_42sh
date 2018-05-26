@@ -23,12 +23,17 @@ int ptr_alias(comm_t *comm, shell_t *shell);
 int ptr_unalias(comm_t *comm, shell_t *shell);
 int ptr_echo(comm_t *comm, shell_t *shell);
 int ptr_repeat(comm_t *comm, shell_t *shell);
+int ptr_at(comm_t *comm, shell_t *shell);
+int ptr_set(comm_t *comm, shell_t *shell);
+int ptr_unset(comm_t *comm, shell_t *shell);
+int ptr_builtins(comm_t *comm, shell_t *shell);
 int ptr_dirs(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
 	int (*fnc)(comm_t *comm, shell_t *shell);
 } builtins[] = {
+	{"builtins", &ptr_builtins},
 	{"cd", &ptr_cd},
 	{"env", &ptr_env},
 	{"setenv", &ptr_setenv},
@@ -42,6 +47,9 @@ static const struct {
 	{"unalias", &ptr_unalias},
 	{"echo", &ptr_echo},
 	{"repeat", &ptr_repeat},
+	{"@", &ptr_at},
+	{"set", &ptr_set},
+	{"unset", &ptr_unset},
 	{"chdir", &ptr_cd},
 	{"dirs", &ptr_dirs},
 	{NULL, NULL}

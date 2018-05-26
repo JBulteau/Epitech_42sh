@@ -1,11 +1,10 @@
 /*
 ** EPITECH PROJECT, 2017
-** var_builtins.c
+** var_operations.c
 ** File description:
-** Var builtins requirements
+** Function for vars operations
 */
 
-#include "my.h"
 #include "minishell.h"
 
 int op_equals()

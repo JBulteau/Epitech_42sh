@@ -39,7 +39,25 @@ var_t **set_var(var_t **arr, char *name, char *content)
 			return (NULL);
 		id = len;
 	}
+	if (content == NULL)
+		content = strdup("");
+	if (content == NULL)
+		return (NULL);
 	if (edit_var(arr[id], content, name) == ERROR_RETURN)
 		return (NULL);
 	return (arr);
+}
+
+int unset_var(shell_t *shell, char *name)
+{
+	int index = find_var(shell->vars, name);
+	var_t *var = NULL;
+
+	if (index == -1)
+		return (ERROR_RETURN);
+	var = shell->vars[index];
+	for (int i = index; shell->vars[i]; i++)
+		shell->vars[i] = shell->vars[i + 1];
+	free_var(var);
+	return (SUCCESS_RETURN);
 }
