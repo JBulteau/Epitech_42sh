@@ -11,25 +11,25 @@
 #include <unistd.h>
 #include <stdio.h>
 
-char *replace_alias(char *buffer[2], char *alias, int index[2], \
+char *replace_alias(char *buffer, char *alias, int index[2], \
 size_t alias_len)
 {
-	size_t buf_len = strlen(buffer[0]);
+	size_t buf_len = strlen(buffer);
 	size_t total_len = strlen(alias);
 	int tmp = index[0];
 
-	if (!(buffer[0] = realloc\
-	(buffer[0], sizeof(char) * (buf_len + total_len - alias_len + 1))))
-		return (NULL);
-	for (size_t i = 0; !(index[0] + 1 + alias_len - 1) \
-	|| buffer[0][index[0] + i + alias_len - 1]; i++) {
-		buffer[0][index[0] + i] = buffer[0][index[0] + alias_len + 1];
-		if (!buffer[0][index[0] + i])
+	for (size_t i = 0; !(index[0] + alias_len + i) \
+	|| buffer[index[0] + i + alias_len - 1]; i++) {
+		buffer[index[0] + i] = buffer[index[0] + alias_len + i];
+		if (!buffer[index[0] + i])
 			break;
 	}
-	buffer[0][buf_len + total_len - alias_len] = '\0';
-	for (; buffer[0][index[0]]; index[0]++)
-		buffer[0][index[0] + total_len + 1] = buffer[0][index[0]];
+	if (!(buffer = realloc\
+	(buffer, sizeof(char) * (buf_len + total_len - alias_len + 1))))
+		return (NULL);
+	buffer[buf_len + total_len - alias_len] = '\0';
+	for (; buffer[index[0]]; index[0]++)
+		buffer[index[0] + total_len + 1] = buffer[index[0]];
 	index[0] = tmp;
 	total_len += tmp;
 	return (fill_alias(buffer, alias, index, total_len));
@@ -62,8 +62,8 @@ char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2])
 		return (buffer);
 	while (alias) {
 		if (!strcmp(word, alias->name) && alias->loop == false) {
-			buffer = replace_alias((char*[2]){buffer, word}, \
-			alias->alias, index, strlen(alias->name));
+			buffer = replace_alias(buffer, alias->alias, index, \
+			strlen(alias->name));
 			alias->loop = true;
 			alias = first;
 		} else if (strcmp(word, alias->name)) {

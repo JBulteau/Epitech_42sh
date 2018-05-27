@@ -64,7 +64,7 @@ shell_t *dup_shell(shell_t *shell)
 		return (NULL);
 	new_shell->input = NULL;
 	new_shell->comm = NULL;
-	new_shell->return_value = shell->return_value;
+	new_shell->return_value = 0;
 	new_shell->history_exec = shell->history_exec;
 	strcpy(new_shell->pwd[0], shell->pwd[0]);
 	strcpy(new_shell->pwd[1], shell->pwd[1]);

@@ -12,7 +12,7 @@
 
 int find_var(var_t **arr, char *name)
 {
-	if (arr == NULL)
+	if (arr == NULL || name == NULL)
 		return (ERROR_RETURN);
 	for (int i = 0; arr[i] != NULL; i++) {
 		if (!strcmp(arr[i]->name, name))
@@ -40,8 +40,14 @@ char *get_var(char **env, var_t **vars, char *name)
 	int len;
 	char *res = NULL;
 
+	if (name == NULL)
+		return (NULL);
 	if (id != -1) {
 		res = get_var_str(vars[id]);
+		if (res && res[0] == '\0') {
+			free(res);
+			res = strdup("\n");
+		}
 		return (res);
 	}
 	len = strlen(name);
