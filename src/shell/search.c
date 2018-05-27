@@ -82,7 +82,7 @@ char **get_path(char **env, var_t **vars)
 	for (int key = 0; env[key] != NULL; key++)
 		if (strncmp(env[key], "PATH=", 5) == 0)
 			path = strwordarr(env[key] + 5, ":");
-	for (int key = 0; !path && vars[key] != NULL; key++)
+	for (int key = 0; !path && vars && vars[key] != NULL; key++)
 		if (!strcmp(vars[key]->name, "path"))
 			path = strwordarr(vars[key]->data.content, ":");
 	if (path == NULL)
