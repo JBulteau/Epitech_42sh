@@ -87,16 +87,16 @@ node_t *handle_aliases(node_t *node, shell_t *shell);
 alias_t *reset_alias_loop(alias_t *alias);
 char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2]);
 char *check_alias_loop(alias_t *alias, char *buffer);
-char *replace_alias(char *buffer[2], char *alias, int index[2], \
+char *replace_alias(char *buffer, char *alias, int index[2], \
 size_t alias_len);
 
 /* search_aliases.c */
 
 char *search_aliases(char *buffer, alias_t *alias);
-int is_first_arg(char c);
+int is_first_arg(char *buffer, int index);
 char *isolate_word(char *buffer, alias_t *alias);
 char *fill_word(char *buffer, char *word, int index);
-char *fill_alias(char *buffer[2], char *alias, int index[2], size_t total_len);
+char *fill_alias(char *buffer, char *alias, int index[2], size_t total_len);
 
 /* handle_variables.c */
 

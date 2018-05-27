@@ -82,10 +82,12 @@ int add_alias(char **args, shell_t *shell)
 		shell->aliases = create_alias(args[1], alias, NULL);
 		if (shell->aliases == NULL)
 			return (ERROR_RETURN);
+		free(alias);
 		return (SUCCESS_RETURN);
 	}
 	for (last = shell->aliases; last->nav[NEXT]; last = last->nav[NEXT]);
 	last->nav[NEXT] = create_alias(args[1], alias, last);
+	free(alias);
 	return (SUCCESS_RETURN);
 }
 
