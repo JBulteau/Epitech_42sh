@@ -8,7 +8,6 @@
 #include "my.h"
 #include "parsing.h"
 #include <string.h>
-#include <unistd.h>
 #include <stdio.h>
 
 char *replace_alias(char *buffer, char *alias, int index[2], \
@@ -47,7 +46,7 @@ char *check_alias_loop(alias_t *alias, char *buffer)
 	}
 	alias = first;
 	if (loop > 1) {
-		dprintf(STDERR_FILENO, "Alias loop.\n");
+		fprintf(stderr, "Alias loop.\n");
 		free(buffer);
 		return (NULL);
 	}

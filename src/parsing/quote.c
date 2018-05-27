@@ -8,7 +8,6 @@
 #include "my.h"
 #include "parsing.h"
 #include <stdio.h>
-#include <unistd.h>
 
 int missing_quote(node_t *node, char *buffer)
 {
@@ -19,11 +18,15 @@ int missing_quote(node_t *node, char *buffer)
 	for (j = 0; buffer[j + 1] != '\0'; j++);
 	if (node->next[i]->quote != NONE && !is_a_quote(buffer[j])) {
 		if (node->next[i]->quote == SIMPLE)
-			dprintf(STDERR_FILENO, "Unmatched '''.\n");
+			fprintf(stderr, "Unmatched '''.\n");
 		else if (node->next[i]->quote == DOUBLE)
-			dprintf(STDERR_FILENO, "Unmatched '\"'.\n");
+			fprintf(stderr, "Unmatched '\"'.\n");
 		else
-			dprintf(STDERR_FILENO, "Unmatched '`'.\n");
+			fprintf(stderr, "Unmatched '`'.\n");
+		return (1);
+	}
+	if (node->next[i]->quote == NONE && is_a_quote(buffer[j])) {
+		fprintf(stderr, "Unmatched '%c'.\n", buffer[j]);
 		return (1);
 	}
 	return (0);
@@ -58,15 +61,16 @@ node_t *delete_quote(node_t *node, char *buffer, int i)
 	index[0] = (i == 0) ? 0 : index[0];
 	index[1] = (i == 0) ? 2 : index[1];
 	if (is_a_quote(buffer[i]) && (node->next[index[1] - 2]->quote) == NONE \
-	&& !node->backslash) {
+	&& !node->backslash && buffer[i + 1] != '\0') {
 		node = new_quoted_node(node, index, buffer, i);
 	} else if (node->next[index[1] - 2]->quote == \
 	index_of("'\"`", buffer[i]) && node->next[index[1] - 2]->quote != NONE \
 	&& !node->backslash) {
-		if ((node->next = \
+		if ((index[0] = 0) == 0 || buffer[i + 1] == '\0')
+			return (node);
+		else if ((node->next = \
 		realloc_node(node->next, index[1]++, node->quote)) == NULL)
 			return (NULL);
-		index[0] = 0;
 	} else {
 		node->next[index[1] - 2] = no_quote(node->next[index[1] - 2], \
 		buffer, i, &index[0]);
@@ -85,8 +89,14 @@ node_t *parse_quote(node_t *node, shell_t *shell)
 		if (node == NULL)
 			return (NULL);
 	}
-	if (missing_quote(node, shell->input))
+	if (missing_quote(node, shell->input)) {
+		free_node(node);
 		return (NULL);
+	}
+	if (!check_double_separator(node)) {
+		free_node(node);
+		return (NULL);
+	}
 	node = handle_aliases(node, shell);
 	node = handle_variables(node, shell);
 	return (parse_split(node));
