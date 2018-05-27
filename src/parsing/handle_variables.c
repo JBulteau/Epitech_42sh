@@ -13,7 +13,7 @@
 char *fill_var(char *buffer, char *new_var_content, int i, size_t total_len)
 {
 	int tmp = i;
-	
+
 	for (; buffer[i]; i++)
 		buffer[i + total_len + 1] = buffer[i];
 	i = tmp;
@@ -31,7 +31,7 @@ int i)
 	size_t buf_len = 0;
 	size_t total_len = 0;
 	size_t len_to_replace = 0;
-	
+
 	if (buffer == NULL || new_var_content == NULL || new_var_name == NULL)
 		return (NULL);
 	buf_len = strlen(buffer);
@@ -75,9 +75,12 @@ char *search_variables(char *buffer, shell_t *shell)
 		return (NULL);
 	for (int i = 0; buffer && buffer[i]; i++) {
 		if (buffer[i] == '$') {
-			new_var_name = get_variable_name(&buffer[i + 1], new_var_name);
-			new_var_content = get_var(shell->env, shell->vars, new_var_name);
-			buffer = replace_var(buffer, new_var_content, new_var_name, i);
+			new_var_name = \
+			get_variable_name(&buffer[i + 1], new_var_name);
+			new_var_content = \
+			get_var(shell->env, shell->vars, new_var_name);
+			buffer = \
+			replace_var(buffer, new_var_content, new_var_name, i);
 		}
 	}
 	free(new_var_name);
