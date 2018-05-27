@@ -39,7 +39,7 @@ void free_jobs(void)
 	node = list_jobs->next;
 	for (int i = 0; list_jobs->pid_job[i] != 0; i++)
 		if (kill(list_jobs->pid_job[i], SIGKILL))
-			perror("kill");
+			;//perror("kill");
 	free(list_jobs->pid_job);
 	free(list_jobs);
 	list_jobs = node;
