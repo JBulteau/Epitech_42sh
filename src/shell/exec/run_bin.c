@@ -18,6 +18,8 @@ int run_that(shell_t *shell)
 		shell->return_value = 1;
 		return (ERROR_CODE);
 	}
+	for (int i = 0; shell->comm[i]; i++)
+		debug_comm(shell->comm[i]);
 	return_code = exec_loop(shell, shell->comm);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);
