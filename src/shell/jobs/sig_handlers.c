@@ -33,7 +33,6 @@ void remove_node_running(void)
 
 	while (node != NULL) {
 		if (node->running == true) {
-			//wait_for_it(node->pid_job[0]);
 			wait(&status);
 			remove_node(node->pid_job[0]);
 			return;
