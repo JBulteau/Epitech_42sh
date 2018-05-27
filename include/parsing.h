@@ -102,7 +102,12 @@ char *fill_alias(char *buffer, char *alias, int index[2], size_t total_len);
 
 node_t *handle_variables(node_t *node, shell_t *shell);
 char *search_variables(char *buffer, shell_t *shell);
+char *handle_new_variable(char *buffer, shell_t *shell, int i);
+char *get_last_return_value(char *new_var_content, shell_t *shell);
 char *get_variable_name(char *buffer, char *new_var_name);
+
+/* replace_variables.c */
+
 char *replace_var(char *buffer, char *new_var_content, char *new_var_name, \
 int i);
 char *fill_var(char *buffer, char *new_var_content, int i, size_t total_len);
