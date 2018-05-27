@@ -8,40 +8,6 @@
 #include "my.h"
 #include "parsing.h"
 
-comm_t *check_redir(comm_t *comm)
-{
-	for (int i = 0; i < 4; i++) {
-		if (comm->red[i] && comm->red[i]->target == NULL) {
-			free_comm(comm);
-			return (NULL);
-		}
-	}
-	return (comm);
-}
-
-comm_t *check_pipe(comm_t *comm)
-{
-	if (comm->pipe[OUT]) {
-		if ((comm->pipe[OUT]->output = \
-		check_comm(comm->pipe[OUT]->output)) == NULL) {
-			free_comm(comm);
-			return (NULL);
-		}
-	}
-	return (comm);
-}
-
-comm_t *check_next(comm_t *comm)
-{
-	if (comm->next) {
-		if ((comm->next = check_comm(comm->next)) == NULL) {
-			free_comm(comm);
-			return (NULL);
-		}
-	}
-	return (comm);
-}
-
 comm_t *check_comm(comm_t *comm)
 {
 	comm = check_redir(comm);
@@ -56,6 +22,15 @@ comm_t *check_comm(comm_t *comm)
 	if ((comm && !comm->argv) || (comm && comm->argv && !comm->argv[0])) {
 		free_comm(comm);
 		return (NULL);
+	}
+	return (comm);
+}
+
+comm_t **slide_comm(comm_t **comm, int *i)
+{
+	for (int j = *i; comm[j + 1]; j++) {
+		comm[j] = comm[j + 1];
+		comm[j + 1] = NULL;
 	}
 	return (comm);
 }
@@ -77,10 +52,8 @@ comm_t **parsing(shell_t *shell)
 	comm = init_comm_array(comm, node);
 	comm = convert_node(comm, node, shell);
 	for (int i = 0; comm && comm[i]; i++)
-		if ((comm[i] = check_comm(comm[i])) == NULL) {
-			free_comms(comm);
-			return (NULL);
-		}
+		if ((comm[i] = check_comm(comm[i])) == NULL)
+			comm = slide_comm(comm, &i);
 	free_node(node);
 	return (comm);
 }

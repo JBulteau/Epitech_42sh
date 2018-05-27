@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "minishell.h"
 #include "my.h"
 
@@ -24,11 +26,29 @@ static void loop_ctrl_z(jobs_t *node)
 	fflush(stdout);
 }
 
+void remove_node_running(void)
+{
+	jobs_t *node = list_jobs;
+	int status = 0;
+
+	while (node != NULL) {
+		if (node->running == true) {
+			//wait_for_it(node->pid_job[0]);
+			wait(&status);
+			remove_node(node->pid_job[0]);
+			return;
+		}
+		else
+			node = node->next;
+	}
+}
+
 void catch_ctrl_c(int sig)
 {
 	UNUSED(sig);
 	printf("\033[2D  \033[2D\n");
 	fflush(stdout);
+	remove_node_running();
 }
 
 void catch_ctrl_z(int sig)

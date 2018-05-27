@@ -8,6 +8,11 @@
 #include "my.h"
 #include "parsing.h"
 
+int is_separator_char(char c)
+{
+	return (is_cmd_separator(c) || c == ';');
+}
+
 int index_save(int index[5], int status)
 {
 	static int **index_array;

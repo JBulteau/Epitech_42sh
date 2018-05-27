@@ -57,6 +57,8 @@ void remove_node(pid_t pid)
 		prev = node;
 		node = node->next;
 	}
+	if (!node)
+		return;
 	if (node->next != NULL)
 		prev->next = node->next;
 	else
