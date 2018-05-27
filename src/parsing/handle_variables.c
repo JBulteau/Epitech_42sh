@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 char *get_variable_name(char *buffer, char *new_var_name)
 {
@@ -59,7 +60,11 @@ char *search_variables(char *buffer, shell_t *shell)
 	if (!buffer)
 		return (NULL);
 	for (int i = 0; buffer && buffer[i]; i++) {
-		if (buffer[i] == '$') {
+		if (buffer[i] == '$' && (!isalnum(buffer[i + 1]) \
+		&& buffer[i + 1] != '?')) {
+			free(buffer);
+			return (NULL);
+		} else if (buffer[i] == '$') {
 			buffer = handle_new_variable(buffer, shell, i);
 		}
 	}
@@ -73,6 +78,10 @@ node_t *handle_variables(node_t *node, shell_t *shell)
 		|| node->next[i]->quote == DOUBLE) && node->next[i]->buffer)
 			node->next[i]->buffer = \
 			search_variables(node->next[i]->buffer, shell);
+		if (node->next[i]->buffer == NULL) {
+			free_node(node);
+			return (NULL);
+		} 
 	}
 	return (node);
 }
