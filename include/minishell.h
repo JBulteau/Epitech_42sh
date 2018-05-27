@@ -47,12 +47,12 @@ typedef struct redir_s redir_t;
 typedef struct comm_s comm_t;
 typedef struct pipe_s pipe_t;
 typedef struct alias_s alias_t;
-typedef struct jobs_s jobs_t; 
+typedef struct jobs_s jobs_t;
 
 struct jobs_s {
-	bool running; 
-	pid_t *pid_job; 
-	jobs_t *next; 
+	bool running;
+	pid_t *pid_job;
+	jobs_t *next;
 };
 
 struct alias_s {
@@ -224,6 +224,7 @@ int add_pid_jobs(pid_t child);
 
 /*	shell/jobs/sig_handlers.c	*/
 void catch_ctrl_z(int sig);
+void catch_ctrl_c(int sig);
 
 /*	shell/jobs/signals.c		*/
 int init_signal(void);
@@ -380,6 +381,6 @@ comm_t **parsing(shell_t *shell);
 ** #endif
 */
 
-extern jobs_t *list_jobs; 
+extern jobs_t *list_jobs;
 
 #endif

@@ -59,27 +59,27 @@ static int find_line_break(char *buf, int index)
 
 static char *read_file(int fd, char *ptr)
 {
-	char *buf = malloc(sizeof(char) * (READ_SIZE + 1));
-	int result = 0;
-	int j = 0;
+	char *b = malloc(sizeof(char) * (READ_SIZE + 1));
+	int i[2] = {0, 0};
 	static int index = 0;
 
-	if (buf == NULL || fd < 0)
+	if (b == NULL || fd < 0)
 		return (NULL);
 	for (int k = 0; k <= READ_SIZE; k++)
-		buf[k] = '\0';
+		b[k] = '\0';
 	if (index != 0 && !(find_line_break(ptr, index)))
-		return (buf);
+		return (b);
 	do {
-		for (buf = my_realloc(buf, READ_SIZE, j); buf == NULL;)
+		for (b = my_realloc(b, READ_SIZE, i[0]); b == NULL;)
 			return (NULL);
-		result = read(fd, &buf[READ_SIZE * j], READ_SIZE);
-		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0') {
-			free(buf);
+		for (;(i[1] = read(fd, &b[READ_SIZE * i[0]], READ_SIZE)) == -1;)
+			return (b);
+		if (i[1] <= 0 && b[0] == '\0' && ptr[0] == '\0') {
+			free(b);
 			return (NULL);
 		}
-	} while (find_line_break(buf, READ_SIZE * ++j));
-	return (buf);
+	} while (find_line_break(b, READ_SIZE * ++(i[0])));
+	return (b);
 }
 
 char *gnl(int fd)
