@@ -27,10 +27,8 @@ int kill_cont_childs(jobs_t *node)
 	int i = 0;
 
 	for (; node->pid_job[i] != 0; i++) {
-		if (kill(node->pid_job[i], SIGCONT) == -1) {
-			;//perror("kill");
+		if (kill(node->pid_job[i], SIGCONT) == -1)
 			return (-1);
-		}
 		name = get_proc_name(node->pid_job[i]);
 		printf("\t%d - %s -> continued\n", node->pid_job[i], name);
 		free(name);
