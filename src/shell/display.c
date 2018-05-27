@@ -15,7 +15,7 @@
 
 void disp_wrong_arch(char *str, int num)
 {
-	fprintf(stderr, "%s: %s. Wrong Architecture\n", str, strerror(num));
+	fprintf(stderr, "%s: %s. Wrong Architecture.\n", str, strerror(num));
 }
 
 void display_signal(int status)
