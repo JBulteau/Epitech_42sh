@@ -299,6 +299,10 @@ void free_var(var_t *var);
 var_t **init_var_arr(void);
 void debug_vars(var_t **arr);
 
+/*	shell/shell_var/var_ptr_next.c	*/
+int check_folder(char* path);
+char *search_folder(char *folder, char *name);
+
 /*	shell/shell_var/var_utils.c	*/
 int find_var(var_t **arr, char *name);
 char *get_var_str(var_t *var);

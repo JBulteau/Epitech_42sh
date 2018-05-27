@@ -57,6 +57,8 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(42RC_DIR)load_shell_rc.c\
 \
 			$(VAR_DIR)var.c\
+			$(VAR_DIR)var_ptr_base.c\
+			$(VAR_DIR)var_ptr_next.c\
 			$(VAR_DIR)var_edition.c\
 			$(VAR_DIR)var_operations.c\
 			$(VAR_DIR)var_utils.c\
