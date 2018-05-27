@@ -10,6 +10,8 @@
 #include <dirent.h>
 #include <stdio.h>
 
+void debug_comm(comm_t *comm);
+
 int free_ret_nb(char **to_free, char **to_free_2, glob_t *pglob, int nb)
 {
 	free(*to_free);

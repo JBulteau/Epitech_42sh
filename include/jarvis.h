@@ -33,6 +33,8 @@ enum inc {
 };
 
 /* jarvis corrector */
+int glob_handling(char **path, glob_t *glob);
+int is_correct(comm_t *comm, glob_t glob);
 void prepare_try_rm(int pos, char *result, char *try);
 char *substitute_letter_no_local(char **result, glob_t *glob);
 char *remove_letter_no_local(char **result, glob_t *pglob);

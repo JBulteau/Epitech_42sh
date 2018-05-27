@@ -12,6 +12,16 @@
 #include <unistd.h>
 #include <string.h>
 
+int glob_handling(char **path, glob_t *glob)
+{
+	for (int i = 0; path[i]; i++)
+		if (glob_creation(glob, path, i)) {
+			free_array((void**)path);
+			return (1);
+		}
+	return (0);
+}
+
 int loop_letter(char **try, int *pos_ind, glob_t *pglob, char *curr_path)
 {
 	for (char letter = 'a'; letter <= 'z'; letter++) {
@@ -34,4 +44,16 @@ int loop_number(char **try, int *pos_ind, glob_t *glob, char *curr_path)
 		}
 	}
 	return (-1);
+}
+
+int is_correct(comm_t *comm, glob_t glob)
+{
+	int size = 0;
+
+	for (int i = 0; glob.gl_pathv && glob.gl_pathv[i]; i++) {
+		size = size_before_slash(glob.gl_pathv[i]);
+		if (strcmp(glob.gl_pathv[i] + size, comm->argv[0]) == 0)
+			return (1);
+	}
+	return (0);
 }

@@ -92,11 +92,10 @@ int jarvis_corrector_no_local(comm_t *comm, char ***env)
 	if (access(comm->argv[0], X_OK) != -1)
 		return (0);
 	path = get_path(*env, NULL);
-	for (int i = 0; path[i]; i++)
-		if (glob_creation(&pglob, path, i)) {
-			free_array((void**)path);
-			return (1);
-		}
+	if (glob_handling(path, &pglob))
+		return (1);
+	if (is_correct(comm, pglob))
+		return (0);
 	if ((value = spaces_handle_no_local(comm, pglob)) == 2 || value == 1) {
 		free_array((void**)path);
 		globfree(&pglob);
