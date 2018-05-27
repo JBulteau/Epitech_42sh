@@ -43,11 +43,11 @@ int ptr_exit(comm_t *comm, shell_t *shell)
 ) && (comm->argv[1][0] <= '9')) {
 		shell->return_value = 1;
 		puts("exit: Badly formed number.");
-		return (0);
+		return (EXIT_FAILURE);
 	} else {
 		shell->return_value = 1;
 		puts("exit: Expression Syntax.");
-		return (0);
+		return (EXIT_FAILURE);
 	}
 	return (-ERROR_CODE);
 }

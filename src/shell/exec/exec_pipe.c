@@ -26,8 +26,7 @@ int run_not_last(shell_t *shell, comm_t *curr)
 	}
 	if (add_pid_jobs(child_pid) == -1)
 		return (ERROR_RETURN);
-	if (curr->pipe[OUT])
-		close(curr->pipe[OUT]->fd[WRITE]);
+	close(curr->pipe[OUT]->fd[WRITE]);
 	close_in(curr);
 	exec_end(curr);
 	return (SUCCESS_RETURN);

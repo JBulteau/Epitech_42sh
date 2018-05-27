@@ -33,40 +33,41 @@ int set_env_value(char ***env, char *var, char *value)
 	int env_idx = search_strtab((*env), var_pre);
 
 	value = (value == NULL) ? strdup("") : value;
-	if (index_of(ALPHA_LOW, var[0]) == -1 && index_of(ALPHA_UP, var[0]) \
-== ERROR_RETURN) {
+	if (isalpha(var[0]) == 0) {
 		puts("setenv: Variable name must begin with a letter.");
-		return (1);
+		return (EXIT_FAILURE);
 	} else if (is_alphanum(var) == -1) {
 		puts("setenv: Variable name must contain alphanumeric characte\
 rs.");
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	if (env_idx != -1) {
 		free((*env)[env_idx]);
 		if (((*env)[env_idx] = concat(var_pre, value, 1, 0)) == NULL)
 			return (ERROR_RETURN);
 	} else if (add_env_value(env, value, var_pre) == ERROR_RETURN) {
-		return (ERROR_RETURN);
+		return (EXIT_FAILURE);
 	}
-	return (SUCCESS_RETURN);
+	return (EXIT_SUCCESS);
 }
 
 int ptr_env(comm_t *comm, shell_t *shell)
 {
 	UNUSED(comm);
-	for (int i = 0; shell->env[i] != NULL; i++) {
+	if (shell == NULL || shell->env == NULL)
+		return (EXIT_FAILURE);
+	for (int i = 0; shell->env[i] != NULL; i++)
 		puts(shell->env[i]);
-	}
 	return (SUCCESS_RETURN);
 }
 
 int ptr_setenv(comm_t *comm, shell_t *shell)
 {
+	if (shell == NULL || shell->env == NULL)
+		return (ERROR_RETURN);
 	if (comm->argv[1] == NULL) {
-		for (int i = 0; shell->env[i] != NULL; i++) {
+		for (int i = 0; shell->env[i] != NULL; i++)
 			puts(shell->env[i]);
-		}
 		return (SUCCESS_RETURN);
 	}
 	return (set_env_value(&shell->env, comm->argv[1], comm->argv[2]));
@@ -77,9 +78,11 @@ int ptr_unsetenv(comm_t *comm, shell_t *shell)
 	int index;
 	char *value;
 
+	if (comm == NULL || shell == NULL || shell->env == NULL)
+		return (EXIT_FAILURE);
 	if (comm->argv[1] == NULL) {
 		puts("unsetenv: Too few arguments.");
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	for (int arg = 1; comm->argv[arg]; arg++) {
 		index = search_strtab(shell->env, comm->argv[arg]);
@@ -90,5 +93,5 @@ int ptr_unsetenv(comm_t *comm, shell_t *shell)
 			shell->env[i] = shell->env[i + 1];
 		free(value);
 	}
-	return (SUCCESS_RETURN);
+	return (EXIT_SUCCESS);
 }
