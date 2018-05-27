@@ -41,12 +41,11 @@ char *get_var(char **env, var_t **vars, char *name)
 	char *res = NULL;
 
 	if (id != -1) {
-		printf("Shell var found at id %i\n", id);
 		res = get_var_str(vars[id]);
 		return (res);
 	}
 	len = strlen(name);
-	for (id = 0; env[id] != NULL; id++)
+	for (id = 0; env && env[id] != NULL; id++)
 		if (strncmp(env[id], name, len) == 0)
 			res = strdup(env[id] + len + 1);
 	return (res);

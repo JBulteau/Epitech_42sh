@@ -30,7 +30,8 @@ int ptr_cd(comm_t *comm, shell_t *shell)
 	int cd_res = -1;
 
 	if (comm->argv[1] == NULL) {
-		home = get_env_var(shell->env, "HOME=");
+		if ((home = get_var(NULL, shell->vars, "home")) == NULL)
+			home = get_var(shell->env, NULL, "HOME");
 		if (home == NULL) {
 			puts("cd: No home directory.");
 			return (1);

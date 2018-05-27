@@ -50,6 +50,29 @@ void free_history(history_t *hist)
 	free(hist);
 }
 
+int history_del(shell_t *shell, comm_t *comm)
+{
+	int i = 0;
+	history_t *prev = NULL;
+
+	if (comm->argv[2] == NULL)
+		return (EXIT_FAILURE);
+	for (history_t *curr = shell->history; curr != NULL; \
+curr = curr->next) {
+		if (++i == atoi(comm->argv[2])) {
+			if (i != 1)
+				prev->next = curr->next;
+			else
+				shell->history = curr->next;
+			free(curr->data);
+			free(curr);
+			break;
+		}
+		prev = curr;
+	}
+	return (EXIT_SUCCESS);
+}
+
 int ptr_history(comm_t *comm, shell_t *shell)
 {
 	int i = 1;
@@ -57,15 +80,18 @@ int ptr_history(comm_t *comm, shell_t *shell)
 	UNUSED(comm);
 	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "del") \
 || !strcmp(comm->argv[1], "delete") || !strcmp(comm->argv[1], "d"))) {
-		puts("TODO HISTORY DELETE");
+		return (history_del(shell, comm));
 	}
-	if ((comm->argv) && (comm->argv[1]) && (!strcmp(comm->argv[1], "clear\
-")))
-		puts("TODO HISTORY CLEAR");
+	if ((comm->argv) && (comm->argv[1]) && ((!strcmp(comm->argv[1], "clear\
+")) || !strcmp(comm->argv[1], "-c"))) {
+		free_history(shell->history);
+		shell->history = NULL;
+		return (EXIT_SUCCESS);
+	}
 	for (history_t *curr = shell->history; curr != NULL; \
 curr = curr->next) {
 		printf("%i\t%s\n", i, (char *) curr->data);
 		i++;
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
