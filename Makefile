@@ -53,7 +53,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(RED_DIR)s_right.c\
 			$(RED_DIR)magic_quotes.c\
 \
-			$(42RC_DIR)load42.c\
+			$(42RC_DIR)load_shell_rc.c\
 \
 			$(VAR_DIR)var.c\
 			$(VAR_DIR)var_edition.c\
