@@ -21,6 +21,7 @@ void disp_comm(comm_t *comm)
 	if (comm->next != NULL)
 		disp_comm(comm->next);
 	if (comm->pipe[OUT] != NULL) {
+		pipe(comm->pipe[OUT]->fd);
 		printf("| ");
 		disp_comm(comm->pipe[OUT]->output);
 	}
