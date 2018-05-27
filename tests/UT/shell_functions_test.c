@@ -14,7 +14,6 @@ Test(basic_shell, init_null_env)
 
 	cr_expect(shell->input == NULL);
 	cr_expect(shell->env != NULL);
-	cr_expect(shell->env[0] == NULL);
 	cr_expect(shell->comm == NULL);
 	cr_expect(shell->return_value == 0);
 }
