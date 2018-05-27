@@ -37,7 +37,7 @@ comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index, \
 shell_t *shell)
 {
 	char *buffer = NULL;
-	
+
 	if (node->quote == NONE) {
 		if (!(comm->argv = parse_argv(comm->argv, node, comm_index, 0)))
 			return (NULL);

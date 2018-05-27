@@ -27,7 +27,8 @@ int index_save(int index[5], int status)
 			index[i] = index_array[index[3] - 1][i];
 		}
 		free(index_array[index[3] - 1]);
-		index_array = realloc(index_array, sizeof(int[3]) * (index[3] - 1));
+		index_array = \
+		realloc(index_array, sizeof(int[3]) * (index[3] - 1));
 	}
 	return (SUCCESS_RETURN);
 }

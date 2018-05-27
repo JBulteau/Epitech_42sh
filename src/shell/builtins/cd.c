@@ -32,10 +32,8 @@ int ptr_cd(comm_t *comm, shell_t *shell)
 	if (comm->argv[1] == NULL) {
 		if ((home = get_var(NULL, shell->vars, "home")) == NULL)
 			home = get_var(shell->env, NULL, "HOME");
-		if (home == NULL) {
-			puts("cd: No home directory.");
-			return (1);
-		}
+		if (home == NULL)
+			return (puts("cd: No home directory.") != -1);
 		cd_res = change_dir(shell->pwd, home);
 		free(home);
 		return (cd_res);
