@@ -13,18 +13,18 @@
 
 int add_env_value(char ***env, char *value, char *var_pre)
 {
-	char **new_env = NULL;
+	char **n_env = NULL;
 	int len = array_len((void **) (*env));
 
-	if ((new_env = malloc(sizeof(char **) * (len + 1))) == NULL)
+	if (len == -1 || (n_env = malloc(sizeof(char **) * (len + 1))) == NULL)
 		return (ERROR_RETURN);
 	for (int i = 0; (*env)[i] != NULL; i++)
-		new_env[i] = (*env)[i];
-	if ((new_env[len - 1] = concat(var_pre, value, 1, 0)) == NULL)
+		n_env[i] = (*env)[i];
+	if ((n_env[len - 1] = concat(var_pre, value, 1, 0)) == NULL)
 		return (ERROR_RETURN);
-	new_env[len] = NULL;
+	n_env[len] = NULL;
 	free((*env));
-	(*env) = new_env;
+	(*env) = n_env;
 	return (SUCCESS_RETURN);
 }
 

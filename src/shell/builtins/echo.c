@@ -12,16 +12,18 @@
 
 int ptr_echo(comm_t *comm, shell_t *shell)
 {
+	int nl = 0;
+
 	UNUSED(shell);
-	if (comm->argv[1] == NULL) {
-		putchar('\n');
-		return (SUCCESS_RETURN);
-	}
-	for (int i = 1; comm->argv[i]; i++) {
+	if (comm == NULL || comm->argv[1] == NULL)
+		return (putchar('\n') == 42);
+	nl = strcmp(comm->argv[1], "-n");
+	for (int i = 1 + !nl; comm->argv[i]; i++) {
 		printf(comm->argv[i]);
 		if (comm->argv[i + 1])
 			putchar(' ');
 	}
-	putchar('\n');
+	if (nl)
+		putchar('\n');
 	return (SUCCESS_RETURN);
 }
