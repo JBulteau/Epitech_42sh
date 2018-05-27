@@ -12,10 +12,6 @@
 #include <unistd.h>
 #include <string.h>
 
-/*static const char *commands[] = {
-	"line",
-};*/
-
 int count_correct_letter(int dist_allow, char **both)
 {
 	int res = 0;

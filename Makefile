@@ -110,6 +110,11 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(JARVIS_DIR)jarvis_corrector_short_rm_sub.c\
 			$(JARVIS_DIR)jarvis_corrector_algo_loop.c\
 			$(JARVIS_DIR)jarvis_corrector_local_command.c\
+			$(JARVIS_DIR)jarvis_corrector_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_short_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_short_add_rm_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_sub_no_local.c\
 
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))

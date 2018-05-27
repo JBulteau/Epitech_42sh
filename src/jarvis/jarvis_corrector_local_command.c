@@ -34,7 +34,7 @@ int spaces_handle_comm(comm_t *comm)
 {
 	char *both = NULL;
 
-	if (!comm->argv[1])
+	if (!(comm->argv[1]))
 		return (-1);
 	both = concat(comm->argv[0], comm->argv[1], 0, 0);
 	if (!both)
@@ -77,22 +77,24 @@ final_check_path(path, &(comm->argv[i]), corr);
 int jarvis_corrector_local_command(comm_t *comm)
 {
 	jarg_t corr;
-	int ret_value = 0;
+	int value = 0;
 
-	if ((ret_value = access(comm->argv[0], X_OK)) != -1)
+	if (access(comm->argv[0], X_OK) != -1)
 		return (0);
-	if (init_corr_command(&corr, comm))
+	if ((value = spaces_handle_comm(comm)) == 2 || value == 1)
+		return (value);
+	if (index_of(comm->argv[0], '/') < 0)
+		return (0);
+	if (init_corr_command(&corr, comm) || \
+(value = misspell_handle_comm(&corr, comm)) == -1)
 		return (1);
-	if ((ret_value = spaces_handle_comm(comm)) == 2 || ret_value == 1) {
+	for (value = (corr.change == 1) ? 2 : 0; value == 2; value++) {
 		free(corr.infos[0].name);
-		free(corr.infos);
-		return (ret_value);
+		corr.infos[0].name = strdup(comm->argv[0]);
+		free(comm->argv[0]);
+		comm->argv[0] = concat("./", corr.infos[0].name, 0, 0);
 	}
-	ret_value = misspell_handle_comm(&corr, comm);
-	if (ret_value == -1)
-		return (1);
-	ret_value = (corr.change == 1) ? 2 : 0;
 	free(corr.infos[0].name);
 	free(corr.infos);
-	return (ret_value);
+	return ((value == 3) ? --value : value);
 }

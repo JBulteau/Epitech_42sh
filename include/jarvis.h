@@ -33,6 +33,16 @@ enum inc {
 };
 
 /* jarvis corrector */
+void prepare_try_rm(int pos, char *result, char *try);
+char *substitute_letter_no_local(char **result, glob_t *glob);
+char *remove_letter_no_local(char **result, glob_t *pglob);
+void prepare_try(int pos, char *result, char *try);
+int test_if_exist_no_local(char *result, glob_t *pglob);
+char *add_letter_no_local(char **result, glob_t *glob);
+int correct_short_no_local(char **result, glob_t *pglob);
+int size_before_slash(char *str);
+int misspell_handle_comm_no_local(comm_t *comm, glob_t glob);
+int jarvis_corrector_no_local(comm_t *comm, char ***env);
 char *check_path_argv(char **arg, jarg_t *corr);
 int jarvis_corrector_local_command(comm_t *comm);
 int loop_number(char **try, int *pos_ind, glob_t *glob, char *curr_path);

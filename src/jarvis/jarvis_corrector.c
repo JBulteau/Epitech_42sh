@@ -61,14 +61,18 @@ int jarvis_corrector_arg(comm_t *comm)
 int jarvis_corrector(comm_t *comm, char ***env)
 {
 	int ret_value = 0;
+	int ret_value_no_local = 0;
 	int ret_value_arg = 0;
 
 	if ((ret_value = jarvis_corrector_local_command(comm)) == 1)
 		return (-1);
+	if (ret_value != 2 && \
+(ret_value_no_local = jarvis_corrector_no_local(comm, env)) == 1)
+		return (-1);
 	if (comm->argv[1] != NULL && \
 (ret_value_arg = jarvis_corrector_arg(comm)) < 0)
 		return (-1);
-	if (ret_value == 2 || ret_value_arg == 2)
+	if (ret_value == 2 || ret_value_arg == 2 || ret_value_no_local == 2)
 		return (2);
 	return (0);
 }

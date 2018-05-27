@@ -87,6 +87,4 @@ char *add_letter(char **result, glob_t *glob, char *curr_path)
 	}
 	free(try);
 	return (NULL);
-
-
 }
