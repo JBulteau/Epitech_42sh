@@ -98,6 +98,5 @@ node_t *parse_quote(node_t *node, shell_t *shell)
 		return (NULL);
 	}
 	node = handle_aliases(node, shell);
-	node = handle_variables(node, shell);
 	return ((node == NULL) ? NULL : parse_split(node));
 }

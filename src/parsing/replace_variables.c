@@ -14,7 +14,7 @@ char *fill_var(char *buffer, char *new_var_content, int i, size_t total_len)
 {
 	int tmp = i;
 
-	for (; buffer[i]; i++)
+	for (; buffer[i + total_len + 1] && buffer[i]; i++)
 		buffer[i + total_len + 1] = buffer[i];
 	i = tmp;
 	total_len += tmp;
