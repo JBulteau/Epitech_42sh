@@ -63,7 +63,7 @@ void put_back_last_slash(char **arg);
 int put_back_ending_slash(int pos, char **arg, int to_know);
 int remove_mutliple_ending_slash(char **arg);
 int success_case(int *pos, char **cpy_path, int *size_check, char **arg);
-int before_correct(char *cpy, char **arg, glob_t *pglob, char *concat_path_star);
+int before_correct(char *cpy, char **arg, glob_t *pglob, char *);
 int check_lenght(glob_t *glob, char *curr_path, char **result, int i);
 void prepare_refill(jarg_t *corr, comm_t *comm, int *nb_change, int *nb_total);
 int is_slash_ending(char **arg);

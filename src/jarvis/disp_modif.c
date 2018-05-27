@@ -5,6 +5,7 @@
 ** Display did you mean
 */
 
+#include <stdio.h>
 #include "minishell.h"
 
 void disp_comm(comm_t *comm)
