@@ -54,6 +54,7 @@ char *isolate_word(char *buffer, alias_t *alias)
 			buffer = compare_aliases(buffer, word, alias, index);
 		}
 	}
+	free(word);
 	return (buffer);
 }
 
