@@ -25,7 +25,8 @@ char *fill_var(char *buffer, char *new_var_content, int i, size_t total_len)
 	return (buffer);
 }
 
-char *replace_var(char *buffer, char *new_var_content, char *new_var_name, int i)
+char *replace_var(char *buffer, char *new_var_content, char *new_var_name, \
+int i)
 {
 	size_t buf_len = 0;
 	size_t total_len = 0;
@@ -42,8 +43,8 @@ char *replace_var(char *buffer, char *new_var_content, char *new_var_name, int i
 		if (!buffer[i + size])
 			break;
 	}
-	buffer = realloc(buffer, sizeof(char) * (buf_len + total_len - len_to_replace + 1));
-	if (buffer == NULL)
+	if ((buffer = realloc(buffer, \
+	sizeof(char) * (buf_len + total_len - len_to_replace + 1))) == NULL)
 		return (NULL);
 	buffer[buf_len + total_len - len_to_replace] = '\0';
 	return (fill_var(buffer, new_var_content, i, total_len));
@@ -72,7 +73,7 @@ char *search_variables(char *buffer, shell_t *shell)
 
 	if (!buffer)
 		return (NULL);
-	for (int i = 0; buffer[i]; i++) {
+	for (int i = 0; buffer && buffer[i]; i++) {
 		if (buffer[i] == '$') {
 			new_var_name = get_variable_name(&buffer[i + 1], new_var_name);
 			new_var_content = get_var(shell->env, shell->vars, new_var_name);
