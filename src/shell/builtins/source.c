@@ -22,4 +22,5 @@ int ptr_source(comm_t *comm, shell_t *shell)
 		if (source_that_file(shell, comm->argv[i]) == ERROR_RETURN)
 			return (EXIT_FAILURE);
 	}
+	return (EXIT_SUCCESS);
 }

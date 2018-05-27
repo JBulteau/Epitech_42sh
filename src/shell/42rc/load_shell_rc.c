@@ -21,7 +21,7 @@ int ask_y_n(char *s, char *yes, char *no)
 	int res;
 	char *input;
 
-	printf("%s [%s|%s]: ", s, yes, no);
+	printf("%s [%s|%s]: ", s, (!yes[0]) ? "enter" : yes, no);
 	fflush(stdout);
 	input = gnl(STDIN_FILENO);
 	if (input == NULL || strcmp(input, yes))
