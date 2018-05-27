@@ -57,7 +57,7 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 		exec_start(curr);
 		init_redir_pipe(curr);
 		if (find_node_job()->pid_job[0] == 0)
-			remove_node();
+			remove_node(0);
 		if ((bi_return = exec_bi(curr, shell)) == -ERROR_CODE) {
 			return (-ERROR_CODE);
 		} else
