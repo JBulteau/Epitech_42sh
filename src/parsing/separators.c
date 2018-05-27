@@ -43,8 +43,9 @@ comm_t *redir(comm_t *comm, node_t *node[2], int new_index[2])
 	comm->red[new_index[0] - 6] = init_redir();
 	if (comm->red[new_index[0] - 6] == NULL)
 		return (NULL);
-	comm->red[new_index[0] - 6]->target = \
-	strdup(node[0]->buffer);
+	if (node[0] && node[0]->buffer)
+		comm->red[new_index[0] - 6]->target = \
+		strdup(node[0]->buffer);
 	if (comm->red[new_index[0] - 6]->target == NULL)
 		return (NULL);
 	return (comm);

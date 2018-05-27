@@ -12,7 +12,8 @@
 void free_comm(comm_t *comm)
 {
 	if (comm->pipe[OUT]) {
-		free_comm(comm->pipe[OUT]->output);
+		if (comm->pipe[OUT]->output)
+			free_comm(comm->pipe[OUT]->output);
 		free(comm->pipe[OUT]);
 	}
 	free_array((void **) comm->argv);

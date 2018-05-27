@@ -59,6 +59,14 @@ struct node {
 
 #define REDIR(value) (value >= S_ARROW_LEFT && value <= D_ARROW_RIGHT)
 
+/* parsing.c */
+
+comm_t **parsing(shell_t *shell);
+comm_t *check_comm(comm_t *comm);
+comm_t *check_redir(comm_t *comm);
+comm_t *check_pipe(comm_t *comm);
+comm_t *check_next(comm_t *comm);
+
 /* init_comm_array.c */
 
 comm_t **init_comm_array(comm_t **comm, node_t *node);
