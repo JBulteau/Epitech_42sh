@@ -33,7 +33,7 @@ comm_t *check_pipe(comm_t *comm)
 
 comm_t *check_next(comm_t *comm)
 {
-	while (comm->next) {
+	if (comm->next) {
 		if ((comm->next = check_comm(comm->next)) == NULL) {
 			free_comm(comm);
 			return (NULL);
