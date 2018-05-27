@@ -122,6 +122,7 @@ static const char	ign_delim[]	=	"";
 
 /*	JARVIS		*/
 int jarvis_corrector(comm_t *comm, char ***env);
+int disp_modif(comm_t **arr);
 
 /*	shel/exec/exec_jarvis.c	*/
 int call_jarvis_rerun(shell_t *shell);

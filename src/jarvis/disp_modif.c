@@ -5,6 +5,7 @@
 ** Display did you mean
 */
 
+#include <unistd.h>
 #include <stdio.h>
 #include "minishell.h"
 
@@ -28,11 +29,12 @@ void disp_comm(comm_t *comm)
 	}
 }
 
-void disp_modif(comm_t **arr)
+int disp_modif(comm_t **arr)
 {
 	printf("Did you mean : ");
 	for (int i = 0; arr[i]; i++) {
 		disp_comm(arr[i]);
 	}
 	putchar('\n');
+	return (EXIT_SUCCESS);
 }
