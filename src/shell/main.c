@@ -19,7 +19,7 @@ int main(int ac, char **av, char **env)
 
 	UNUSED(av);
 	UNUSED(ac);
-	if (shell == NULL || init_signal() == ERROR_RETURN)
+	if (shell == NULL)
 		return (ERROR_CODE);
 	disp_prompt(shell);
 	while ((shell->input = gnl(STDIN_FILENO)) != NULL) {

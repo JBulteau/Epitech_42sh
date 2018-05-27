@@ -32,7 +32,23 @@ int ask_y_n(char *s, char *yes, char *no)
 	return (res);
 }
 
-/*	In else statement load 42rc	*/
+int source_that_file(shell_t *shell, char *path)
+{
+	int fd = open(path, O_RDONLY);
+	char *save;
+
+	if (fd == -1)
+		return (ERROR_RETURN);
+	save = shell->input;
+	while ((shell->input = gnl(fd)) != NULL) {
+		if (run_that(shell) == -ERROR_CODE)
+			break;
+		free(shell->input);
+	}
+	shell->input = save;
+	return (SUCCESS_RETURN);
+}
+
 int load42(shell_t *shell)
 {
 	char *path42rc = concat(get_env_var(shell->env, "HOME="), \
@@ -47,7 +63,10 @@ concat("/", ".42rc", 0, 0), 1, 1);
 		} else {
 			puts("Ok :'(");
 		}
-	} else {
+	}
+	if (source_that_file(shell, path42rc) == ERROR_RETURN) {
+		free(path42rc);
+		return (ERROR_RETURN);
 	}
 	free(path42rc);
 	return (SUCCESS_RETURN);
