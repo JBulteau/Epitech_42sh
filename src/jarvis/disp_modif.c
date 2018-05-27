@@ -8,8 +8,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "minishell.h"
+#include "my.h"
 
-void disp_comm(comm_t *comm)
+int disp_comm(comm_t *comm)
 {
 	for (int i = 0; comm->argv[i]; i++)
 		printf("%s ", comm->argv[i]);
@@ -23,17 +24,22 @@ void disp_comm(comm_t *comm)
 	if (comm->next != NULL)
 		disp_comm(comm->next);
 	if (comm->pipe[OUT] != NULL) {
-		pipe(comm->pipe[OUT]->fd);
+		if (pipe(comm->pipe[OUT]->fd) == ERROR_RETURN)
+			return (ERROR_RETURN);
 		printf("| ");
 		disp_comm(comm->pipe[OUT]->output);
 	}
+	return (SUCCESS_RETURN);
 }
 
 int disp_modif(comm_t **arr)
 {
 	printf("Did you mean : ");
 	for (int i = 0; arr[i]; i++) {
-		disp_comm(arr[i]);
+		if (disp_comm(arr[i]) == ERROR_RETURN) {
+			fprintf(stderr, "An error has ccured\n");
+			return (0);
+		}
 	}
 	putchar('\n');
 	return (1);
