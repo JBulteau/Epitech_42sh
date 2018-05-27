@@ -57,3 +57,10 @@ int is_correct(comm_t *comm, glob_t glob)
 	}
 	return (0);
 }
+
+int free_glob_and_path(glob_t *glob, char **path)
+{
+	globfree(glob);
+	free_array((void**)path);
+	return (0);
+}

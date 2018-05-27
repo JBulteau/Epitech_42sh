@@ -33,6 +33,7 @@ enum inc {
 };
 
 /* jarvis corrector */
+int free_glob_and_path(glob_t *glob, char **path);
 int glob_creation(glob_t *pglob, char **path, int i);
 int glob_handling(char **path, glob_t *glob);
 int is_correct(comm_t *comm, glob_t glob);
