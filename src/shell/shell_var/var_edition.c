@@ -22,6 +22,8 @@ int edit_var(var_t *var, char *content, char *name)
 		var->data.content = strdup(content);
 	if (var->type == NBR)
 		var->data.value = atoi(content);
+	if (content[0] == '\0')
+		free(content);
 	return (SUCCESS_RETURN);
 }
 
