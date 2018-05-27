@@ -43,7 +43,7 @@ int ptr_at(comm_t *comm, shell_t *shell)
 	int j = 0;
 
 	if (comm->argv[1] == NULL)
-		return(ptr_set(comm, shell));
+		return (ptr_set(comm, shell));
 	for (int i = 1; comm->argv[i]; i++) {
 		var_name = get_var_name(comm->argv[i], &j);
 		if (var_name == NULL)
