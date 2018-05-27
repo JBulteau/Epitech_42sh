@@ -45,6 +45,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(BI_DIR)alias.c\
 			$(BI_DIR)echo.c\
 			$(BI_DIR)dirs.c\
+			$(BI_DIR)fouchauve.c\
 			$(BI_DIR)vars.c\
 			$(BI_DIR)printenv.c\
 			$(BI_DIR)source.c\

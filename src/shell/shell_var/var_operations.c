@@ -34,8 +34,11 @@ char *get_var_name(char *arg, int *j)
 
 ope_t get_op(char *arg, int *j)
 {
+	puts(arg);
 	int id = find_ope(arg);
 
+	if (id == -1)
+		return (ERR);
 	if (vars_ope[id].op == PLUS_PLUS || vars_ope[id].op == MINUS_MINUS) {
 		if (arg[2] != '\0') {
 			puts("ERROR ++DELAMERDE");

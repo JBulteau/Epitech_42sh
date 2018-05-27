@@ -33,6 +33,7 @@ int ptr_printenv(comm_t *comm, shell_t *shell);
 int ptr_where(comm_t *comm, shell_t *shell);
 int ptr_which(comm_t *comm, shell_t *shell);
 int ptr_source(comm_t *comm, shell_t *shell);
+int ptr_fouchauve(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
@@ -51,6 +52,7 @@ static const struct {
 	{"alias", &ptr_alias},
 	{"unalias", &ptr_unalias},
 	{"echo", &ptr_echo},
+	{"fouchauve", &ptr_fouchauve},
 	{"repeat", &ptr_repeat},
 	{"@", &ptr_at},
 	{"set", &ptr_set},
