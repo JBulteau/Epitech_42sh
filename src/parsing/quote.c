@@ -88,5 +88,6 @@ node_t *parse_quote(node_t *node, shell_t *shell)
 	if (missing_quote(node, shell->input))
 		return (NULL);
 	node = handle_aliases(node, shell);
+	node = handle_variables(node, shell);
 	return (parse_split(node));
 }

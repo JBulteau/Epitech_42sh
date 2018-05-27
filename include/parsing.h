@@ -98,6 +98,15 @@ char *isolate_word(char *buffer, alias_t *alias);
 char *fill_word(char *buffer, char *word, int index);
 char *fill_alias(char *buffer[2], char *alias, int index[2], size_t total_len);
 
+/* handle_variables.c */
+
+node_t *handle_variables(node_t *node, shell_t *shell);
+char *search_variables(char *buffer, shell_t *shell);
+char *get_variable_name(char *buffer, char *new_var_name);
+char *replace_var(char *buffer, char *new_var_content, char *new_var_name, \
+int i);
+char *fill_var(char *buffer, char *new_var_content, int i, size_t total_len);
+
 /* handle_separators.c */
 
 comm_t *handle_separators(comm_t *comm, node_t *node, int idx[4], \
