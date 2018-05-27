@@ -15,10 +15,10 @@
 
 int init_signal(void)
 {
-	struct sigaction act_z;
+	struct sigaction act;
 
 	list_jobs = malloc(sizeof(jobs_t));
-	if (memset(&act_z, '\0', sizeof(act_z) + 1) == NULL || \
+	if (memset(&act, '\0', sizeof(act) + 1) == NULL || \
 list_jobs == NULL)
 		return (-1);
 	list_jobs->pid_job = malloc(sizeof(int) * 2);
@@ -27,8 +27,10 @@ list_jobs == NULL)
 	list_jobs->pid_job[0] = 0;
 	list_jobs->running = false;
 	list_jobs->next = NULL;
-	act_z.sa_sigaction = (void *)catch_ctrl_z;
-	sigaction(SIGTSTP, &act_z, NULL);
+	act.sa_sigaction = (void *)catch_ctrl_z;
+	sigaction(SIGTSTP, &act, NULL);
+	act.sa_sigaction = (void *)catch_ctrl_c;
+	sigaction(SIGINT, &act, NULL);
 	return (0);
 }
 
@@ -38,8 +40,7 @@ void free_jobs(void)
 
 	node = list_jobs->next;
 	for (int i = 0; list_jobs->pid_job[i] != 0; i++)
-		if (kill(list_jobs->pid_job[i], SIGKILL))
-			;//perror("kill");
+		kill(list_jobs->pid_job[i], SIGKILL);
 	free(list_jobs->pid_job);
 	free(list_jobs);
 	list_jobs = node;

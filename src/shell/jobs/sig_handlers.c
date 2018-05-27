@@ -26,6 +26,13 @@ static void loop_ctrl_z(jobs_t *node)
 	fflush(stdout);
 }
 
+void catch_ctrl_c(int sig)
+{
+	UNUSED(sig);
+	printf("\033[2D  \033[2D\n");
+	fflush(stdout);
+}
+
 void catch_ctrl_z(int sig)
 {
 	jobs_t *node = find_node_job();
@@ -33,8 +40,10 @@ void catch_ctrl_z(int sig)
 	UNUSED(sig);
 	printf("\033[2D  \033[2D");
 	fflush(stdout);
-	if (node->running == false)
+	if (node->running == false) {
+		printf ("\n");
 		return;
+	}
 	printf("\n[%d]", get_nb_job());
 	loop_ctrl_z(node);
 	if (raise(SIGCONT) == -1) {

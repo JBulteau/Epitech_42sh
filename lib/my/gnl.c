@@ -74,6 +74,8 @@ static char *read_file(int fd, char *ptr)
 		for (buf = my_realloc(buf, READ_SIZE, j); buf == NULL;)
 			return (NULL);
 		result = read(fd, &buf[READ_SIZE * j], READ_SIZE);
+		if (result == -1)
+			return (buf);
 		if (result <= 0 && buf[0] == '\0' && ptr[0] == '\0') {
 			free(buf);
 			return (NULL);
