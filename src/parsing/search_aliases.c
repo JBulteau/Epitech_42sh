@@ -13,8 +13,8 @@ char *fill_alias(char *buffer[2], char *alias, int index[2], size_t total_len)
 {
 	int i = 0;
 
-	buffer[1] = realloc(buffer[1], sizeof(char) * total_len);
-	buffer[1] = memset(buffer[1], '\0', total_len);
+	buffer[1] = realloc(buffer[1], sizeof(char) * (total_len + 1));
+	buffer[1] = memset(buffer[1], '\0', total_len + 1);
 	for (; (size_t)index[0] < total_len && alias[i]; index[0]++) {
 		buffer[0][index[0]] = alias[i];
 		buffer[1][i] = alias[i];
@@ -36,17 +36,19 @@ char *fill_word(char *buffer, char *word, int index)
 
 char *isolate_word(char *buffer, alias_t *alias)
 {
-	char *word = malloc(sizeof(char) * strlen(buffer));
+	char *word = malloc(sizeof(char) * (strlen(buffer) + 1));
 	int index[2] = {0, 0};
 
 	if (!word)
 		return (buffer);
 	buffer = clear_str(buffer);
-	word = memset(word, '\0', strlen(buffer));
 	for (; buffer && (!index[1] || buffer[index[1] - 1]); index[1]++) {
-		if ((index[1] < 2 || is_first_arg(buffer[index[1] - 2])) \
-		&& (buffer[index[1]] != ' ' && buffer[index[1]] != '\t' \
-		&& buffer[index[1]] != '\0')) {
+		word = memset(word, '\0', strlen(buffer) + 1);
+		if ((index[1] < 2 || is_first_arg(buffer[index[1] - 1]) \
+		|| (is_first_arg(buffer[index[1] - 2]) \
+		&& (buffer[index[1] - 1] == ' ' \
+		|| buffer[index[1] - 1] == '\t'))) && (buffer[index[1]] != ' ' \
+		&& buffer[index[1]] != '\t' && buffer[index[1]] != '\0')) {
 			index[0] = index[1];
 			word = fill_word(buffer, word, index[1]);
 			buffer = compare_aliases(buffer, word, alias, index);

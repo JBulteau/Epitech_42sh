@@ -25,7 +25,7 @@ int disp_aliases(alias_t *node)
 	}
 	for (alias_t *current = node; current != NULL; current = \
 current->nav[NEXT])
-		printf("%s=%s\n", current->name, current->alias);
+		printf("%s\t%s\n", current->name, current->alias);
 	return (SUCCESS_RETURN);
 }
 

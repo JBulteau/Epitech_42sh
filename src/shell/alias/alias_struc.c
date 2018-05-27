@@ -30,7 +30,7 @@ int check_existing_alias(shell_t *shell, char **args, char *alias)
 	alias_t *first = shell->aliases;
 
 	while (shell->aliases) {
-		if (!strcmp(shell->aliases->name, args[0])) {
+		if (!strcmp(shell->aliases->name, args[1])) {
 			free(shell->aliases->alias);
 			shell->aliases->alias = strdup(alias);
 			shell->aliases = first;
