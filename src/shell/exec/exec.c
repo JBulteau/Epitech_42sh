@@ -28,35 +28,25 @@ int exec_end(comm_t *comm)
 	return (SUCCESS_RETURN);
 }
 
-static int go_next_sep(comm_t **comms, int i)
-{
-	while (comms[i]->separator != NOTHING)
-		i++;
-	return (i);
-}
-
 int run_that_comm(shell_t *shell, comm_t *comm)
 {
 	int pipeline;
 
-	pipeline = run_pipeline(shell, comm);
+	if (comm->parenthesis != NULL)
+		pipeline = exec_loop(shell, comm->parenthesis);
+	else
+		pipeline = run_pipeline(shell, comm);
 	if (pipeline == ERROR_RETURN)
 			return (ERROR_RETURN);
-	if ((comm->separator == OR && shell->return_value != 0) || (comm->separator == THEN && shell->return_value == 0)) {
-			pipeline = run_that_comm(shell, comm->next);
-	}
 	return (pipeline);
 }
 
-int exec_loop(shell_t *shell)
+int exec_loop(shell_t *shell, comm_t **comm_arr)
 {
 	int pipeline = 0;
 
-	for (int i = 0; shell->comm[i] != NULL; i++) {
-		//if (shell->comm[i]->parenthesis == true) {
-		//	puts("parenthesis");
-		//}
-		pipeline = run_that_comm(shell, shell->comm[i]);
+	for (int i = 0; comm_arr[i] != NULL; i++) {
+		pipeline = run_that_comm(shell, comm_arr[i]);
 		if (pipeline == ERROR_RETURN)
 			return (ERROR_RETURN);
 	}

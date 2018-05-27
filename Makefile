@@ -43,11 +43,15 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(BI_DIR)ptr_jobs.c\
 			$(BI_DIR)alias.c\
 			$(BI_DIR)echo.c\
+			$(BI_DIR)dirs.c\
+			$(BI_DIR)vars.c\
+			$(BI_DIR)printenv.c\
 \
 			$(RED_DIR)d_left.c\
 			$(RED_DIR)s_left.c\
 			$(RED_DIR)d_right.c\
 			$(RED_DIR)s_right.c\
+			$(RED_DIR)magic_quotes.c\
 \
 			$(42RC_DIR)load42.c\
 \
@@ -81,6 +85,10 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PARSING_DIR)init_comm_array.c\
 			$(PARSING_DIR)convert_node.c\
 			$(PARSING_DIR)handle_separators.c\
+			$(PARSING_DIR)handle_aliases.c\
+			$(PARSING_DIR)convert_utils.c\
+			$(PARSING_DIR)separators.c\
+			$(PARSING_DIR)search_aliases.c\
 \
 			$(EXEC_DIR)exec_pipe.c\
 			$(EXEC_DIR)redir_pipe.c\

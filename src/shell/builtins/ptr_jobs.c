@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "my.h"
 #include "minishell.h"
 #include "builtins.h"
 #include "my.h"

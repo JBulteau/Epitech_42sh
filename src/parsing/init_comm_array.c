@@ -29,8 +29,11 @@ int get_nb_comm(node_t *node)
 
 comm_t **init_comm_array(comm_t **comm, node_t *node)
 {
-	int nb_comm = get_nb_comm(node);
-
+	int nb_comm = 0;
+	
+	if (!node)
+		return (NULL);
+	nb_comm = get_nb_comm(node);
 	comm = malloc(sizeof(comm_t*) * (nb_comm + 1));
 	if (comm == NULL)
 		return (NULL);

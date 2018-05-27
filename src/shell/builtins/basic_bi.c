@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "minishell.h"
 #include "my.h"
 #include "builtins.h"
@@ -68,4 +69,18 @@ int exec_bi(comm_t *comm, shell_t *shell)
 (shell->pwd == NULL))
 		return (ERROR_RETURN);
 	return (builtins[is_builtin(comm->argv[0])].fnc(comm, shell));
+}
+
+int ptr_builtins(comm_t *comm, shell_t *shell)
+{
+	UNUSED(comm);
+	UNUSED(shell);
+
+	if (comm->argv[1]) {
+		puts("builtins: Too many arguments.");
+		return (1);
+	}
+	for (int i = 0; builtins[i].name != NULL; i++)
+		puts(builtins[i].name);
+	return (SUCCESS_RETURN);
 }

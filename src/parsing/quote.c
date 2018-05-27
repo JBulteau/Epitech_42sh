@@ -75,17 +75,18 @@ node_t *delete_quote(node_t *node, char *buffer, int i)
 	return ((node->next == NULL) ? NULL : node);
 }
 
-node_t *parse_quote(node_t *node, char *buffer)
+node_t *parse_quote(node_t *node, shell_t *shell)
 {
 	node->next = realloc_node(node->next, 1, node->quote);
 	if (node->next == NULL)
 		return (NULL);
-	for (int i = 0; buffer[i] != '\0'; i++) {
-		node = fill_buffer(node, buffer, &i);
+	for (int i = 0; shell->input[i] != '\0'; i++) {
+		node = fill_buffer(node, shell->input, &i);
 		if (node == NULL)
 			return (NULL);
 	}
-	if (missing_quote(node, buffer))
+	if (missing_quote(node, shell->input))
 		return (NULL);
+	node = handle_aliases(node, shell);
 	return (parse_split(node));
 }

@@ -28,11 +28,10 @@ shell_t *init_shell(char **env)
 		return (NULL);
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';
-	if ((create_default_env && (setup_default_env(&(shell->env), shell) == \
-ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE) || init_vars(shell) \
-== ERROR_RETURN)
-		return (NULL);
-	if (isatty(STDIN_FILENO) && load42(shell) == ERROR_RETURN)
+	if (((create_default_env && (setup_default_env(&(shell->env), shell) \
+== ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE) || \
+init_vars(shell) == ERROR_RETURN) || (isatty(STDIN_FILENO) && \
+load42(shell) == ERROR_RETURN))
 		return (NULL);
 	return (shell);
 }
@@ -55,4 +54,25 @@ void delete_shell(shell_t *shell)
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
+}
+
+shell_t *dup_shell(shell_t *shell)
+{
+	shell_t *new_shell = malloc(sizeof(shell_t));
+
+	if (new_shell == NULL)
+		return (NULL);
+	new_shell->env = clone_arr(shell->env);
+	if (new_shell->env == NULL)
+		return (NULL);
+	new_shell->input = NULL;
+	new_shell->comm = NULL;
+	new_shell->return_value = shell->return_value;
+	new_shell->history_exec = shell->history_exec;
+	strcpy(new_shell->pwd[0], shell->pwd[0]);
+	strcpy(new_shell->pwd[1], shell->pwd[1]);
+	new_shell->history = dup_history(shell->history);
+	new_shell->aliases = dup_aliases(shell->aliases);
+	new_shell->vars = dup_vars(shell->vars);
+	return (new_shell);
 }

@@ -12,6 +12,16 @@
 #include <stdbool.h>
 #include <glob.h>
 
+enum {
+	SAVE,
+	LOAD
+};
+
+enum {
+	RESET,
+	CHECK
+};
+
 typedef enum quote_type quote_type_t;
 
 enum quote_type {
@@ -51,7 +61,11 @@ struct node {
 
 /* parsing.c */
 
-comm_t **parsing(char *buffer);
+comm_t **parsing(shell_t *shell);
+comm_t *check_comm(comm_t *comm);
+comm_t *check_redir(comm_t *comm);
+comm_t *check_pipe(comm_t *comm);
+comm_t *check_next(comm_t *comm);
 
 /* init_comm_array.c */
 
@@ -60,24 +74,56 @@ int get_nb_comm(node_t *node);
 
 /* convert_node.c */
 
-comm_t **convert_node(comm_t **comm, node_t *node);
-comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index);
+comm_t **convert_node(comm_t **comm, node_t *node, shell_t *shell);
+comm_t *fill_comm(comm_t *comm, node_t *node, int *node_index, shell_t *shell);
 void check_node(node_t *node, int index[3]);
-comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index);
+comm_t *convert_param(comm_t *comm, node_t *node, int *comm_index, \
+shell_t *shell);
 char **parse_argv(char **argv, node_t *node, int *comm_index, int index);
+
+/* handle_aliases.c */
+
+node_t *handle_aliases(node_t *node, shell_t *shell);
+alias_t *reset_alias_loop(alias_t *alias);
+char *compare_aliases(char *buffer, char *word, alias_t *alias, int index[2]);
+char *check_alias_loop(alias_t *alias, char *buffer);
+char *replace_alias(char *buffer[2], char *alias, int index[2], \
+size_t alias_len);
+
+/* search_aliases.c */
+
+char *search_aliases(char *buffer, alias_t *alias);
+int is_first_arg(char c);
+char *isolate_word(char *buffer, alias_t *alias);
+char *fill_word(char *buffer, char *word, int index);
+char *fill_alias(char *buffer[2], char *alias, int index[2], size_t total_len);
 
 /* handle_separators.c */
 
-comm_t *handle_separators(comm_t *comm, node_t *node, int idx[3], \
-int *comm_index);
-comm_t *handle_advanced_separators(comm_t *comm, node_t *node, int idx[3], \
-int *comm_index);
-comm_t *handle_basic_separators(comm_t *comm, node_t *node, int idx[3], \
-int *comm_index);
-comm_t *apply_separator(comm_t *comm, node_t *node[2], int *comm_index, \
-separator_type_t separator);
-comm_t *set_separator(comm_t *comm, node_t *node[2], \
-separator_type_t separator, int *new_index);
+comm_t *handle_separators(comm_t *comm, node_t *node, int idx[4], \
+shell_t *shell);
+comm_t *handle_advanced_separators(comm_t *comm, node_t *node, int idx[4], \
+shell_t *shell);
+comm_t *handle_basic_separators(comm_t *comm, node_t *node, int idx[4], \
+shell_t *shell);
+comm_t *apply_separator(comm_t *comm, node_t *node[2], int comm_index[2], \
+shell_t *shell);
+comm_t *set_separator(comm_t *comm, node_t *node[2], int new_index[2], \
+shell_t *shell);
+
+/* seaprators.c */
+
+comm_t *simple_separators(comm_t *comm, node_t *node[2], int new_index[2], \
+shell_t *shell);
+comm_t *simple_pipe(comm_t *comm, node_t *node[2], int new_index[2], \
+shell_t *shell);
+comm_t *redir(comm_t *comm, node_t *node[2], int new_index[2]);
+comm_t *ampersand(comm_t *comm, int new_index[2]);
+
+/* convert_utils.c */
+
+int index_save(int index[5], int status);
+int is_valid_node(comm_t *comm, node_t *node, int index[3]);
 
 /* struct.c */
 
@@ -87,7 +133,7 @@ node_t *copy_node(node_t *dest, node_t *src);
 
 /* quote.c */
 
-node_t *parse_quote(node_t *node, char *buffer);
+node_t *parse_quote(node_t *node, shell_t *shell);
 node_t *delete_quote(node_t *node, char *buffer, int i);
 node_t *new_quoted_node(node_t *node, int index[], char *buffer, int i);
 node_t *no_quote(node_t *node, char *buffer, int i, int *j);

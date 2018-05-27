@@ -14,11 +14,11 @@ int run_that(shell_t *shell)
 {
 	int return_code = 0;
 
-	if ((shell->comm = parsing(shell->input)) == NULL) {
+	if ((shell->comm = parsing(shell)) == NULL) {
 		shell->return_value = 1;
 		return (ERROR_CODE);
 	}
-	return_code = exec_loop(shell);
+	return_code = exec_loop(shell, shell->comm);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);
 	return (return_code);
