@@ -62,10 +62,16 @@ struct node {
 /* parsing.c */
 
 comm_t **parsing(shell_t *shell);
+comm_t **slide_comm(comm_t **comm, int *i);
 comm_t *check_comm(comm_t *comm);
-comm_t *check_redir(comm_t *comm);
-comm_t *check_pipe(comm_t *comm);
+
+/* parsing_security.c */
+
+int check_double_separator(node_t *node);
+int check_buffer(char **buffer);
 comm_t *check_next(comm_t *comm);
+comm_t *check_pipe(comm_t *comm);
+comm_t *check_redir(comm_t *comm);
 
 /* init_comm_array.c */
 
@@ -138,6 +144,7 @@ comm_t *ampersand(comm_t *comm, int new_index[2]);
 
 int index_save(int index[5], int status);
 int is_valid_node(comm_t *comm, node_t *node, int index[3]);
+int is_separator_char(char c);
 
 /* struct.c */
 

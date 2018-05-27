@@ -97,6 +97,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PARSING_DIR)search_aliases.c\
 			$(PARSING_DIR)handle_variables.c\
 			$(PARSING_DIR)replace_variables.c\
+			$(PARSING_DIR)parsing_security.c\
 \
 			$(EXEC_DIR)exec_pipe.c\
 			$(EXEC_DIR)redir_pipe.c\
