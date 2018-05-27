@@ -41,6 +41,8 @@ char *get_proc_name(pid_t pid)
 	if (fd == -1)
 		return (NULL);
 	size = read(fd, name, 1024);
+	if (size <= 0)
+		return (NULL);
 	name[size - 1] = '\0';
 	close(fd);
 	return (name);
