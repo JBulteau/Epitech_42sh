@@ -8,26 +8,25 @@
 #include "my.h"
 #include "parsing.h"
 
-separator_type_t is_separator(char *buffer, int *i)
+separator_type_t is_separator(char *buf, int *i)
 {
-	switch (buffer[*i]) {
-	case ';' :
-		if (*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
-		&& (*i < 2 || (buffer[*i - 1] != '&' \
-		|| buffer[*i - 2] != '&')))) {
-			for (;buffer[*i + 1] == ';'; (*i)++);
+	switch (buf[*i]) {
+	case ';' : if (*i < 1 || (buf[*i - 1] != ';' && buf[*i - 1] != '|' \
+		&& (*i < 2 || (buf[*i - 1] != '&' || buf[*i - 2] != '&')))) {
+			for (;buf[*i + 1] == ';'; (*i)++);
 			return (SEMICOLON);
 		}
-	case '|' :
-		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
-		&& buffer[*i - 1] != '&')) && buffer[(*i) + 1] == '|') {
+		break;
+	case '|' : if ((*i < 1 || (buf[*i - 1] != ';' && buf[*i - 1] != '|' \
+		&& buf[*i - 1] != '&')) && buf[(*i) + 1] == '|') {
 			(*i)++;
 			return (D_PIPE);
 		}
-	case '&' :
-		if ((*i < 1 || (buffer[*i - 1] != ';' && buffer[*i - 1] != '|' \
-		&& buffer[*i - 1] != '&')) && buffer[*i + 1] == '&')
+		break;
+	case '&' : if ((*i < 1 || (buf[*i - 1] != ';' && buf[*i - 1] != '|' \
+		&& buf[*i - 1] != '&')) && buf[*i + 1] == '&')
 			return (D_AMPERSAND);
+		break;
 	}
 	return (0);
 }
