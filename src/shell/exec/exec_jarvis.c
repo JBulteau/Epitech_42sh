@@ -14,8 +14,7 @@ int call_jarvis_rerun(shell_t *shell)
 	int return_v = 0;
 
 	if (changed) {
-		printf("Jarvis change %i comm(s)\n", changed);
-		printf("Jarvis changed %i comm(s)\n", changed);
+		printf("Jarvis changed %i comm(s)\n", changed / 2);
 		return_v = exec_loop(shell, shell->comm);
 	}
 	return (return_v);
