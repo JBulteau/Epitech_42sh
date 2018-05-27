@@ -16,6 +16,8 @@ int sub_loop(char *path, char *arg)
 {
 	char *filepath = search_folder(path, arg);
 	if (filepath != NULL) {
+		if (!strncmp(filepath, "/usr/bin", 8))
+			printf("/bin/%s\n", arg);
 		printf("%s\n", filepath);
 		free(filepath);
 	} else
