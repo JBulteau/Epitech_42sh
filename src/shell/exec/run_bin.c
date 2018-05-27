@@ -19,6 +19,9 @@ int run_that(shell_t *shell)
 		return (ERROR_CODE);
 	}
 	return_code = exec_loop(shell, shell->comm);
+	if (shell->return_value && isatty(STDIN_FILENO) && (call_jarvis_rerun\
+(shell) == ERROR_RETURN))
+		return (ERROR_RETURN);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);
 	return (return_code);

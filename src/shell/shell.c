@@ -29,9 +29,9 @@ shell_t *init_shell(char **env)
 	for (int i = 0; i < PATH_MAX; i++)
 		shell->pwd[1][i] = '\0';
 	if (((create_default_env && (setup_default_env(&(shell->env), shell) \
-== ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE) || \
-init_vars(shell) == ERROR_RETURN) || (isatty(STDIN_FILENO) && \
-load42(shell) == ERROR_RETURN))
+== ERROR_RETURN)) || (set_shlvl(&(shell->env)) == ERROR_CODE) || init_signal() \
+== ERROR_RETURN|| init_vars(shell) == ERROR_RETURN) || (isatty(STDIN_FILENO) \
+&& load42(shell) == ERROR_RETURN))
 		return (NULL);
 	return (shell);
 }

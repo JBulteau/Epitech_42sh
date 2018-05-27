@@ -12,6 +12,7 @@ TESTS_DIR	=	$(realpath ./tests)
 SRC_DIR		=	$(realpath ./src)
 
 PARSING_DIR	=	parsing/
+JARVIS_DIR	=	jarvis/
 SHELL_DIR	=	shell/
 BI_DIR		=	$(SHELL_DIR)builtins/
 RED_DIR		=	$(SHELL_DIR)redirections/
@@ -46,6 +47,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(BI_DIR)dirs.c\
 			$(BI_DIR)vars.c\
 			$(BI_DIR)printenv.c\
+			$(BI_DIR)source.c\
 			$(BI_DIR)which_where.c\
 \
 			$(RED_DIR)d_left.c\
@@ -94,16 +96,40 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(PARSING_DIR)separators.c\
 			$(PARSING_DIR)search_aliases.c\
 			$(PARSING_DIR)handle_variables.c\
+			$(PARSING_DIR)replace_variables.c\
 \
 			$(EXEC_DIR)exec_pipe.c\
 			$(EXEC_DIR)redir_pipe.c\
 			$(EXEC_DIR)exec.c\
+			$(EXEC_DIR)exec_jarvis.c\
 			$(EXEC_DIR)run_bin.c\
 \
 			$(JOBS_DIR)init_signal.c\
 			$(JOBS_DIR)jobs.c\
 			$(JOBS_DIR)signals.c\
 			$(JOBS_DIR)sig_handlers.c\
+\
+			$(JARVIS_DIR)disp_modif.c\
+			$(JARVIS_DIR)jarvis_corrector.c\
+			$(JARVIS_DIR)jarvis_corrector_spaces.c\
+			$(JARVIS_DIR)jarvis_corrector_misspell.c\
+			$(JARVIS_DIR)jarvis_corrector_tools.c\
+			$(JARVIS_DIR)jarvis_corrector_algo.c\
+			$(JARVIS_DIR)jarvis_corrector_refill.c\
+			$(JARVIS_DIR)jarvis_corrector_misspell_final.c\
+			$(JARVIS_DIR)jarvis_corrector_init_jarg.c\
+			$(JARVIS_DIR)jarvis_corrector_utils.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_short.c\
+			$(JARVIS_DIR)jarvis_corrector_short_rm_sub.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_loop.c\
+			$(JARVIS_DIR)jarvis_corrector_local_command.c\
+			$(JARVIS_DIR)jarvis_corrector_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_short_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_short_add_rm_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_algo_sub_no_local.c\
+			$(JARVIS_DIR)jarvis_corrector_built.c\
+
 
 SRC		=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 

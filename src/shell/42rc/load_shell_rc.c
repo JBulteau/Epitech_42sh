@@ -21,10 +21,10 @@ int ask_y_n(char *s, char *yes, char *no)
 	int res;
 	char *input;
 
-	printf("%s [%s|%s]: ", s, yes, no);
+	printf("%s [%s|%s]: ", s, (!yes[0]) ? "enter" : yes, no);
 	fflush(stdout);
 	input = gnl(STDIN_FILENO);
-	if (input == NULL || strcmp(input, yes))
+	if ((input == NULL && putchar('\n')) || strcmp(input, yes))
 		res = 0;
 	else
 		res = 1;
@@ -32,7 +32,25 @@ int ask_y_n(char *s, char *yes, char *no)
 	return (res);
 }
 
-/*	In else statement load 42rc	*/
+int source_that_file(shell_t *shell, char *path)
+{
+	int fd = open(path, O_RDONLY);
+	void *save[2];
+
+	if (fd == -1)
+		return (ERROR_RETURN);
+	save[0] = shell->input;
+	save[1] = shell->comm;
+	while ((shell->input = gnl(fd)) != NULL) {
+		if (run_that(shell) == -ERROR_CODE)
+			break;
+		free(shell->input);
+	}
+	shell->comm = save[1];
+	shell->input = save[0];
+	return (SUCCESS_RETURN);
+}
+
 int load42(shell_t *shell)
 {
 	char *path42rc = concat(get_env_var(shell->env, "HOME="), \
@@ -47,7 +65,10 @@ concat("/", ".42rc", 0, 0), 1, 1);
 		} else {
 			puts("Ok :'(");
 		}
-	} else {
+	}
+	if (source_that_file(shell, path42rc) == ERROR_RETURN) {
+		free(path42rc);
+		return (SUCCESS_RETURN);
 	}
 	free(path42rc);
 	return (SUCCESS_RETURN);
