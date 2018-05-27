@@ -25,7 +25,7 @@ int kill_cont_childs(jobs_t *node)
 
 	for (; node->pid_job[i] != 0; i++) {
 		if (kill(node->pid_job[i], SIGCONT) == -1) {
-			perror("kill");
+			;//perror("kill");
 			return (-1);
 		}
 		name = get_proc_name(node->pid_job[i]);

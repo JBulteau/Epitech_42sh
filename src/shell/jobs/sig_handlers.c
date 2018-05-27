@@ -16,7 +16,7 @@ static void loop_ctrl_z(jobs_t *node)
 
 	for (int i = 0; node->pid_job[i] != 0; i++) {
 		if (kill(node->pid_job[i], SIGSTOP) == -1) {
-			perror("kill");
+			;//perror("kill");
 			return;
 		}
 		name = get_proc_name(node->pid_job[i]);

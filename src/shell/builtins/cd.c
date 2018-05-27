@@ -16,7 +16,7 @@ int change_dir(char pwd[2][PATH_MAX], char *newdir)
 	int exists = chdir((newdir == NULL) ? "" : newdir);
 
 	if (exists == -1) {
-		printf("%s: %s.\n", newdir, strerror(errno));
+		fprintf(stderr, "%s: %s.\n", newdir, strerror(errno));
 	} else {
 		strncpy(pwd[1], pwd[0], PATH_MAX);
 		getcwd(pwd[0], PATH_MAX);
