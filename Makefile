@@ -109,6 +109,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(JOBS_DIR)signals.c\
 			$(JOBS_DIR)sig_handlers.c\
 \
+			$(JARVIS_DIR)disp_modif.c\
 			$(JARVIS_DIR)jarvis_corrector.c\
 			$(JARVIS_DIR)jarvis_corrector_spaces.c\
 			$(JARVIS_DIR)jarvis_corrector_misspell.c\
