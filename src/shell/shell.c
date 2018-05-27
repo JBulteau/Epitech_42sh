@@ -51,9 +51,6 @@ void delete_shell(shell_t *shell)
 	if (list_jobs)
 		for (; list_jobs != NULL;)
 			free_jobs();
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
 }
 
 shell_t *dup_shell(shell_t *shell)
