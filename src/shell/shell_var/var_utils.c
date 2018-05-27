@@ -44,6 +44,10 @@ char *get_var(char **env, var_t **vars, char *name)
 		return (NULL);
 	if (id != -1) {
 		res = get_var_str(vars[id]);
+		if (res && res[0] == '\0') {
+			free(res);
+			res = strdup("\n");
+		}
 		return (res);
 	}
 	len = strlen(name);
