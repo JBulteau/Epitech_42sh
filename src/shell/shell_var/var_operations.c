@@ -97,7 +97,8 @@ int ptr_mod(char *name, int n, shell_t *shell)
 ope_t find_ope(char *arg)
 {
 	for (int i = 0; vars_ope[i].op_txt; i++) {
-		if (!strncmp(vars_ope[i].op_txt, arg, strlen(vars_ope[i].op_txt)))
+		if (!strncmp(vars_ope[i].op_txt, arg, \
+		strlen(vars_ope[i].op_txt)))
 			return (i);
 	}
 	return (ERROR_RETURN);
