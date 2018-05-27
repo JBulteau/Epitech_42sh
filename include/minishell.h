@@ -161,7 +161,7 @@ int ptr_setenv(comm_t *comm, shell_t *shell);
 int ptr_unsetenv(comm_t *comm, shell_t *shell);
 
 /*	shell/builtins/fg.c		*/
-void set_node_running_false(void);
+void set_node_running_false(pid_t pid);
 int kill_cont_childs(jobs_t *node);
 int ptr_fg(comm_t *comm, shell_t *shell);
 
@@ -214,12 +214,13 @@ int run_bin(comm_t *comm, char *path, char **env, shell_t *shell);
 /*	shell/jobs/init_signal.c	*/
 char *get_proc_name(pid_t pid);
 int wait_for_it(pid_t pid);
+int is_in_list(jobs_t *node, pid_t pid);
 
 /*	shell/jobs/jobs.c		*/
 jobs_t *find_node_job(void);
 int get_nb_job(void);
 jobs_t *new_node(void);
-void remove_node(void);
+void remove_node(pid_t pid);
 int add_pid_jobs(pid_t child);
 
 /*	shell/jobs/sig_handlers.c	*/

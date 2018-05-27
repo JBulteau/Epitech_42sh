@@ -48,19 +48,21 @@ jobs_t *new_node(void)
 	return (new);
 }
 
-void remove_node(void)
+void remove_node(pid_t pid)
 {
-	jobs_t *new = list_jobs;
-	jobs_t *save = new;
+	jobs_t *node = list_jobs->next;
+	jobs_t *prev = list_jobs;
 
-	new = new->next;
-	while (new->next != NULL) {
-		save = new;
-		new = new->next;
+	while (node && is_in_list(node, pid) == 0) {
+		prev = node;
+		node = node->next;
 	}
-	save->next = NULL;
-	free(new->pid_job);
-	free(new);
+	if (node->next != NULL)
+		prev->next = node->next;
+	else
+		prev->next = NULL;
+	free(node->pid_job);
+	free(node);
 }
 
 int add_pid_jobs(pid_t child)
