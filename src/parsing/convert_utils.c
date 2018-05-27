@@ -12,10 +12,10 @@ int index_save(int index[5], int status)
 {
 	static int **index_array;
 
-	index_array = realloc(index_array, sizeof(int[3]) * index[3]);
-	if (index_array == NULL)
-		return (ERROR_RETURN);
 	if (status == SAVE) {
+		index_array = realloc(index_array, sizeof(int[3]) * index[3]);
+		if (index_array == NULL)
+			return (ERROR_RETURN);
 		index_array[index[3] - 1] = malloc(sizeof(int) * 3);
 		if (index_array[index[3] - 1] == NULL)
 			return (ERROR_RETURN);
@@ -26,6 +26,8 @@ int index_save(int index[5], int status)
 		for (int i = 0; i < 3; i++) {
 			index[i] = index_array[index[3] - 1][i];
 		}
+		free(index_array[index[3] - 1]);
+		index_array = realloc(index_array, sizeof(int[3]) * (index[3] - 1));
 	}
 	return (SUCCESS_RETURN);
 }
