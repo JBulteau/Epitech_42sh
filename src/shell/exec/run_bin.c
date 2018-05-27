@@ -22,7 +22,6 @@ int run_that(shell_t *shell)
 	if (shell->return_value && isatty(STDIN_FILENO) && (call_jarvis_rerun\
 (shell) == ERROR_RETURN))
 		return (ERROR_RETURN);
-	debug_comm(shell->comm[0]);
 	if (shell->comm != NULL)
 		free_comms(shell->comm);
 	return (return_code);
