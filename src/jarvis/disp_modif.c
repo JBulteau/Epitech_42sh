@@ -36,5 +36,5 @@ int disp_modif(comm_t **arr)
 		disp_comm(arr[i]);
 	}
 	putchar('\n');
-	return (EXIT_SUCCESS);
+	return (1);
 }
