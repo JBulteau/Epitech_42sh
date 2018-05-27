@@ -26,6 +26,9 @@ size_before_slash(glob->gl_pathv[i])) * 100) / (int)strlen(*result)) < -35 || \
 
 int fill_result_correct_no_local(char **result, glob_t *pglob, int i)
 {
+	if (access(pglob->gl_pathv[i] + size_before_slash(pglob->gl_pathv[i]), \
+X_OK) == -1)
+		return (3);
 	free(*result);
 	*result = strdup(pglob->gl_pathv[i] + \
 size_before_slash(pglob->gl_pathv[i]));
