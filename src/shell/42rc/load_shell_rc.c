@@ -35,17 +35,19 @@ int ask_y_n(char *s, char *yes, char *no)
 int source_that_file(shell_t *shell, char *path)
 {
 	int fd = open(path, O_RDONLY);
-	char *save;
+	void *save[2];
 
 	if (fd == -1)
 		return (ERROR_RETURN);
-	save = shell->input;
+	save[0] = shell->input;
+	save[1] = shell->comm;
 	while ((shell->input = gnl(fd)) != NULL) {
 		if (run_that(shell) == -ERROR_CODE)
 			break;
 		free(shell->input);
 	}
-	shell->input = save;
+	shell->comm = save[1];
+	shell->input = save[0];
 	return (SUCCESS_RETURN);
 }
 
@@ -66,7 +68,7 @@ concat("/", ".42rc", 0, 0), 1, 1);
 	}
 	if (source_that_file(shell, path42rc) == ERROR_RETURN) {
 		free(path42rc);
-		return (ERROR_RETURN);
+		return (SUCCESS_RETURN);
 	}
 	free(path42rc);
 	return (SUCCESS_RETURN);

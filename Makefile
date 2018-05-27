@@ -46,6 +46,7 @@ SRC_FILES	=	$(SHELL_DIR)main.c\
 			$(BI_DIR)dirs.c\
 			$(BI_DIR)vars.c\
 			$(BI_DIR)printenv.c\
+			$(BI_DIR)source.c\
 			$(BI_DIR)which_where.c\
 \
 			$(RED_DIR)d_left.c\

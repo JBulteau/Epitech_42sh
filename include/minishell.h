@@ -123,6 +123,7 @@ static const char	ign_delim[]	=	"";
 /*	42rc/load42.c	*/
 int ask_y_n(char *s, char *yes, char *no);
 int load42(shell_t *shell);
+int source_that_file(shell_t *shell, char *path);
 
 /*	shell/alias/alias_comm.c	*/
 int rm_alias(shell_t *shell, char *alias);

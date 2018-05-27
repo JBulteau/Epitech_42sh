@@ -32,6 +32,7 @@ int ptr_at(comm_t *comm, shell_t *shell);
 int ptr_printenv(comm_t *comm, shell_t *shell);
 int ptr_where(comm_t *comm, shell_t *shell);
 int ptr_which(comm_t *comm, shell_t *shell);
+int ptr_source(comm_t *comm, shell_t *shell);
 
 static const struct {
 	char *name;
@@ -60,6 +61,7 @@ static const struct {
 	{"printenv", &ptr_printenv},
 	{"which", &ptr_which},
 	{"where", &ptr_where},
+	{"source", &ptr_source},
 	{NULL, NULL}
 };
 
