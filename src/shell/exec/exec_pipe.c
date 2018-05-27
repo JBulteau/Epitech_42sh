@@ -55,7 +55,6 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 
 	if (is_builtin(curr->argv[0]) != -1) {
 		exec_start(curr);
-		init_redir_pipe(curr);
 		if (find_node_job()->pid_job[0] == 0)
 			remove_node(0);
 		if ((bi_return = exec_bi(curr, shell)) == -ERROR_CODE) {
@@ -65,7 +64,8 @@ int run_last_pipeline(shell_t *shell, comm_t *curr)
 	} else if (run_and_fork(shell, curr) == ERROR_RETURN)
 		return (ERROR_RETURN);
 	exec_end(curr);
-	close_in(curr);
+	if (is_builtin(curr->argv[0]) == -1)
+		close_in(curr);
 	return (SUCCESS_RETURN);
 }
 
