@@ -41,15 +41,6 @@ int save_history(shell_t *shell, char *input)
 	return (0);
 }
 
-void free_history(history_t *hist)
-{
-	if (hist == NULL)
-		return;
-	free(hist->data);
-	free_history(hist->next);
-	free(hist);
-}
-
 int history_del(shell_t *shell, comm_t *comm)
 {
 	int i = 0;
@@ -60,10 +51,8 @@ int history_del(shell_t *shell, comm_t *comm)
 	for (history_t *curr = shell->history; curr != NULL; \
 curr = curr->next) {
 		if (++i == atoi(comm->argv[2])) {
-			if (i != 1)
-				prev->next = curr->next;
-			else
-				shell->history = curr->next;
+			shell->history = (i == 1) ? curr->next : shell->history;
+			prev->next = (i != 1) ? curr->next : prev->next;
 			free(curr->data);
 			free(curr);
 			break;

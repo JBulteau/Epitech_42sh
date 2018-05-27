@@ -73,3 +73,12 @@ shell_t *dup_shell(shell_t *shell)
 	new_shell->vars = dup_vars(shell->vars);
 	return (new_shell);
 }
+
+void free_history(history_t *hist)
+{
+	if (hist == NULL)
+		return;
+	free(hist->data);
+	free_history(hist->next);
+	free(hist);
+}

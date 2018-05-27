@@ -45,18 +45,16 @@ int ptr_at(comm_t *comm, shell_t *shell)
 	if (comm->argv[1] == NULL)
 		return (ptr_set(comm, shell));
 	for (int i = 1; comm->argv[i]; i++) {
-		var_name = get_var_name(comm->argv[i], &j);
-		if (var_name == NULL)
+		for (var_name = get_var_name(comm->argv[i], &j); !var_name;)
 			break;
 		operation = get_op(comm->argv[i] + j, &j);
 		if (operation == ERROR_RETURN)
 			break;
 		else if (operation == PLUS_PLUS || operation == MINUS_MINUS) {
 			vars_ope[operation].fnc(var_name, 0, shell);
-		} else {
-			num = get_num(comm->argv[i] + j, &j);
-			vars_ope[operation].fnc(var_name, num, shell);
-		}
+		} else
+			vars_ope[operation].fnc(var_name, \
+(num = get_num(comm->argv[i] + j, &j)), shell);
 		free(var_name);
 	}
 	return (SUCCESS_RETURN);
