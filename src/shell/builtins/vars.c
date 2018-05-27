@@ -6,10 +6,11 @@
 */
 
 #include <stdio.h>
+#include "vars.h"
 #include "minishell.h"
 #include "my.h"
 
-static int disp_vars(var_t **vars)
+int disp_vars(var_t **vars)
 {
 	for (int i = 0; vars[i]; i++) {
 		printf("%s\t", vars[i]->name);
@@ -36,7 +37,28 @@ int ptr_unset(comm_t *comm, shell_t *shell)
 
 int ptr_at(comm_t *comm, shell_t *shell)
 {
-	puts("Not implemented yet");
+	char *var_name;
+	ope_t operation;
+	int num;
+	int j = 0;
+
+	if (comm->argv[1] == NULL)
+		return(ptr_set(comm, shell));
+	for (int i = 1; comm->argv[i]; i++) {
+		var_name = get_var_name(comm->argv[i], &i, &j, shell);
+		if (var_name == NULL)
+			break;
+		operation = get_op(comm->argv[i] + j, &i, &j);
+		if (operation == ERROR_RETURN)
+			break;
+		else if (operation == PLUS_PLUS || operation == MINUS_MINUS) {
+			vars_ope[operation].fnc(var_name, 0, shell);
+		} else {
+			num = get_num(comm->argv[i] + j, &i, &j);
+			vars_ope[operation].fnc(var_name, num, shell);
+		}
+		free(var_name);
+	}
 	return (SUCCESS_RETURN);
 }
 
@@ -49,7 +71,6 @@ int ptr_set(comm_t *comm, shell_t *shell)
 	token = strwordarr(comm->argv[1], "=");
 	if (token == NULL)
 		return (ERROR_RETURN);
-	if (token[1] == NULL)
 	shell->vars = set_var(shell->vars, token[0], token[1]);
 	if (shell->vars == NULL)
 		return (ERROR_RETURN);

@@ -18,6 +18,7 @@ separator_type_t separator, int *new_index)
 			comm->next = fill_comm(init_comm(), node[1], new_index);
 	} else if (separator == S_PIPE) {
 		comm->pipe[OUT] = init_pipe(comm, init_comm());
+		//TODO CA PETE ICI
 		comm->pipe[OUT]->output = \
 		fill_comm(comm->pipe[OUT]->output, node[1], new_index);
 	} else
