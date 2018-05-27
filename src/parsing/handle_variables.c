@@ -79,6 +79,8 @@ char *search_variables(char *buffer, shell_t *shell)
 			buffer = replace_var(buffer, new_var_content, new_var_name, i);
 		}
 	}
+	free(new_var_name);
+	free(new_var_content);
 	return (buffer);
 }
 
