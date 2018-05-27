@@ -32,6 +32,7 @@ hist->next);
 
 int event_not_found(shell_t *shell, int n)
 {
+	UNUSED(shell);
 	fprintf(stderr, "%i: Event not found.\n", n);
 	return (EXIT_FAILURE);
 }
