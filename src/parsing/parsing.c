@@ -21,7 +21,7 @@ comm_t *check_redir(comm_t *comm)
 
 comm_t *check_pipe(comm_t *comm)
 {
-	while (comm->pipe[OUT]) {
+	if (comm->pipe[OUT]) {
 		if ((comm->pipe[OUT]->output = \
 		check_comm(comm->pipe[OUT]->output)) == NULL) {
 			free_comm(comm);
