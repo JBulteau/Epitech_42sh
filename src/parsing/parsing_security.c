@@ -59,7 +59,7 @@ int check_buffer(char **buffer)
 }
 
 int check_double_separator(node_t *node)
-{	
+{
 	for (int i = 0; node && node->next[i]; i++) {
 		while (node->next[i] && node->next[i]->quote != NONE)
 			i++;
