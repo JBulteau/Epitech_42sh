@@ -18,6 +18,9 @@ Here is what we implemented:
 	> Increment `variable` by 1.
 - @ variable--
 	> Decrement `variable` by 1.
+
+	**Note** :  please notice that we temporary remove the variable replacement in command-line parsing in order to prevent some crashes. We are currently fixing it.
+
 - alias [name [command]]
 	> Assign `name` as alias for `command`
 	> If `name` is omitted print all alias
@@ -51,4 +54,14 @@ Here is what we implemented:
 - repeat [n command]
 	> repeats the `command` `n` times
 
+# To see further : JARVIS feature
+
+We implemented a correcter (**JARVIS corrector**) in our shell. Currently, in case of wrong command, this corrector suggest the closest correct command or argument to the user input.
+
+In the future we may improve this corrector to make it more performing.
+
+Originally, we also wanted to implement a bigger feature : **JARVIS micro**.
+Thanks to the Google API Speech, our shell should have been able to be controlled only with voice (nevertheless keeping the classical command-line).
+
+However, time played a crucial role in the development of this project, and in order to release our 42sh before the deadline, we gave up the **JARVIS micro** feature. But not forever...
 > **Important:** No CPU was abused during the development of this project.
